@@ -1,0 +1,42 @@
+{
+  "name": "wedsite",
+  "version": "0.0.0",
+  "description": "A website for wedding plans",
+  "main": "src/main/server/index.js",
+  "scripts": {
+    "test": "npm test",
+    "start": "node src/main/server/index.js"
+  },
+  "author": "Elliott",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.2.2",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.19.1",
+    "eslint-config-google": "^0.9.1"
+  },
+  "babel": {
+    "presets": [
+      [
+        "env",
+        {
+          "node": "current"
+        }
+      ]
+    ]
+  },
+  "eslintConfig": {
+    "extends": "google",
+    "parserOptions": {
+      "ecmaVersion": 6
+    },
+    "env": {
+      "es6": true,
+      "browser": true,
+      "node": true
+    }
+  }
+}
