@@ -5,8 +5,7 @@
   "main": "src/main/server/index.js",
   "scripts": {
     "test": "npm test",
-    "start": "npx node src/main/server/index.js",
-    "watch": "npx nodemon --exec \"npm start\" -w src/main/server src/main/assets/views -e \"js,hbs\""
+    "start": "npx node src/main/server/index.js"
   },
   "author": "Elliott",
   "license": "ISC",
@@ -72,5 +71,9 @@
       "max-len": 1,
       "camelcase": 0
     }
+  },
+  "nodemonConfig": {
+    "exec": "npm start",
+    "watch": ["src/main/server", "src/main/assets/views/layouts"]
   }
 }
