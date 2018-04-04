@@ -10,6 +10,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const upload = require('multer')();
 
+// node based requirements
 const {readFile, readFileSync} = require('fs');
 const {join} = require('path');
 const {hostname} = require('os');
@@ -99,8 +100,11 @@ app.post('/logger/:loggerPath', upload.array(), function(req, res) {
 // controller
 app.get(/\/\w*/, function(req, res) {
   let {path} = req;
-  if (path === '/') path = '/app';
-  res.render(`wedsite/templates${path}`);
+  if (path === '/') {
+    res.status(302).redirect('/home');
+  } else {
+    res.render(`app/templates${path}`);
+  }
 });
 
 app.listen(3000);
