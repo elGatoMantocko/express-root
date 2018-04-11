@@ -13,9 +13,10 @@ const autoprefixer = require('autoprefixer');
 const workboxBuild = require('workbox-build');
 const {normalize} = require('upath');
 const serviceWorkerConfig = {
+  maximumFileSizeToCacheInBytes: 5000000,
   globDirectory: 'public/',
   globPatterns: [
-    '**/*.{js,css,ico,eot,svg,ttf,woff,woff2,otf,json,txt}',
+    '**/*.{js,css,jpeg,ico,eot,svg,ttf,woff,woff2,otf,json,txt}',
   ],
   swDest: 'public/sw.js',
   swSrc: 'src/main/assets/sw.js',
@@ -103,7 +104,7 @@ gulp.task('bundleCss', function() {
         rootValue: 16,
         unitPrecision: 2,
         minPixelValue: 4,
-        propList: ['--*', 'padding*', 'margin*', 'border*', 'font', 'font-size', 'letter-spacing'],
+        propList: ['--*', 'padding*', 'margin*', 'border*', 'font', 'height', 'font-size', 'letter-spacing'],
       }),
       noComments(),
       noEmpty(),
