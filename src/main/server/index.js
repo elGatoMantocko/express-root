@@ -11,19 +11,29 @@ const cookieParser = require('cookie-parser');
 const upload = require('multer')();
 
 // node based requirements
-const {readFile, readFileSync} = require('fs');
+const {readFile, readFileSync, readdirSync} = require('fs');
 const {join} = require('path');
 const {hostname} = require('os');
 
 // details for presenting
 const viewsDir = join('src', 'main', 'assets', 'views');
 const layoutsDir = join(viewsDir, 'layouts');
+const partialsDir = join(viewsDir, 'app', 'partials');
 const bundleDir = join('dist', 'bundle');
 
 // details for logging
 const {name: application_name, version: build_version} = require(join(__dirname, '..', '..', '..', 'package.json'));
 const build_date = (new Date()).toISOString();
 const machine_name = hostname();
+
+// register the main partials that app templates use
+Handlebars.registerPartial('layouts/default', readFileSync(join(layoutsDir, 'default.hbs')).toString());
+Handlebars.registerPartial('header', readFileSync(join(layoutsDir, 'header.hbs')).toString());
+Handlebars.registerPartial('footer', readFileSync(join(layoutsDir, 'footer.hbs')).toString());
+readdirSync(partialsDir).forEach((file) => {
+  // partials are registered under the app/partials directory the joined by the partial name
+  Handlebars.registerPartial(`app/partials/${file.slice(0, -4)}`, readFileSync(join(partialsDir, file)).toString());
+});
 
 // app view engine
 app.engine('hbs', function(path, opts, cb) {
@@ -38,11 +48,6 @@ app.engine('hbs', function(path, opts, cb) {
     return cb(null, '');
   }
 });
-
-// register the main partials that app templates use
-Handlebars.registerPartial('layouts/default', readFileSync(join(layoutsDir, 'default.hbs')).toString());
-Handlebars.registerPartial('header', readFileSync(join(layoutsDir, 'header.hbs')).toString());
-Handlebars.registerPartial('footer', readFileSync(join(layoutsDir, 'footer.hbs')).toString());
 
 // tell the app about the views and view engine
 app.set('views', viewsDir);
@@ -82,7 +87,7 @@ app.post('/logger/:loggerPath', upload.array(), function(req, res) {
     body: {
       message = 'No message provided',
       page_url = 'No URL provided',
-      page_title = 'Spooty',
+      page_title = 'App',
       user_agent = 'No user agent provided',
     },
   } = req;
@@ -99,12 +104,8 @@ app.post('/logger/:loggerPath', upload.array(), function(req, res) {
 
 // controller
 app.get(/\/\w*/, function(req, res) {
-  let {path} = req;
-  if (path === '/') {
-    res.status(302).redirect('/home');
-  } else {
-    res.render(`app/templates${path}`);
-  }
+  if (req.path === '/') res.status(302).redirect('/home');
+  else res.render(`app/templates${req.path}`);
 });
 
 app.listen(3000);

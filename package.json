@@ -1,11 +1,12 @@
 {
-  "name": "wedsite",
+  "name": "app",
   "version": "0.0.0",
   "description": "A website for wedding plans",
   "main": "src/main/server/index.js",
   "scripts": {
     "test": "npm test",
-    "start": "npx node src/main/server/index.js"
+    "start": "npx node src/main/server/index.js",
+    "watch": "npx nodemon -w src/main/server/index.js -w src/main/assets/views -e \"js hbs\""
   },
   "author": "Elliott",
   "license": "ISC",
@@ -73,7 +74,6 @@
     }
   },
   "nodemonConfig": {
-    "exec": "npm start",
-    "watch": ["src/main/server", "src/main/assets/views/layouts"]
+    "exec": "npm start"
   }
 }
