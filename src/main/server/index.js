@@ -9,22 +9,25 @@ const Handlebars = require('handlebars');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const upload = require('multer')();
+const helmet = require('helmet');
 
 // node based requirements
 const {readFile, readFileSync, readdirSync} = require('fs');
 const {join} = require('path');
-const {hostname} = require('os');
 
+// details for logging
+const {hostname} = require('os');
+const {name: application_name, version: build_version} = require(join(__dirname, '..', '..', '..', 'package.json'));
+const build_date = (new Date()).toISOString();
+const machine_name = hostname();
+
+
+// TEMPLATING
 // details for presenting
 const viewsDir = join('src', 'main', 'assets', 'views');
 const layoutsDir = join(viewsDir, 'layouts');
 const partialsDir = join(viewsDir, 'app', 'partials');
 const bundleDir = join('dist', 'bundle');
-
-// details for logging
-const {name: application_name, version: build_version} = require(join(__dirname, '..', '..', '..', 'package.json'));
-const build_date = (new Date()).toISOString();
-const machine_name = hostname();
 
 // register the main partials that app templates use
 Handlebars.registerPartial('layouts/default', readFileSync(join(layoutsDir, 'default.hbs')).toString());
@@ -52,8 +55,10 @@ app.engine('hbs', function(path, opts, cb) {
 // tell the app about the views and view engine
 app.set('views', viewsDir);
 app.set('view engine', 'hbs');
+// \TEMPLATING
 
-// helpful middleware
+// MIDDLEWARE
+app.use(helmet());
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -61,12 +66,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 // log incoming requests
 app.use(function(req, res, next) {
   const {originalUrl, body, method, ip, protocol} = req;
-  // INFO - declare info to the server
-  // time of request
-  // request method
-  // full path
-  // source ip address
-  // protocol (should always be https)
   console.log(`INFO - ${(new Date()).toUTCString()} - ${method} - ${originalUrl} - ${ip} - ${protocol} - ${JSON.stringify(body)}`);
   next();
 });
@@ -75,6 +74,14 @@ app.use(function(req, res, next) {
 app.use('/resources', express.static('node_modules'));
 app.use('/assets', express.static(bundleDir));
 
+// error handling
+app.use(function(err, req, res, next) {
+  console.error(err);
+  next();
+});
+// \MIDDLEWARE
+
+// CONTROLLERS
 // version endpoint
 app.get('/base/version', function(req, res) {
   res.jsonp({machine_name, build_date, build_version, application_name});
@@ -107,5 +114,6 @@ app.get(/\/\w*/, function(req, res) {
   if (req.path === '/') res.status(302).redirect('/home');
   else res.render(`app/templates${req.path}`);
 });
+// \CONTROLLERS
 
 app.listen(3000);
