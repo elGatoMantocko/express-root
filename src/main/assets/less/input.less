@@ -1,0 +1,40 @@
+@inputPaddingX: .75rem;
+@inputPaddingY: .75rem;
+
+.app-input-group {
+  position: relative;
+
+  > input,
+  > label {
+    padding: @inputPaddingY @inputPaddingX;
+  }
+
+  input.float-label {
+    ~ label {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      color: #495057;
+      display: block;
+      margin-bottom: 0;
+      border: 1px solid transparent;
+      border-radius: .25rem;
+      transition: all .1s ease-in-out;
+    }
+
+    &::placeholder {
+      color: transparent;
+    }
+
+    &:not(:placeholder-shown) {
+      padding-top: calc(@inputPaddingY + @inputPaddingY * (2 / 3));
+      padding-bottom: calc(@inputPaddingY / 3);
+      & ~ label {
+        padding-top: calc(@inputPaddingY / 3);
+        padding-bottom: calc(@inputPaddingY / 3);
+        font-size: 12px;
+      }
+    }
+  }
+}
