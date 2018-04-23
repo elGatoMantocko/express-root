@@ -1,9 +1,12 @@
+// optional
 @inputPaddingX: .75rem;
 @inputPaddingY: .75rem;
 
 .app-input-group {
+  // necessary for label positioning in the *placeholders* spot
   position: relative;
 
+  // input and label padding should be identical
   > input,
   > label {
     padding: @inputPaddingY @inputPaddingX;
@@ -11,28 +14,39 @@
 
   input.float-label {
     ~ label {
+      // these three are required
       position: absolute;
       top: 0;
       left: 0;
+
+      // these three are optional
       width: 100%;
       color: #495057;
       display: block;
+
+      // only here because bootstrap adds margin bottom to labels
       margin-bottom: 0;
+
+      // these two should mimic the behavior of the input
       border: 1px solid transparent;
       border-radius: .25rem;
+
+      // style transition
       transition: all .1s ease-in-out;
     }
 
     &::placeholder {
-      color: transparent;
+      color: transparent; // required (along with other placeholder selectors)
     }
 
-    &:not(:placeholder-shown) {
+    &.label-adjusted {
       padding-top: calc(@inputPaddingY + @inputPaddingY * (2 / 3));
       padding-bottom: calc(@inputPaddingY / 3);
       & ~ label {
         padding-top: calc(@inputPaddingY / 3);
         padding-bottom: calc(@inputPaddingY / 3);
+
+        // font should be smaller than input font
         font-size: 12px;
       }
     }

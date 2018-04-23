@@ -72,6 +72,7 @@
     },
     "rules": {
       "max-len": 1,
+      "no-invalid-this": 0,
       "camelcase": 0
     }
   },
