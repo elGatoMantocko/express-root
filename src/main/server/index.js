@@ -81,6 +81,7 @@ app.use(function(req, res, next) {
 // static assets
 app.use('/resources', express.static('node_modules'));
 app.use('/assets', express.static(bundleDir));
+app.use('/favicon.ico', express.static(join(bundleDir, 'favicon.ico')));
 
 // error handling
 app.use(function(err, req, res, next) {
@@ -118,7 +119,7 @@ app.post('/logger/:loggerPath', upload.array(), function(req, res) {
 });
 
 // controller
-app.get(/\/\w*/, function(req, res) {
+app.get('/:action', function(req, res) {
   if (req.path === '/') res.status(302).redirect('/home');
   else res.render(`app/templates${req.path}`);
 });
