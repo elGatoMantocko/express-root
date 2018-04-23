@@ -4,7 +4,7 @@ This branch provides an architecture that is a base express app with a straightf
 
 ## Development
 
-Start the app with `npm start`.
+Start the app with `npm start` and access it at [http://localhost:3000](http://localhost:3000).
 
 Build the assets with `npx gulp build`.
 
