@@ -12,6 +12,8 @@
     padding: @inputPaddingY @inputPaddingX;
   }
 
+  // float label styles should be applied to inputs with the 'float-label' class
+  // labels sitting next to it will get standard styles
   input.float-label {
     ~ label {
       // these three are required
@@ -35,10 +37,12 @@
       transition: all .1s ease-in-out;
     }
 
+    // this selector is non-standard and has different naming per browser
     &::placeholder {
       color: transparent; // required (along with other placeholder selectors)
     }
 
+    // javascript will apply this style on input in the field
     &.label-adjusted {
       padding-top: calc(@inputPaddingY + @inputPaddingY * (2 / 3));
       padding-bottom: calc(@inputPaddingY / 3);
