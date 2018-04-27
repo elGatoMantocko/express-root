@@ -119,7 +119,7 @@ app.post('/logger/:loggerPath', upload.array(), function(req, res) {
 });
 
 // controller
-app.get('/:action', function(req, res) {
+app.get(/\w*$/, function(req, res) {
   if (req.path === '/') res.status(302).redirect('/home');
   else res.render(`app/templates${req.path}`);
 });
