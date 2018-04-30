@@ -1,14 +1,53 @@
 // optional
 @inputPaddingX: .75rem;
 @inputPaddingY: .75rem;
+@baseFontSize: 1rem;
 
 .app-input-group {
   // necessary for label positioning in the *placeholders* spot
   position: relative;
+  overflow-x: hidden;
+
+  &.app-input-icon {
+    input,
+    label {
+      padding-left: calc(@inputPaddingX * 3);
+      input.label-adjusted {
+        padding-left: @inputPaddingX;
+        ~ label {
+          padding-left: @inputPaddingX;
+        }
+      }
+    }
+
+    uitk-icon,
+    .icon {
+      // these three are required
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      // these three are optional
+      color: #495057;
+      display: block;
+
+      // only here because bootstrap adds margin bottom to labels
+      margin-bottom: 0;
+
+      // these two should mimic the behavior of the input
+      border: 1px solid transparent;
+      border-radius: .25rem;
+
+      // style transition
+      transition: all .1s ease-in-out;
+    }
+  }
 
   // input and label padding should be identical
-  > input,
-  > label {
+  input,
+  label,
+  uitk-icon,
+  .icon {
     padding: @inputPaddingY @inputPaddingX;
   }
 
@@ -46,12 +85,18 @@
     &.label-adjusted {
       padding-top: calc(@inputPaddingY + @inputPaddingY * (2 / 3));
       padding-bottom: calc(@inputPaddingY / 3);
+      padding-left: @inputPaddingX;
       & ~ label {
+        padding-left: @inputPaddingX;
         padding-top: calc(@inputPaddingY / 3);
         padding-bottom: calc(@inputPaddingY / 3);
 
         // font should be smaller than input font
-        font-size: 12px;
+        font-size: calc(@baseFontSize * (3 / 4));
+      }
+
+      & ~ uitk-icon {
+        left: -3rem;
       }
     }
   }

@@ -12,8 +12,8 @@
   "author": "Elliott",
   "license": "ISC",
   "dependencies": {
-    "autoprefixer": "^8.3.0",
-    "babel-core": "^6.26.0",
+    "autoprefixer": "^8.4.1",
+    "babel-core": "^6.26.3",
     "body-parser": "^1.18.2",
     "bootstrap": "^4.1.0",
     "child_process": "^1.0.2",

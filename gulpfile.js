@@ -22,7 +22,7 @@ gulp.task('clean', function() {
 });
 
 gulp.task('bundleStatic', function() {
-  return gulp.src(join(CLIENT_STATIC_FILES, '*'))
+  return gulp.src(join(CLIENT_STATIC_FILES, '**', '*'))
     .pipe(gulp.dest(BUNDLE_DEST));
 });
 

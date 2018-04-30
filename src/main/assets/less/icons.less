@@ -1,0 +1,1299 @@
+// ==========================================================================
+// Icon Font Face
+// ==========================================================================
+@font-face {
+  font-family: 'AppIcons';
+  src: url(../assets/fonts/AppIcons.eot?#iefix) format('No-IE-404'), url(../assets/fonts/AppIcons.woff) format('woff'), url(../assets/fonts/AppIcons.ttf) format('truetype'), url(../assets/fonts/AppIcons.svg#AppIcons) format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+// ==========================================================================
+// Icon Core
+// ==========================================================================
+.iconCore() {
+  font-family: 'AppIcons';
+  display: inline-block;
+  position: relative;
+  font-weight: normal;
+  line-height: 1;
+  text-align: center;
+  speak: none;
+}
+
+// Basic setup of icons
+uitk-icon,
+.icon {
+  display: inline-block;
+  position: relative;
+  font-style: normal;
+
+  // Hide alternative content
+  .alt {
+    display: inline-block;
+    position: absolute;
+    opacity: 0;
+    visibility: hidden;
+    text-indent: -999em;
+  }
+
+  // Generated content for icons
+  &:after, &:before {
+    .iconCore();
+  }
+}
+
+// ==========================================================================
+// Icon Stack
+// ==========================================================================
+uitk-icon-stack,
+.icon-stack {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+
+  uitk-icon,
+  .icon {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+// Firefox animation flicker issue (preserve-3d	Specifies that child elements will preserve its 3D position)
+.firefox uitk-icon-stack,
+.firefox .icon-stack {
+  transform-style: preserve-3d;
+}
+
+// ==========================================================================
+// Icons
+// ==========================================================================
+
+// User
+uitk-icon[name="user"]:before,
+.icon-user:before {
+  content: "\e019"
+}
+
+uitk-icon[name="useralt"]:before,
+.icon-useralt:before {
+  content: "\e018"
+}
+
+// Traveler
+uitk-icon[name="traveler"]:before,
+.icon-traveler:before {
+  content: "\e011"
+}
+
+uitk-icon[name="traveleralt"]:before,
+.icon-traveleralt:before {
+  content: "\e010"
+}
+
+// Add traveler
+uitk-icon[name="add-traveler"]:before,
+.icon-add-traveler:before {
+  content: "\e017"
+}
+
+uitk-icon[name="add-traveleralt"]:before,
+.icon-add-traveleralt:before {
+  content: "\e016"
+}
+
+// Travelers
+uitk-icon[name="travelers"]:before,
+.icon-travelers:before {
+  content: "\e013"
+}
+
+uitk-icon[name="travelersalt"]:before,
+.icon-travelersalt:before {
+  content: "\e012"
+}
+
+// Group
+uitk-icon[name="group"]:before,
+.icon-group:before {
+  content: "\e015";
+}
+
+uitk-icon[name="groupalt"]:before,
+.icon-groupalt:before {
+  content: "\e014";
+}
+
+// Time
+uitk-icon[name="time"]:before,
+.icon-time:before {
+  content: "\e027"
+}
+
+// Help
+uitk-icon[name="help"]:before,
+.icon-help:before {
+  content: "\e05a"
+}
+
+uitk-icon[name="helpalt"]:before,
+.icon-helpalt:before {
+  content: "\e059"
+}
+
+// Location
+uitk-icon[name="location"]:before,
+.icon-location:before {
+  content: "\e023"
+}
+
+uitk-icon[name="locationalt"]:before,
+.icon-locationalt:before {
+  content: "\e022"
+}
+
+// Destination
+uitk-icon[name="destination"]:before,
+.icon-destination:before {
+  content: "\e056"
+}
+
+uitk-icon[name="destinationalt"]:before,
+.icon-destinationalt:before {
+  content: "\e055"
+}
+
+// Phone
+uitk-icon[name="phone"]:before,
+.icon-phone:before {
+  content: "\e021"
+}
+
+uitk-icon[name="phonealt"]:before,
+.icon-phonealt:before {
+  content: "\e020"
+}
+
+// Mail
+uitk-icon[name="mail"]:before,
+.icon-mail:before {
+  content: "\e02f"
+}
+
+uitk-icon[name="mailalt"]:before,
+.icon-mailalt:before {
+  content: "\e02e"
+}
+
+// List
+uitk-icon[name="list"]:before,
+.icon-list:before {
+  content: "\e0b3"
+}
+
+// Auth
+uitk-icon[name="auth"]:before,
+.icon-auth:before {
+  content: "\e0b9"
+}
+
+uitk-icon[name="authalt"]:before,
+.icon-authalt:before {
+  content: "\e0b8"
+}
+
+// Info
+uitk-icon[name="info"]:before,
+.icon-info:before {
+  content: "\e05c"
+}
+
+uitk-icon[name="infoalt"]:before,
+.icon-infoalt:before {
+  content: "\e05b"
+}
+
+// Hotels
+uitk-icon[name="hotels"]:before,
+.icon-hotels:before {
+  content: "\e003"
+}
+
+uitk-icon[name="hotelsalt"]:before,
+.icon-hotelsalt:before {
+  content: "\e002"
+}
+
+// Settings
+uitk-icon[name="settings"]:before,
+.icon-settings:before {
+  content: "\e01f"
+}
+
+uitk-icon[name="settingsalt"]:before,
+.icon-settingsalt:before {
+  content: "\e01e"
+}
+
+// Success
+// .icon-successalt is created for default alert icon settings
+uitk-icon[name="success"]:before,
+uitk-icon[name="successalt"]:before,
+.icon-success:before,
+.icon-successalt:before {
+  content: "\e0aa"
+}
+
+// Mobile
+uitk-icon[name="mobile"]:before,
+.icon-mobile:before {
+  content: "\e0c9"
+}
+
+uitk-icon[name="mobilealt"]:before,
+.icon-mobilealt:before {
+  content: "\e0c8"
+}
+
+// Cars
+uitk-icon[name="cars"]:before,
+.icon-cars:before {
+  content: "\e005"
+}
+
+uitk-icon[name="carsalt"]:before,
+.icon-carsalt:before {
+  content: "\e004"
+}
+
+// Calendar
+uitk-icon[name="calendar"]:before,
+.icon-calendar:before {
+  content: "\e800"
+}
+
+// Luggage
+uitk-icon[name="luggage"]:before,
+.icon-luggage:before {
+  content: "\e075"
+}
+
+uitk-icon[name="luggagealt"]:before,
+.icon-luggagealt:before {
+  content: "\e074"
+}
+
+// Map
+uitk-icon[name="map"]:before,
+.icon-map:before {
+  content: "\e80b"
+}
+
+uitk-icon[name="mapalt"]:before,
+.icon-mapalt:before {
+  content: "\e0bc"
+}
+
+// Viewed
+uitk-icon[name="viewed"]:before,
+.icon-viewed:before {
+  content: "\e064"
+}
+
+uitk-icon[name="viewedalt"]:before,
+.icon-viewedalt:before {
+  content: "\e063"
+}
+
+// Overnight
+uitk-icon[name="overnight"]:before,
+.icon-overnight:before {
+  content: "\e02b"
+}
+
+uitk-icon[name="overnightalt"]:before,
+.icon-overnightalt:before {
+  content: "\e02a"
+}
+
+// Carets
+uitk-icon[name="caret0"]:before,
+.icon-caret0:before {
+  content: "\e098";
+}
+
+uitk-icon[name="caret90"]:before,
+.icon-caret90:before {
+  content: "\e099"
+}
+
+uitk-icon[name="caret180"]:before,
+.icon-caret180:before {
+  content: "\e09a";
+}
+
+uitk-icon[name="caret270"]:before,
+.icon-caret270:before {
+  content: "\e09b";
+}
+
+// Arrows
+uitk-icon[name="arrow0"]:before,
+.icon-arrow0:before {
+  content: "\e08a";
+}
+
+uitk-icon[name="arrow45"]:before,
+.icon-arrow45:before {
+  content: "\e08b";
+}
+
+uitk-icon[name="arrow90"]:before,
+.icon-arrow90:before {
+  content: "\e08c"
+}
+
+uitk-icon[name="arrow135"]:before,
+.icon-arrow135:before {
+  content: "\e08d";
+}
+
+uitk-icon[name="arrow180"]:before,
+.icon-arrow180:before {
+  content: "\e08e";
+}
+
+uitk-icon[name="arrow225"]:before,
+.icon-arrow225:before {
+  content: "\e08f";
+}
+
+uitk-icon[name="arrow270"]:before,
+.icon-arrow270:before {
+  content: "\e090";
+}
+
+uitk-icon[name="arrow315"]:before,
+.icon-arrow315:before {
+  content: "\e091";
+}
+
+// Arrows thin
+uitk-icon[name="arrow0-thin"]:before,
+.icon-arrow0-thin:before {
+  content: "\e09c";
+}
+
+uitk-icon[name="arrow45-thin"]:before,
+.icon-arrow45-thin:before {
+  content: "\e09d";
+}
+
+uitk-icon[name="arrow90-thin"]:before,
+.icon-arrow90-thin:before {
+  content: "\e09e"
+}
+
+uitk-icon[name="arrow135-thin"]:before,
+.icon-arrow135-thin:before {
+  content: "\e09f";
+}
+
+uitk-icon[name="arrow180-thin"]:before,
+.icon-arrow180-thin:before {
+  content: "\e0a0";
+}
+
+uitk-icon[name="arrow225-thin"]:before,
+.icon-arrow225-thin:before {
+  content: "\e0a1";
+}
+
+uitk-icon[name="arrow270-thin"]:before,
+.icon-arrow270-thin:before {
+  content: "\e0a2";
+}
+
+uitk-icon[name="arrow315-thin"]:before,
+.icon-arrow315-thin:before {
+  content: "\e0a3";
+}
+
+// Walk
+uitk-icon[name="walk"]:before,
+.icon-walk:before {
+  content: "\e0b7"
+}
+
+uitk-icon[name="walkalt"]:before,
+.icon-walkalt:before {
+  content: "\e0b6"
+}
+
+// Sun
+uitk-icon[name="sun"]:before,
+.icon-sun:before {
+  content: "\e029"
+}
+
+uitk-icon[name="sunalt"]:before,
+.icon-sunalt:before {
+  content: "\e028"
+}
+
+// Warning
+// .icon-error and .icon-erroralt is created for default alert icon settings
+uitk-icon[name="warn"]:before,
+uitk-icon[name="error"]:before,
+.icon-warn:before,
+.icon-error:before {
+  content: "\e058"
+}
+
+uitk-icon[name="warnalt"]:before,
+uitk-icon[name="erroralt"]:before,
+.icon-warnalt:before,
+.icon-erroralt:before {
+  content: "\e057"
+}
+
+// Flights
+uitk-icon[name="flights"]:before,
+uitk-icon[name="flights45"]:before,
+.icon-flights:before,
+.icon-flights45:before {
+  content: "\e001"
+}
+
+uitk-icon[name="flights0"]:before,
+.icon-flights0:before {
+  content: "\e00f"
+}
+
+uitk-icon[name="flights90"]:before,
+.icon-flights90:before {
+  content: "\e00d"
+}
+
+uitk-icon[name="flightsalt"]:before,
+uitk-icon[name="flightsalt45"]:before,
+.icon-flightsalt:before,
+.icon-flightsalt45:before {
+  content: "\e000"
+}
+
+uitk-icon[name="flightsalt0"]:before,
+.icon-flightsalt0:before {
+  content: "\e00e"
+}
+
+uitk-icon[name="flightsalt90"]:before,
+.icon-flightsalt90:before {
+  content: "\e00c"
+}
+
+// Expand
+uitk-icon[name="expand"]:before,
+.icon-expand:before {
+  content: "\e097";
+  transition: all 0.5s;
+}
+
+uitk-icon[name="expand-thin"]:before,
+.icon-expand-thin:before {
+  content: "\e0a9";
+  transition: all 0.5s;
+}
+
+// Collapse
+uitk-icon[name="collapse"]:before,
+.icon-collapse:before {
+  content: "\e096";
+}
+
+uitk-icon[name="collapse-thin"]:before,
+.icon-collapse-thin:before {
+  content: "\e0a8";
+}
+
+// Close
+uitk-icon[name="close"]:before,
+uitk-icon[name="close-thin"]:before,
+.icon-close:before,
+.icon-close-thin:before {
+  content: "\e0ab"
+}
+
+// Print
+uitk-icon[name="print"]:before,
+.icon-print:before {
+  content: "\e066"
+}
+
+uitk-icon[name="printalt"]:before,
+.icon-printalt:before {
+  content: "\e065"
+}
+
+// Popup
+uitk-icon[name="popup"]:before,
+.icon-popup:before {
+  content: "\e06a"
+}
+
+uitk-icon[name="popupalt"]:before,
+.icon-popupalt:before {
+  content: "\e069"
+}
+
+// Toggles
+uitk-icon[name="toggle0"]:before,
+.icon-toggle0:before {
+  content: "\e092";
+}
+
+uitk-icon[name="toggle90"]:before,
+.icon-toggle90:before {
+  content: "\e093";
+}
+
+uitk-icon[name="toggle180"]:before,
+.icon-toggle180:before {
+  content: "\e094";
+}
+
+uitk-icon[name="toggle270"]:before,
+.icon-toggle270:before {
+  content: "\e095";
+}
+
+// Toggles thin
+uitk-icon[name="toggle0-thin"]:before,
+.icon-toggle0-thin:before {
+  content: "\e0a4";
+}
+
+uitk-icon[name="toggle90-thin"]:before,
+.icon-toggle90-thin:before {
+  content: "\e0a5";
+}
+
+uitk-icon[name="toggle180-thin"]:before,
+.icon-toggle180-thin:before {
+  content: "\e0a6";
+}
+
+uitk-icon[name="toggle270-thin"]:before,
+.icon-toggle270-thin:before {
+  content: "\e0a7";
+}
+
+// Seat
+uitk-icon[name="seat"]:before,
+uitk-icon[name="seatalt"]:before,
+.icon-seat:before,
+.icon-seatalt:before {
+  content: "\e071"
+}
+
+// Train
+uitk-icon[name="train"]:before,
+.icon-train:before {
+  content: "\e007"
+}
+
+uitk-icon[name="trainalt"]:before,
+.icon-trainalt:before {
+  content: "\e006"
+}
+
+// Shield
+uitk-icon[name="shield"]:before,
+.icon-shield:before {
+  content: "\e0c3"
+}
+
+uitk-icon[name="shieldalt"]:before,
+.icon-shieldalt:before {
+  content: "\e0c2"
+}
+
+// Offcanvas
+uitk-icon[name="offcanvas"]:before,
+.icon-offcanvas:before {
+  content: "\e0b2"
+}
+
+// Subtract
+uitk-icon[name="subtract"]:before,
+.icon-subtract:before {
+  content: "\e0ad"
+}
+
+// Add
+uitk-icon[name="add"]:before,
+.icon-add:before {
+  content: "\e0ac"
+}
+
+// Trend
+uitk-icon[name="trend"]:before,
+.icon-trend:before {
+  content: "\e06e"
+}
+
+uitk-icon[name="trendalt"]:before,
+.icon-trendalt:before {
+  content: "\e06d"
+}
+
+// Line graph
+uitk-icon[name="line-graph"]:before,
+.icon-line-graph:before {
+  content: "\e070"
+}
+
+uitk-icon[name="line-graphalt"]:before,
+.icon-line-graphalt:before {
+  content: "\e06f"
+}
+
+// Pie chart
+uitk-icon[name="pie-chart"]:before,
+.icon-pie-chart:before {
+  content: "\e06c"
+}
+
+uitk-icon[name="pie-chartalt"]:before,
+.icon-pie-chartalt:before {
+  content: "\e06b"
+}
+
+// Gridview
+uitk-icon[name="gridview"]:before,
+.icon-gridview:before {
+  content: "\e060"
+}
+
+uitk-icon[name="gridviewalt"]:before,
+.icon-gridviewalt:before {
+  content: "\e05f"
+}
+
+// Wifi
+uitk-icon[name="wifi"]:before,
+.icon-wifi:before {
+  content: "\e072";
+}
+
+uitk-icon[name="partial-wifi"]:before,
+.icon-partial-wifi:before {
+  content: "\e073";
+}
+
+// Accessible
+uitk-icon[name="accessible"]:before,
+.icon-accessible:before {
+  content: "\e089";
+}
+
+uitk-icon[name="accessiblealt"]:before,
+.icon-accessiblealt:before {
+  content: "\e088";
+}
+
+// No image
+uitk-icon[name="noimage"]:before,
+.icon-noimage:before {
+  content: "\e033";
+}
+
+uitk-icon[name="noimagealt"]:before,
+.icon-noimagealt:before {
+  content: "\e032";
+}
+
+// Image gallery
+uitk-icon[name="image-gallery"]:before,
+.icon-image-gallery:before {
+  content: "\e035";
+}
+
+uitk-icon[name="image-galleryalt"]:before,
+.icon-image-galleryalt:before {
+  content: "\e034";
+}
+
+// Activities
+uitk-icon[name="activities"]:before,
+.icon-activities:before {
+  content: "\e0bf";
+}
+
+uitk-icon[name="activitiesalt"]:before,
+.icon-activitiesalt:before {
+  content: "\e0be";
+}
+
+// Search
+uitk-icon[name="search"]:before,
+.icon-search:before {
+  content: "\e01d";
+}
+
+uitk-icon[name="searchalt"]:before,
+.icon-searchalt:before {
+  content: "\e01c";
+}
+
+// Comment
+uitk-icon[name="comment"]:before,
+.icon-comment:before {
+  content: "\e031";
+}
+
+uitk-icon[name="commentalt"]:before,
+.icon-commentalt:before {
+  content: "\e030";
+}
+
+// Snowflake
+uitk-icon[name="snowflake"]:before,
+.icon-snowflake:before {
+  content: "\e079";
+}
+
+uitk-icon[name="snowflakealt"]:before,
+.icon-snowflakealt:before {
+  content: "\e078";
+}
+
+// Credit card
+uitk-icon[name="credit-card"]:before,
+.icon-credit-card:before {
+  content: "\e03b";
+}
+
+uitk-icon[name="credit-cardalt"]:before,
+.icon-credit-cardalt:before {
+  content: "\e03a";
+}
+
+// Tag
+uitk-icon[name="tag"]:before,
+.icon-tag:before {
+  content: "\e600";
+}
+
+uitk-icon[name="tagalt"]:before,
+.icon-tagalt:before {
+  content: "\e601";
+}
+
+// Lock
+uitk-icon[name="lock"]:before,
+.icon-lock:before {
+  content: "\e0bb";
+}
+
+uitk-icon[name="lockalt"]:before,
+.icon-lockalt:before {
+  content: "\e0ba";
+}
+
+// Bed
+uitk-icon[name="bed"]:before,
+uitk-icon[name="bed-alt-filled"]:before,
+.icon-bed:before,
+.icon-bed-alt-filled:before {
+  content: "\e605";
+}
+
+// Egencia bird
+uitk-icon[name="egencia-bird"]:before,
+.icon-egencia-bird:before {
+  content: "\e044";
+}
+
+uitk-icon[name="egencia-birdalt"]:before,
+.icon-egencia-birdalt:before {
+  content: "\e043";
+}
+
+// Filter
+uitk-icon[name="filter"]:before,
+.icon-filter:before {
+  content: "\e037";
+}
+
+uitk-icon[name="filteralt"]:before,
+.icon-filteralt:before {
+  content: "\e036";
+}
+
+// Hearts
+uitk-icon[name="heart"]:before,
+.icon-heart:before {
+  content: "\e04c"
+}
+
+uitk-icon[name="heartalt"]:before,
+.icon-heartalt:before {
+  content: "\e04b"
+}
+
+// Stars
+uitk-icon[name="star"]:before,
+.icon-star:before {
+  content: "\e04d";
+}
+
+uitk-icon[name="half-star"]:before,
+.icon-half-star:before {
+  content: "\e04e";
+}
+
+uitk-icon[name="empty-star"]:before,
+.icon-empty-star:before {
+  content: "\e04f";
+}
+
+// Circles
+uitk-icon[name="circle"]:before,
+.icon-circle:before {
+  content: "\e052";
+}
+
+uitk-icon[name="half-circle"]:before,
+.icon-half-circle:before {
+  content: "\e051";
+}
+
+uitk-icon[name="empty-circle"]:before,
+.icon-empty-circle:before {
+  content: "\e050";
+}
+
+// Home
+uitk-icon[name="home"]:before,
+.icon-home:before {
+  content: "\e01b";
+}
+
+uitk-icon[name="homealt"]:before,
+.icon-homealt:before {
+  content: "\e01a";
+}
+
+// Computer
+uitk-icon[name="computer"]:before,
+.icon-computer:before {
+  content: "\e0c7";
+}
+
+uitk-icon[name="computeralt"]:before,
+.icon-computeralt:before {
+  content: "\e0c6";
+}
+
+// Cart
+uitk-icon[name="cart"]:before,
+.icon-cart:before {
+  content: "\e038";
+}
+
+// Coffee
+uitk-icon[name="coffee"]:before,
+.icon-coffee:before {
+  content: "\e07d";
+}
+
+uitk-icon[name="coffeealt"]:before,
+.icon-coffeealt:before {
+  content: "\e07c";
+}
+
+// Flag
+uitk-icon[name="flag"]:before,
+.icon-flag:before {
+  content: "\e042";
+}
+
+uitk-icon[name="flagalt"]:before,
+.icon-flagalt:before {
+  content: "\e041";
+}
+
+// Bookmark
+uitk-icon[name="bookmark"]:before,
+.icon-bookmark:before {
+  content: "\e054";
+}
+
+uitk-icon[name="bookmarkalt"]:before,
+.icon-bookmarkalt:before {
+  content: "\e053";
+}
+
+// Share
+uitk-icon[name="share"]:before,
+.icon-share:before {
+  content: "\e068";
+}
+
+uitk-icon[name="sharealt"]:before,
+.icon-sharealt:before {
+  content: "\e067";
+}
+
+// Award
+uitk-icon[name="award"]:before,
+.icon-award:before {
+  content: "\e0c1";
+}
+
+uitk-icon[name="awardalt"]:before,
+.icon-awardalt:before {
+  content: "\e0c0";
+}
+
+// Dining
+uitk-icon[name="dining"]:before,
+.icon-dining:before {
+  content: "\e081";
+}
+
+uitk-icon[name="diningalt"]:before,
+.icon-diningalt:before {
+  content: "\e080";
+}
+
+// Global
+uitk-icon[name="global"]:before,
+.icon-global:before {
+  content: "\e048";
+}
+
+uitk-icon[name="globalalt"]:before,
+.icon-globalalt:before {
+  content: "\e047";
+}
+
+// Wine
+uitk-icon[name="wine"]:before,
+.icon-wine:before {
+  content: "\e083";
+}
+
+uitk-icon[name="winealt"]:before,
+.icon-winealt:before {
+  content: "\e082";
+}
+
+// Croissant
+uitk-icon[name="croissant"]:before,
+.icon-croissant:before {
+  content: "\e07f";
+}
+
+uitk-icon[name="croissantalt"]:before,
+.icon-croissantalt:before {
+  content: "\e07e";
+}
+
+// Parking
+uitk-icon[name="parking"]:before,
+.icon-parking:before {
+  content: "\e07b";
+}
+
+uitk-icon[name="parkingalt"]:before,
+.icon-parkingalt:before {
+  content: "\e07a";
+}
+
+// Bell
+uitk-icon[name="bell"]:before,
+.icon-bell:before {
+  content: "\e02d";
+}
+
+uitk-icon[name="bellalt"]:before,
+.icon-bellalt:before {
+  content: "\e02c";
+}
+
+// Pool
+uitk-icon[name="pool"]:before,
+.icon-pool:before {
+  content: "\e085";
+}
+
+uitk-icon[name="poolalt"]:before,
+.icon-poolalt:before {
+  content: "\e084";
+}
+
+// Gym
+uitk-icon[name="gym"]:before,
+.icon-gym:before {
+  content: "\e087";
+}
+
+uitk-icon[name="gymalt"]:before,
+.icon-gymalt:before {
+  content: "\e086";
+}
+
+// Lights
+uitk-icon[name="lights"]:before,
+.icon-lights:before {
+  content: "\e0c5";
+}
+
+uitk-icon[name="lightsalt"]:before,
+.icon-lightsalt:before {
+  content: "\e0c4";
+}
+
+// Headset
+uitk-icon[name="headset"]:before,
+.icon-headset:before {
+  content: "\e040";
+}
+
+// Ellipsis
+uitk-icon[name="ellipsis"]:before,
+.icon-ellipsis:before {
+  content: "\e0b4";
+}
+
+// Ticket
+uitk-icon[name="ticket"]:before,
+.icon-ticket:before {
+  content: "\e03d";
+}
+
+uitk-icon[name="ticketalt"]:before,
+.icon-ticketalt:before {
+  content: "\e03c";
+}
+
+// Tickets
+uitk-icon[name="tickets"]:before,
+.icon-tickets:before {
+  content: "\e03f";
+}
+
+uitk-icon[name="ticketsalt"]:before,
+.icon-ticketsalt:before {
+  content: "\e03e";
+}
+
+// Bus
+uitk-icon[name="bus"]:before,
+.icon-bus:before {
+  content: "\e00b";
+}
+
+uitk-icon[name="busalt"]:before,
+.icon-busalt:before {
+  content: "\e00a";
+}
+
+// Refundable
+uitk-icon[name="refundable"]:before,
+.icon-refundable:before {
+  content: "\e0b0";
+}
+
+uitk-icon[name="non-refundable"]:before,
+.icon-non-refundable:before {
+  content: "\e0b1";
+}
+
+// Briefcase
+uitk-icon[name="briefcase"]:before,
+.icon-briefcase:before {
+  content: "\e80a"
+}
+
+uitk-icon[name="briefcase-filled"]:before, // Deprecated
+uitk-icon[name="briefcasealt"]:before,
+.icon-briefcase-filled:before, // Deprecated
+.icon-briefcasealt:before {
+  content: "\e045"
+}
+
+// Taxi
+uitk-icon[name="taxi"]:before,
+.icon-taxi:before {
+  content: "\e009"
+}
+
+uitk-icon[name="taxialt"]:before,
+.icon-taxialt:before {
+  content: "\e008"
+}
+
+// Refresh
+uitk-icon[name="refresh"]:before,
+.icon-refresh:before {
+  content: "\e807"
+}
+
+// Cabin
+uitk-icon[name="cabin"]:before,
+.icon-cabin:before {
+  content: "\e804"
+}
+
+// Bicycle
+uitk-icon[name="bicycle"]:before,
+.icon-bicycle:before {
+  content: "\e806"
+}
+
+// Lounge
+uitk-icon[name="lounge"]:before,
+.icon-lounge:before {
+  content: "\e808"
+}
+
+// Service dog
+uitk-icon[name="service-dog"]:before,
+.icon-service-dog:before {
+  content: "\e602"
+}
+
+uitk-icon[name="service-dogalt"]:before,
+.icon-service-dogalt:before {
+  content: "\e603"
+}
+
+// Trolley
+uitk-icon[name="trolley"]:before,
+.icon-trolley:before {
+  content: "\e604"
+}
+
+// Plug
+uitk-icon[name="plug"]:before,
+.icon-plug:before {
+  content: "\e802"
+}
+
+// Entertainment
+uitk-icon[name="entertainment"]:before,
+.icon-entertainment:before {
+  content: "\e801"
+}
+
+// Handshake
+uitk-icon[name="handshake"]:before,
+.icon-handshake:before {
+  content: "\e805"
+}
+
+// Thumbs up
+uitk-icon[name="thumbsup"]:before,
+.icon-thumbsup:before {
+  content: "\e04a"
+}
+
+uitk-icon[name="thumbsupalt"]:before,
+.icon-thumbsupalt:before {
+  content: "\e049"
+}
+
+// Files
+uitk-icon[name="file"]:before,
+.icon-file:before {
+  content: "\e05d"
+}
+
+uitk-icon[name="files"]:before,
+.icon-files:before {
+  content: "\e05e"
+}
+
+// Copy
+uitk-icon[name="copy"]:before,
+.icon-copy:before {
+  content: "\e062"
+}
+
+uitk-icon[name="copyalt"]:before,
+.icon-copyalt:before {
+  content: "\e061"
+}
+
+// Edit
+uitk-icon[name="edit"]:before,
+.icon-edit:before {
+  content: "\e803"
+}
+
+// Transmission
+uitk-icon[name="transmission"]:before,
+.icon-transmission:before {
+  content: "\e077"
+}
+
+uitk-icon[name="transmissionalt"]:before,
+.icon-transmissionalt:before {
+  content: "\e076"
+}
+
+// Angled arrow
+uitk-icon[name="angled-arrow-right"]:before,
+.icon-angled-arrow-right:before {
+  content: "\e0ae"
+}
+
+uitk-icon[name="angled-arrow-left"]:before,
+.icon-angled-arrow-left:before {
+  content: "\e0af"
+}
+
+// Circle filled (primarily used as background for stacking)
+uitk-icon[name="circle-filled"]:before,
+.icon-circle-filled:before {
+  content: "\e0ca";
+}
+
+uitk-icon[name="enlarge"]:before,
+.icon-enlarge:before {
+  content: "\e900";
+}
+
+uitk-icon[name="shrink"]:before,
+.icon-shrink:before {
+  content: "\e901";
+}
+
+//Trash
+uitk-icon[name="trash"]:before,
+.icon-trash:before {
+  content: "\e90a";
+}
+
+//Download
+uitk-icon[name="download"]:before,
+.icon-download:before {
+  content: "\e909";
+}
+
+//Upload
+uitk-icon[name="upload"]:before,
+.icon-upload:before {
+  content: "\e908";
+}
+
+//In progress
+uitk-icon[name="in-progress"]:before,
+.icon-in-progress:before {
+  content: "\e906";
+}
