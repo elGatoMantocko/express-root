@@ -23,7 +23,8 @@ gulp.task('clean', function() {
 
 gulp.task('bundleStatic', function() {
   return gulp.src(join(CLIENT_STATIC_FILES, '**', '*'))
-    .pipe(gulp.dest(BUNDLE_DEST));
+    .pipe(gulp.dest(BUNDLE_DEST))
+    .pipe(plugins.livereload());
 });
 
 gulp.task('bundleJs', function() {
@@ -33,7 +34,8 @@ gulp.task('bundleJs', function() {
     .pipe(plugins.concat('app.js'))
     .pipe(plugins.uglify())
     .pipe(plugins.sourcemaps.write())
-    .pipe(gulp.dest(BUNDLE_DEST));
+    .pipe(gulp.dest(BUNDLE_DEST))
+    .pipe(plugins.livereload());
 });
 
 gulp.task('bundleLess', function() {
@@ -43,7 +45,8 @@ gulp.task('bundleLess', function() {
       autoprefixer({browsers: ['last 1 versions', 'ie 11']}),
     ]))
     .pipe(plugins.concat('styles.css'))
-    .pipe(gulp.dest(BUNDLE_DEST));
+    .pipe(gulp.dest(BUNDLE_DEST))
+    .pipe(plugins.livereload());
 });
 
 gulp.task('bundleHbs', function(done) {
@@ -53,13 +56,17 @@ gulp.task('bundleHbs', function(done) {
     if (err) done(err);
     // eslint-disable-next-line max-len
     let command = 'node node_modules/handlebars/bin/handlebars --extension hbs ' + CLIENT_HBS_SRC + ' -f ' + join(BUNDLE_DEST, 'templates.js');
-    exec(command, (err) => done(err));
+    exec(command, (err) => {
+      plugins.livereload();
+      done(err);
+    });
   });
 });
 
 gulp.task('build', ['bundleJs', 'bundleLess', 'bundleHbs', 'bundleStatic']);
 
 gulp.task('watch', function() {
+  plugins.livereload.listen();
   gulp.watch(join(CLIENT_JS_SRC, '**', '*.js'), ['bundleJs']);
   gulp.watch(join(CLIENT_HBS_SRC, '**', '*.hbs'), ['bundleHbs']);
   gulp.watch(join(CLIENT_LESS_SRC, '*.less'), ['bundleLess']);
