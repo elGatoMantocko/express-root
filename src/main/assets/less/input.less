@@ -30,15 +30,17 @@
       color: #495057;
       display: block;
 
-      // only here because bootstrap adds margin bottom to labels
-      margin-bottom: 0;
-
       // these two should mimic the behavior of the input
       border: 1px solid transparent;
       border-radius: .25rem;
 
       // style transition
       transition: all .1s ease-in-out;
+
+      // fix alignment issues. use sub because 'middle' sits too high
+      &:before {
+        vertical-align: sub;
+      }
     }
   }
 
