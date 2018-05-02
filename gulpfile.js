@@ -21,7 +21,7 @@ gulp.task('clean', function() {
 });
 
 gulp.task('lint', function() {
-  return gulp.src(JS_FILES.map((file) => `${CLIENT_JS_SRC}/${file}`))
+  return gulp.src(JS_FILES.map((file) => CLIENT_JS_SRC + file))
     .pipe(plugins.eslint())
     .pipe(plugins.eslint.format());
 });
@@ -34,7 +34,7 @@ gulp.task('bundleStatic', function() {
 });
 
 gulp.task('bundleJs', function() {
-  return gulp.src(JS_FILES.map((file) => `${CLIENT_JS_SRC}/${file}`))
+  return gulp.src(JS_FILES.map((file) => CLIENT_JS_SRC + file))
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins.babel({presets: ['env']}))
     .pipe(plugins.concat('app.js'))
@@ -45,7 +45,7 @@ gulp.task('bundleJs', function() {
 });
 
 gulp.task('bundleLess', function() {
-  return gulp.src(LESS_FILES.map((file) => `${CLIENT_LESS_SRC}/${file}`))
+  return gulp.src(LESS_FILES.map((file) => CLIENT_LESS_SRC + file))
     .pipe(plugins.less())
     .pipe(plugins.postcss([
       autoprefixer({browsers: ['last 1 versions', 'ie 11']}),
@@ -61,7 +61,7 @@ gulp.task('bundleHbs', function(done) {
   mkdirp(BUNDLE_DEST, function(err) {
     if (err) done(err);
     // eslint-disable-next-line max-len
-    const command = 'node node_modules/handlebars/bin/handlebars --extension hbs ' + CLIENT_HBS_SRC + ' -f ' + `${BUNDLE_DEST}/templates.js`;
+    const command = 'node node_modules/handlebars/bin/handlebars --extension hbs ' + CLIENT_HBS_SRC + ' -f ' + BUNDLE_DEST + 'templates.js';
     exec(command, (err) => {
       plugins.livereload();
       done(err);
@@ -83,10 +83,10 @@ gulp.task('watch', gulp.parallel('build', function() {
   const watchers = [];
 
   // watch js, less, hbs, and static
-  watchers.push(gulp.watch(`${CLIENT_JS_SRC}/**/*.js`, gulp.series('lint', 'bundleJs')));
-  watchers.push(gulp.watch(`${CLIENT_HBS_SRC}/**/*.hbs`, gulp.parallel('bundleHbs')));
-  watchers.push(gulp.watch(`${CLIENT_LESS_SRC}/*.less'`, gulp.parallel('bundleLess')));
-  watchers.push(gulp.watch(`${CLIENT_STATIC_FILES}/**/*`, gulp.parallel('bundleStatic')));
+  watchers.push(gulp.watch(CLIENT_JS_SRC + '**/*.js', gulp.series('lint', 'bundleJs')));
+  watchers.push(gulp.watch(CLIENT_HBS_SRC + '**/*.hbs', gulp.parallel('bundleHbs')));
+  watchers.push(gulp.watch(CLIENT_LESS_SRC + '**/*.less', gulp.parallel('bundleLess')));
+  watchers.push(gulp.watch(CLIENT_STATIC_FILES + '**/*', gulp.parallel('bundleStatic')));
 
   watchers.forEach((watcher) => {
     watcher.on('change', function(path, stats) {
