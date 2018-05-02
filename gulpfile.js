@@ -1,4 +1,3 @@
-const {join} = require('path');
 const mkdirp = require('mkdirp');
 const gulp = require('gulp');
 const autoprefixer = require('autoprefixer');
@@ -7,28 +6,35 @@ const plugins = require('gulp-load-plugins')();
 const {JS_FILES, LESS_FILES} = require('./buildtools/paths');
 
 // src locations
-const ASSETS_DIR = join('src', 'main', 'assets');
-const CLIENT_JS_SRC = join(ASSETS_DIR, 'js');
-const CLIENT_HBS_SRC = join(ASSETS_DIR, 'views');
-const CLIENT_LESS_SRC = join(ASSETS_DIR, 'less');
-const CLIENT_STATIC_FILES = join(ASSETS_DIR, 'static');
+const ASSETS_DIR = 'src/main/assets/';
+const CLIENT_JS_SRC = ASSETS_DIR + 'js/';
+const CLIENT_HBS_SRC = ASSETS_DIR + 'views/';
+const CLIENT_LESS_SRC = ASSETS_DIR + 'less/';
+const CLIENT_STATIC_FILES = ASSETS_DIR + 'static/';
 
 // bundle directory
-const BUNDLE_DEST = join('dist', 'bundle');
+const BUNDLE_DEST = 'dist/bundle/';
 
 gulp.task('clean', function() {
   return gulp.src('dist', {read: false})
     .pipe(plugins.clean());
 });
 
+gulp.task('lint', function() {
+  return gulp.src(JS_FILES.map((file) => `${CLIENT_JS_SRC}/${file}`))
+    .pipe(plugins.eslint())
+    .pipe(plugins.eslint.format());
+});
+
 gulp.task('bundleStatic', function() {
-  return gulp.src(join(CLIENT_STATIC_FILES, '**', '*'))
+  return gulp.src(CLIENT_STATIC_FILES + '**/*')
+    .pipe(plugins.rename({dirname: ''})) // How is this not a OOTB gulp feature??
     .pipe(gulp.dest(BUNDLE_DEST))
     .pipe(plugins.livereload());
 });
 
 gulp.task('bundleJs', function() {
-  return gulp.src(JS_FILES.map((file) => join(CLIENT_JS_SRC, file)))
+  return gulp.src(JS_FILES.map((file) => `${CLIENT_JS_SRC}/${file}`))
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins.babel({presets: ['env']}))
     .pipe(plugins.concat('app.js'))
@@ -39,7 +45,7 @@ gulp.task('bundleJs', function() {
 });
 
 gulp.task('bundleLess', function() {
-  return gulp.src(LESS_FILES.map((file) => join(CLIENT_LESS_SRC, file)))
+  return gulp.src(LESS_FILES.map((file) => `${CLIENT_LESS_SRC}/${file}`))
     .pipe(plugins.less())
     .pipe(plugins.postcss([
       autoprefixer({browsers: ['last 1 versions', 'ie 11']}),
@@ -55,7 +61,7 @@ gulp.task('bundleHbs', function(done) {
   mkdirp(BUNDLE_DEST, function(err) {
     if (err) done(err);
     // eslint-disable-next-line max-len
-    let command = 'node node_modules/handlebars/bin/handlebars --extension hbs ' + CLIENT_HBS_SRC + ' -f ' + join(BUNDLE_DEST, 'templates.js');
+    const command = 'node node_modules/handlebars/bin/handlebars --extension hbs ' + CLIENT_HBS_SRC + ' -f ' + `${BUNDLE_DEST}/templates.js`;
     exec(command, (err) => {
       plugins.livereload();
       done(err);
@@ -63,12 +69,28 @@ gulp.task('bundleHbs', function(done) {
   });
 });
 
-gulp.task('build', ['bundleJs', 'bundleLess', 'bundleHbs', 'bundleStatic']);
+gulp.task('build',
+  gulp.parallel(
+    gulp.series('lint', 'bundleJs'),
+    'bundleLess',
+    'bundleHbs',
+    'bundleStatic'
+  )
+);
 
-gulp.task('watch', function() {
+gulp.task('watch', gulp.parallel('build', function() {
   plugins.livereload.listen();
-  gulp.watch(join(CLIENT_JS_SRC, '**', '*.js'), ['bundleJs']);
-  gulp.watch(join(CLIENT_HBS_SRC, '**', '*.hbs'), ['bundleHbs']);
-  gulp.watch(join(CLIENT_LESS_SRC, '*.less'), ['bundleLess']);
-  gulp.watch(join(CLIENT_STATIC_FILES, '*'), ['bundleStatic']);
-});
+  const watchers = [];
+
+  // watch js, less, hbs, and static
+  watchers.push(gulp.watch(`${CLIENT_JS_SRC}/**/*.js`, gulp.series('lint', 'bundleJs')));
+  watchers.push(gulp.watch(`${CLIENT_HBS_SRC}/**/*.hbs`, gulp.parallel('bundleHbs')));
+  watchers.push(gulp.watch(`${CLIENT_LESS_SRC}/*.less'`, gulp.parallel('bundleLess')));
+  watchers.push(gulp.watch(`${CLIENT_STATIC_FILES}/**/*`, gulp.parallel('bundleStatic')));
+
+  watchers.forEach((watcher) => {
+    watcher.on('change', function(path, stats) {
+      console.log(`File ${path} was changed`);
+    });
+  });
+}));
