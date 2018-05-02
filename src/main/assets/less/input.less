@@ -20,7 +20,6 @@
       }
     }
 
-    uitk-icon,
     .icon {
       // these three are required
       position: absolute;
@@ -46,7 +45,6 @@
   // input and label padding should be identical
   input,
   label,
-  uitk-icon,
   .icon {
     padding: @inputPaddingY @inputPaddingX;
   }
@@ -95,7 +93,7 @@
         font-size: calc(@baseFontSize * (3 / 4));
       }
 
-      & ~ uitk-icon {
+      & ~ .icon {
         left: -3rem;
       }
     }

@@ -4,7 +4,7 @@ const gulp = require('gulp');
 const autoprefixer = require('autoprefixer');
 const exec = require('child_process').exec;
 const plugins = require('gulp-load-plugins')();
-const {JS_FILES} = require('./buildtools/paths');
+const {JS_FILES, LESS_FILES} = require('./buildtools/paths');
 
 // src locations
 const ASSETS_DIR = join('src', 'main', 'assets');
@@ -28,7 +28,7 @@ gulp.task('bundleStatic', function() {
 });
 
 gulp.task('bundleJs', function() {
-  return gulp.src(JS_FILES.map((file) => join(CLIENT_JS_SRC, '**', file)))
+  return gulp.src(JS_FILES.map((file) => join(CLIENT_JS_SRC, file)))
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins.babel({presets: ['env']}))
     .pipe(plugins.concat('app.js'))
@@ -39,7 +39,7 @@ gulp.task('bundleJs', function() {
 });
 
 gulp.task('bundleLess', function() {
-  return gulp.src(join(CLIENT_LESS_SRC, '*.less'))
+  return gulp.src(LESS_FILES.map((file) => join(CLIENT_LESS_SRC, file)))
     .pipe(plugins.less())
     .pipe(plugins.postcss([
       autoprefixer({browsers: ['last 1 versions', 'ie 11']}),
