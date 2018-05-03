@@ -7,7 +7,7 @@
     "build": "npx gulp build",
     "start": "npx node src/main/server/index.js",
     "test": "npm test",
-    "watch": "npx nodemon -w src/main/server/index.js -w src/main/assets/views -e \"js hbs\""
+    "watch": "npx nodemon -w src/main/server/**/*.js"
   },
   "author": "Elliott",
   "license": "ISC",
