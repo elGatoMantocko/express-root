@@ -1,6 +1,7 @@
 // express
 const express = require('express');
 const app = express();
+const argv = require('minimist')(process.argv.slice(2));
 
 // node based requirements
 const {readFile, readFileSync, readdirSync} = require('fs');
@@ -130,4 +131,6 @@ app.get(/\w*$/, function(req, res) {
 });
 // \CONTROLLERS
 
-app.listen(3000);
+// APP START
+app.listen(argv.port || 3000);
+// \APP START
