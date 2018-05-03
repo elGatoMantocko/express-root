@@ -1,7 +1,6 @@
-const mkdirp = require('mkdirp');
 const gulp = require('gulp');
 const autoprefixer = require('autoprefixer');
-const exec = require('child_process').exec;
+const {normalize} = require('upath');
 const plugins = require('gulp-load-plugins')();
 const {JS_FILES, LESS_FILES} = require('./buildtools/paths');
 
@@ -56,17 +55,15 @@ gulp.task('bundleLess', function() {
 });
 
 gulp.task('bundleHbs', function(done) {
-  // because we don't use gulp here (gulp-handlebars is out of date)
-  //  we need to make sure the bundle directory exists
-  mkdirp(BUNDLE_DEST, function(err) {
-    if (err) done(err);
-    // eslint-disable-next-line max-len
-    const command = 'node node_modules/handlebars/bin/handlebars --extension hbs ' + CLIENT_HBS_SRC + ' -f ' + BUNDLE_DEST + 'templates.js';
-    exec(command, (err) => {
-      plugins.livereload();
-      done(err);
-    });
-  });
+  const processPartialName = (file) => normalize(file.relative.replace(/\.\w+$/, ''));
+  return gulp.src(CLIENT_HBS_SRC + '**/*.hbs')
+    .pipe(plugins.handlebars({handlebars: require('handlebars')}))
+    .pipe(plugins.wrap('Handlebars.registerPartial(\'<%= processPartialName(file) %>\', Handlebars.template(<%= contents %>));', {}, {
+      imports: {processPartialName},
+    }))
+    .pipe(plugins.concat('templates.js'))
+    .pipe(gulp.dest(BUNDLE_DEST))
+    .pipe(plugins.livereload());
 });
 
 gulp.task('build',

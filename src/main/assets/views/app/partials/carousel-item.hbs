@@ -1,3 +1,5 @@
 <div id="{{id}}" class="carousel-item {{classes}}">
-  {{> @partial-block}}
+  {{#if @partial-block}}
+    {{> @partial-block}}
+  {{/if}}
 </div>
