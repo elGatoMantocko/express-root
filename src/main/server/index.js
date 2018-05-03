@@ -33,8 +33,8 @@ const partialsDir = join(viewsDir, 'app', 'partials');
 
 // register the main partials that app templates use
 Handlebars.registerPartial('layouts/default', readFileSync(join(layoutsDir, 'default.hbs')).toString());
-Handlebars.registerPartial('header', readFileSync(join(layoutsDir, 'header.hbs')).toString());
-Handlebars.registerPartial('footer', readFileSync(join(layoutsDir, 'footer.hbs')).toString());
+Handlebars.registerPartial('layouts/header', readFileSync(join(layoutsDir, 'header.hbs')).toString());
+Handlebars.registerPartial('layouts/footer', readFileSync(join(layoutsDir, 'footer.hbs')).toString());
 readdirSync(partialsDir).forEach((file) => {
   // partials are registered under the app/partials directory the joined by the partial name
   Handlebars.registerPartial(`app/partials/${file.slice(0, -4)}`, readFileSync(join(partialsDir, file)).toString());
