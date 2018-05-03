@@ -19,6 +19,7 @@
     "bootstrap": "^4.1.1",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
+    "express-locale": "^1.0.5",
     "font-awesome": "^4.7.0",
     "gulp": "^4.0.0",
     "gulp-babel": "^7.0.1",

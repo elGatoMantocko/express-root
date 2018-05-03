@@ -13,6 +13,7 @@ const Handlebars = require('handlebars');
 const bundleDir = join('dist', 'bundle');
 
 // middleware to make life easier
+const localeResolver = require('express-locale');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const upload = require('multer')();
@@ -66,6 +67,10 @@ app.set('view engine', 'hbs');
 // \TEMPLATING
 
 // MIDDLEWARE - TODO move to another file
+app.use(localeResolver({
+  priority: ['query', 'accept-language', 'cookie', 'default'],
+  default: 'en_US',
+}));
 app.use(helmet());
 app.use(cookieParser());
 app.use(bodyParser.json());
