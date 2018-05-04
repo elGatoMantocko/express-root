@@ -2,6 +2,7 @@
 const express = require('express');
 const app = express();
 const argv = require('minimist')(process.argv.slice(2));
+const https = require('https');
 
 // node based requirements
 const {readFile, readFileSync, readdirSync} = require('fs');
@@ -88,6 +89,7 @@ app.use(function(req, res, next) {
 app.use('/resources', express.static('node_modules'));
 app.use('/assets', express.static(bundleDir));
 app.use('/favicon.ico', express.static(join(bundleDir, 'favicon.ico')));
+app.use('/manifest.json', express.static(join(bundleDir, 'manifest.json')));
 
 // error handling
 app.use(function(err, req, res, next) {
@@ -132,5 +134,15 @@ app.get(/\w*$/, function(req, res) {
 // \CONTROLLERS
 
 // APP START
-app.listen(argv.port || 3000);
+if (argv.key && argv.cert) {
+  const key = readFileSync(argv.key);
+  const cert = readFileSync(argv.cert);
+  const allowHTTP1 = true;
+
+  // eventually pindrop http2 here when express supports it
+  //  track: https://github.com/expressjs/express/issues/3388
+  https.createServer({allowHTTP1, key, cert}, app).listen(argv.port || 3443);
+} else {
+  app.listen(argv.port || 3000);
+}
 // \APP START

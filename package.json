@@ -5,7 +5,7 @@
   "main": "src/main/server/index.js",
   "scripts": {
     "build": "npx gulp build",
-    "start": "npx node src/main/server/index.js",
+    "start": "node src/main/server/index.js --port 3000",
     "test": "npm test",
     "watch": "npx nodemon -w src/main/server/**/*.js"
   },
@@ -36,6 +36,7 @@
     "gulp-wrap": "^0.13.0",
     "handlebars": "^4.0.11",
     "helmet": "^3.12.0",
+    "https": "^1.0.0",
     "jquery": "^3.3.1",
     "minimist": "^1.2.0",
     "moment": "^2.22.1",

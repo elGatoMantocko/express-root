@@ -1,0 +1,11 @@
+{
+  "background_color": "#fff",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "Basic Express App",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "short_name": "App",
+  "start_url": "/home",
+  "theme_color": "#f8f9fa"
+}
