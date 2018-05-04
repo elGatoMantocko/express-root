@@ -2,6 +2,7 @@
 @inputPaddingX: .75rem;
 @inputPaddingY: .75rem;
 @baseFontSize: 1rem;
+@inputTextColor: #495057;
 
 .app-input-group {
   // necessary for label positioning in the *placeholders* spot
@@ -27,7 +28,7 @@
       left: 0;
 
       // these three are optional
-      color: #495057;
+      color: @inputTextColor;
       display: block;
 
       // these two should mimic the behavior of the input
@@ -55,14 +56,15 @@
   // labels sitting next to it will get standard styles
   input.float-label {
     ~ label {
-      // these three are required
+      // these four are required
       position: absolute;
       top: 0;
       left: 0;
+      user-select: none;
 
       // these three are optional
       width: 100%;
-      color: #495057;
+      color: @inputTextColor;
       display: block;
 
       // only here because bootstrap adds margin bottom to labels
@@ -86,6 +88,12 @@
       padding-top: calc(@inputPaddingY + @inputPaddingY * (2 / 3));
       padding-bottom: calc(@inputPaddingY / 3);
       padding-left: @inputPaddingX;
+
+      &::placeholder {
+        color: lighten(@inputTextColor, 50%);
+        transition: all .1s ease-in-out;
+      }
+
       & ~ label {
         padding-left: @inputPaddingX;
         padding-top: calc(@inputPaddingY / 3);
