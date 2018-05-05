@@ -9,11 +9,7 @@
       </div>
       <div class="row justify-content-center">
         <div class="col-sm col-sm-8">
-          <div class="app-input-group app-input-icon">
-            <input id="my-email-input" class="float-label form-control" type="email" autofocus spellcheck="false" placeholder="my.email@domain.com">
-            <i class="icon fa fa-at"></i>
-            <label for="my-email-input">Email Address</label>
-          </div>
+          {{> app/partials/input id="my-email-input" type="email" label="Email Address" icon="at" placeholder="my.email@domain.com" autofocus=true spellsheck=false }}
         </div>
       </div>
       <div class="row justify-content-center mt-4">
