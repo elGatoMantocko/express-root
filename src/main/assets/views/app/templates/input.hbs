@@ -7,29 +7,78 @@
           <p class="lead">Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus.</p>
         </div>
       </div>
-      <div class="row justify-content-center">
-        <div class="col-sm col-sm-8">
-          {{> app/partials/input id="my-email-input" type="email" label="Email Address" icon="at" placeholder="my.email@domain.com" autofocus=true spellsheck=false }}
-        </div>
-      </div>
-      <div class="row justify-content-center mt-4">
-        <div class="col-sm col-sm-4">
-          <div class="app-input-group app-input-icon">
-            <input id="my-first-name-input" class="float-label form-control" type="name" placeholder="John">
-            <i class="icon fa fa-user"></i>
-            <label for="my-first-name-input">First Name</label>
+      <form action="/register" method="post" autocomplete="off">
+        <div class="row justify-content-center">
+          <div class="col-sm col-sm-8">
+            {{#> app/partials/input-group for="my-email-input" icon="at" label="Email Address" }}
+              <input id="my-email-input"
+                     class="validation-control form-control label-adjusted float-label"
+                     name="email"
+                     type="email"
+                     placeholder="my.email@domain.com"
+                     autofocus=true
+                     spellcheck=false>
+            {{/app/partials/input-group}}
           </div>
         </div>
-        <div class="col-sm col-sm-4">
-          <div class="app-input-group app-input-icon">
-            <input id="my-last-name-input" class="float-label form-control" type="name" placeholder="Doe">
-            <i class="icon fa fa-user"></i>
-            <label for="my-last-name-input">Last Name</label>
+        <div class="row justify-content-center">
+          <div class="col-sm col-sm-4">
+            {{#> app/partials/input-group for="my-first-name-input" icon="user" label="First Name" }}
+              <input id="my-first-name-input"
+                     class="validation-control form-control float-label"
+                     name="first_name"
+                     type="text"
+                     placeholder="John"
+                     spellcheck=false>
+            {{/app/partials/input-group}}
+          </div>
+          <div class="col-sm col-sm-4">
+            {{#> app/partials/input-group for="my-last-name-input" icon="user" label="Last Name" }}
+              <input id="my-last-name-input"
+                     class="validation-control form-control float-label"
+                     name="last_name"
+                     type="text"
+                     placeholder="Doe"
+                     spellcheck=false>
+            {{/app/partials/input-group}}
           </div>
         </div>
-      </div>
+        <div class="row justify-content-center">
+          <div class="col-sm col-sm-4">
+            {{#> app/partials/input-group for="my-password-input" icon="lock" label="Password" }}
+              <input id="my-password-input"
+                     class="validation-control form-control float-label"
+                     name="password"
+                     type="password"
+                     minlength="6"
+                     placeholder="***********"
+                     autocomplete="new-password"
+                     required>
+            {{/app/partials/input-group}}
+          </div>
+          <div class="col-sm col-sm-4">
+            {{#> app/partials/input-group for="my-password-verify-input" icon="lock" label="Verify Password" }}
+              <input id="my-password-verify-input"
+                     class="validation-control form-control float-label"
+                     type="password"
+                     minlength="6"
+                     autocomplete="new-password"
+                     placeholder="***********"
+                     data-verify-for="#my-password-input"
+                     oninput="App.libs.input.verifyPassword(this)"
+                     required>
+            {{/app/partials/input-group}}
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-sm col-sm-8">
+            <button type="submit" class="btn btn-lg btn-block btn-primary">Register</button>
+          </div>
+        </div>
+      </form>
     </div>
   {{/inline}}
   {{#*inline "more-scripts"}}
+    <script type="text/javascript">App.Presenters.Input();</script>
   {{/inline}}
 {{/layouts/default}}

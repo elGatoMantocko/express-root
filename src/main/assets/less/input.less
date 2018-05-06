@@ -4,10 +4,23 @@
 @baseFontSize: 1rem;
 @inputTextColor: #495057;
 
+form .app-input-group {
+  margin-bottom: 1rem;
+}
+
 .app-input-group {
   // necessary for label positioning in the *placeholders* spot
   position: relative;
   overflow-x: hidden;
+
+  input.validation-control:invalid {
+    border-color: red;
+
+    ~ .icon,
+    ~ label {
+      color: red;
+    }
+  }
 
   &.app-input-icon {
     input,
