@@ -49,6 +49,11 @@ Handlebars.registerHelper('range', function(length, options) {
   }).join(''));
 });
 
+// json helper to stringify json in the view
+Handlebars.registerHelper('json', function(object) {
+  return new Handlebars.SafeString(JSON.stringify(object));
+});
+
 // app view engine
 app.engine('hbs', function(path, opts, cb) {
   try {
@@ -128,8 +133,17 @@ app.post('/logger/:loggerPath', upload.array(), function(req, res) {
 
 // controller
 app.get(/\w*$/, function(req, res) {
+  // build the model skeleton
+  const model = {
+    App: {
+      Models: {},
+      Presenters: {},
+      libs: {},
+    },
+  };
+
   if (req.path === '/') res.status(302).redirect('/home');
-  else res.render(`app/templates${req.path}`);
+  else res.render(`app/templates${req.path}`, model);
 });
 // \CONTROLLERS
 
