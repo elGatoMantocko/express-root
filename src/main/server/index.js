@@ -145,6 +145,12 @@ app.get(/\w*$/, function(req, res) {
   if (req.path === '/') res.status(302).redirect('/home');
   else res.render(`app/templates${req.path}`, model);
 });
+
+// basic registration endpoint
+app.post('/register', function(req, res) {
+  // index user into database and redirect to /login with the userid as a parameter
+  res.send(req.body);
+});
 // \CONTROLLERS
 
 // APP START

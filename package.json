@@ -52,7 +52,7 @@
     "eslint": "^4.19.1",
     "eslint-config-google": "^0.9.1",
     "gulp-livereload": "^3.8.1",
-    "nodemon": "^1.17.3"
+    "nodemon": "^1.17.4"
   },
   "babel": {
     "presets": [
