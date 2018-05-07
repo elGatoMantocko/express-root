@@ -7,7 +7,7 @@
           <p class="lead">Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus.</p>
         </div>
       </div>
-      <form action="/register" method="post" autocomplete="off">
+      <form id="my-registration-form" action="/register" method="post" autocomplete="off">
         <div class="row justify-content-center">
           <div class="col-sm col-sm-8">
             {{#> app/partials/input-group for="my-email-input" icon="at" label="Email Address" }}
@@ -15,7 +15,7 @@
                      class="validation-control form-control label-adjusted float-label"
                      name="email"
                      type="email"
-                     placeholder="my.email@domain.com"
+                     placeholder="sholmes@domain.com"
                      autofocus=true
                      spellcheck=false>
             {{/app/partials/input-group}}
@@ -27,8 +27,10 @@
               <input id="my-first-name-input"
                      class="validation-control form-control float-label"
                      name="first_name"
+                     pattern="^[A-Za-z]+$"
+                     title="Only accepts characters A through Z"
                      type="text"
-                     placeholder="John"
+                     placeholder="Sherlock"
                      spellcheck=false>
             {{/app/partials/input-group}}
           </div>
@@ -37,8 +39,56 @@
               <input id="my-last-name-input"
                      class="validation-control form-control float-label"
                      name="last_name"
+                     pattern="^[A-Za-z]+$"
+                     title="Only accepts characters A through Z"
                      type="text"
-                     placeholder="Doe"
+                     placeholder="Holmes"
+                     spellcheck=false>
+            {{/app/partials/input-group}}
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-sm col-sm-8">
+            {{#> app/partials/input-group for="my-address-line-1-input" label="Address Line One"}}
+              <input id="my-address-line-1-input"
+                     class="validation-control form-control float-label"
+                     name="address_line_1"
+                     type="text"
+                     placeholder="221 Baker Street"
+                     spellcheck=false>
+            {{/app/partials/input-group}}
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-sm col-sm-8">
+            {{#> app/partials/input-group for="my-address-line-2-input" label="Address Line Two"}}
+              <input id="my-address-line-2-input"
+                     class="validation-control form-control float-label"
+                     name="address_line_2"
+                     type="text"
+                     placeholder="Flat B"
+                     spellcheck=false>
+            {{/app/partials/input-group}}
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-sm col-sm-4">
+            {{#> app/partials/input-group for="my-city-input" label="City / Town"}}
+              <input id="my-city-input"
+                     class="validation-control form-control float-label"
+                     name="city"
+                     type="text"
+                     placeholder="London"
+                     spellcheck=false>
+            {{/app/partials/input-group}}
+          </div>
+          <div class="col-sm col-sm-4">
+            {{#> app/partials/input-group for="my-state-input" label="State / Province / Region"}}
+              <input id="my-state-input"
+                     class="validation-control form-control float-label"
+                     name="state"
+                     type="text"
+                     placeholder="Marylebone"
                      spellcheck=false>
             {{/app/partials/input-group}}
           </div>
@@ -52,8 +102,7 @@
                      type="password"
                      minlength="6"
                      placeholder="***********"
-                     autocomplete="new-password"
-                     required>
+                     autocomplete="new-password">
             {{/app/partials/input-group}}
           </div>
           <div class="col-sm col-sm-4">
@@ -65,14 +114,13 @@
                      autocomplete="new-password"
                      placeholder="***********"
                      data-verify-for="#my-password-input"
-                     oninput="App.libs.input.verifyPassword(this)"
-                     required>
+                     oninput="App.libs.input.verifyPassword(this)">
             {{/app/partials/input-group}}
           </div>
         </div>
         <div class="row justify-content-center">
           <div class="col-sm col-sm-8">
-            <button type="submit" class="btn btn-lg btn-block btn-primary">Register</button>
+            <button id="my-submit-button" type="submit" class="btn btn-lg btn-block btn-primary">Register</button>
           </div>
         </div>
       </form>

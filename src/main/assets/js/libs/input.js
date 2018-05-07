@@ -1,5 +1,5 @@
 App.libs.input = {
-  init: function() {
+  initFloats: function() {
     /**
      * Necessary code for float labels to work no shadow dom required
      * This should be run after float labels are rendered

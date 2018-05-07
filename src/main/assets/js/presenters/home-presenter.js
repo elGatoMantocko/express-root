@@ -1,6 +1,6 @@
 App.Presenters.Home = function() {
   // initialize the input(s)
-  App.libs.input.init();
+  App.libs.input.initFloats();
 
   let now = moment();
   /**
