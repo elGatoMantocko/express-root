@@ -3,8 +3,6 @@ App.libs.input = {
     /**
      * Necessary code for float labels to work no shadow dom required
      * This should be run after float labels are rendered
-     *
-     * Possibly move to an input init lib function
      */
     $('.float-label').on('focusin', function(e) {
       e.preventDefault();
@@ -16,14 +14,19 @@ App.libs.input = {
       if (!$el.val()) $el.removeClass('label-adjusted');
     });
 
-    $('input.validation-control').on('focusout focusin', function(e) {
-      const $el = $(this);
-      if (!$el[0].checkValidity()) {
-        $el.addClass('invalid');
-      } else {
-        $el.removeClass('invalid');
-      }
-    });
+    // validation control for inputs with 'validation-control' class
+    $('input.validation-control')
+      .on('focusout focusin', function() {
+        if (!this.checkValidity()) {
+          $(this).addClass('invalid');
+        } else {
+          $(this).removeClass('invalid');
+        }
+      }).on('input', function() {
+        if (this.checkValidity()) {
+          $(this).removeClass('invalid');
+        }
+      });
   },
 
   verifyPassword: function(el) {
