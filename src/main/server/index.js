@@ -9,9 +9,8 @@ const {readFileSync} = require('fs');
 const {join} = require('path');
 
 // view engine
-const Handlebars = require('handlebars');
-const hbsUtils = require('./handlebars/index.js');
-const {handlebars} = require('consolidate');
+const {HandlebarsBuilder} = require('./handlebars/index.js');
+const engines = require('consolidate');
 
 // app bundles
 const bundleDir = join('dist', 'bundle');
@@ -31,14 +30,20 @@ const machine_name = hostname();
 
 // TEMPLATING
 const viewsDir = join('src', 'main', 'assets', 'views');
-hbsUtils.registerDefaultLayouts(Handlebars);
-hbsUtils.registerAppPartials(Handlebars);
-hbsUtils.registerDefaultHelpers(Handlebars);
 
-// tell the app about the views and view engine
-app.engine('hbs', handlebars);
-app.set('views', viewsDir);
-app.set('view engine', 'hbs');
+// get the handlebars runtime and assign it to consolidate
+const hbsRuntimeBuilder = new HandlebarsBuilder();
+hbsRuntimeBuilder.build() // resolves to hbs runtime
+  .then((hbs) => engines.requires.handlebars = hbs)
+  .catch((err) => engines.requires.handlebars = require('handlebars'))
+  .finally(() => {
+    // tell the app about the views and view engine
+    app.locals.cache = true;
+    app.engine('hbs', engines.handlebars);
+    app.set('views', viewsDir);
+    app.set('view engine', 'hbs');
+  });
+
 // \TEMPLATING
 
 // MIDDLEWARE - TODO move to another file
@@ -52,8 +57,8 @@ app.use(cookieParser());
 
 // log incoming requests
 app.use(function(req, res, next) {
-  const {originalUrl, body, method, ip, protocol} = req;
-  console.log(`INFO - ${(new Date()).toUTCString()} - ${method} - ${originalUrl} - ${ip} - ${protocol} - ${JSON.stringify(body)}`);
+  const {originalUrl, method, ip, protocol} = req;
+  console.log(`INFO - ${(new Date()).toUTCString()} - ${method} - ${originalUrl} - ${ip} - ${protocol}}`);
   next();
 });
 
@@ -64,7 +69,8 @@ app.use('/favicon.ico', express.static(join(bundleDir, 'favicon.ico')));
 app.use('/manifest.json', express.static(join(bundleDir, 'manifest.json')));
 
 // error handling
-app.use(function(err, req, res, next) {
+app.use(async function(err, req, res, next) {
+  // await log to external logging
   console.error(err);
   next();
 });

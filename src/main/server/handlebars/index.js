@@ -1,97 +1,145 @@
-// if this file gets too big, split into respective functions
 const {readdir, readFile} = require('fs').promises;
 const {join} = require('path');
 
 // paths for layouts
-const viewsDir = join('src', 'main', 'assets', 'views');
-const layoutsDir = join(viewsDir, 'layouts');
-const partialsDir = join(viewsDir, 'app', 'partials');
+const VIEWS_DIR = join('src', 'main', 'assets', 'views');
+const LAYOUTS_DIR = join(VIEWS_DIR, 'layouts');
+const PARTIALS_DIR = join(VIEWS_DIR, 'app', 'partials');
 
 /**
- * Registers the default set of partials for the application
- * @param {Object} Handlebars - Handlebars runtime instance
- * @return {Promise} - Resolves to the handlebars runtime
+ * Class that builds a handlebars instance
+ * @class
  */
-async function registerDefaultLayouts(Handlebars) {
-  try {
-    const layouts = await readdir(layoutsDir);
+class HandlebarsBuilder {
+  /**
+   * Constructor initializes the Handlebars instance and returns self
+   * @return {HandlebarsBuilder} - self
+   */
+  constructor() {
+    this.hbs = require('handlebars');
+    return this;
+  }
 
-    return layouts.reduce(async function(hbsP, fileName = '') {
+  /**
+   * Build the default set of hbs options for our apps
+   * @param {Object} options - Params to allow disabling of settings
+   * @return {Promise} - Promise that resolves to the hbs runtime instance
+   */
+  async build(options = {}) {
+    if (!options.layouts) await this.registerDefaultLayouts();
+    if (!options.helpers) await this.registerDefaultHelpers();
+    if (!options.partials) await this.registerAppPartials();
+    return this.hbs;
+  }
+
+  /**
+   * Registers the default set of partials for the application
+   * @return {Promise} - Resolves to the handlebars runtime
+   */
+  async registerDefaultLayouts() {
+    let layouts;
+
+    // get layouts from the layouts directory
+    try {
+      layouts = await readdir(LAYOUTS_DIR);
+    } catch (dir_err) {
+      console.error(new Error(dir_err));
+      layouts = [];
+    }
+
+    return await layouts.reduce(async function(hbsP, fileName = '') {
       // get the layout's name and start getting the file's contents right away
       const layoutName = `layouts/${fileName.replace(/\.hbs$/ig, '')}`;
-      const data = await readFile(join(layoutsDir, fileName));
+      let data;
+
+      try {
+        data = await readFile(join(LAYOUTS_DIR, fileName));
+      } catch (file_err) {
+        console.error(new Error(file_err));
+        return await hbs;
+      }
 
       // need to wait for the promise to be resolved
       const hbs = await hbsP;
       hbs.registerPartial(layoutName, data.toString());
       return hbs;
-    }, Promise.resolve(Handlebars));
-  } catch (error) {
-    console.error(new Error(error));
+    }, Promise.resolve(this.hbs));
   }
-}
 
-/**
- * Registers a default set of helpers for the application
- * @param {Object} Handlebars - Handlebars runtime instance
- * @return {Promise} - Resolves to the handlebars runtime
- */
-async function registerAppPartials(Handlebars) {
-  try {
-    const partials = await readdir(partialsDir);
+  /**
+   * Registers a default set of helpers for the application
+   * @return {Promise} - Resolves to the handlebars runtime
+   */
+  async registerAppPartials() {
+    let partials;
 
-    return partials.reduce(async function(hbsP, fileName = '') {
+    // get partials from the partials directory
+    try {
+      partials = await readdir(PARTIALS_DIR);
+    } catch (dir_err) {
+      console.error(new Error(dir_err));
+      partials = [];
+    }
+
+    return await partials.reduce(async function(hbsP, fileName = '') {
       // get the layout's name and start getting the file's contents right away
       const layoutName = `app/partials/${fileName.replace(/\.hbs$/ig, '')}`;
-      const data = await readFile(join(partialsDir, fileName));
+      let data;
+
+      try {
+        data = await readFile(join(PARTIALS_DIR, fileName));
+      } catch (file_err) {
+        console.error(new Error(file_err));
+        return await hbs;
+      }
 
       // need to wait for the promise to be resolved
       const hbs = await hbsP;
       hbs.registerPartial(layoutName, data.toString());
       return hbs;
-    }, Promise.resolve(Handlebars));
-  } catch (error) {
-    console.error(new Error(error));
+    }, Promise.resolve(this.hbs));
   }
-};
 
-/**
- * Registers our default set of handlebars helpers
- * @param {Object} Handlebars - Handlebars runtime instance
- * @return {Promise} - Resolves to handlebars runtime
- */
-async function registerDefaultHelpers(Handlebars) {
-  try {
-    // #range block helper takes a number n as an arg and renders the block n times
-    Handlebars.registerHelper('range', function(length, options) {
-      return new Handlebars.SafeString(Array.from({length}, (value, index) => {
-        return options.fn({length, value}, {data: {index}});
-      }).join(''));
-    });
+  /**
+   * Registers our default set of handlebars helpers
+   * @return {Promise} - Resolves to handlebars runtime
+   */
+  async registerDefaultHelpers() {
+    try {
+      // #range block helper takes a number n as an arg and renders the block n times
+      this.hbs.registerHelper('range', (length, options) => {
+        return new this.hbs.SafeString(Array.from({length}, (value, index) => {
+          return options.fn({length, value}, {data: {index}});
+        }).join(''));
+      });
 
-    // json helper to stringify json in the view
-    Handlebars.registerHelper('json', function(object) {
-      return new Handlebars.SafeString(JSON.stringify(object));
-    });
+      // json helper to stringify json in the view
+      this.hbs.registerHelper('json', (object) => {
+        return new this.hbs.SafeString(JSON.stringify(object));
+      });
 
-    Handlebars.registerHelper('includeJsBundle', function(options = {}) {
-      const {contextPath = '/assets', bundleName} = options.hash;
-      return new Handlebars.SafeString(
-        `<script type="text/javascript" src="${contextPath}/${bundleName}.js"></script>`
-      );
-    });
+      this.hbs.registerHelper('includeJsBundle', (options = {}) => {
+        const {contextPath = '/assets', bundleName} = options.hash;
+        return new this.hbs.SafeString(
+          `<script type="text/javascript" src="${contextPath}/${bundleName}.js"></script>`
+        );
+      });
 
-    Handlebars.registerHelper('includeCssBundle', function(options = {}) {
-      const {contextPath = '/assets', bundleName} = options.hash;
-      return new Handlebars.SafeString(
-        `<link rel="stylesheet" href="${contextPath}/${bundleName}.css">`
-      );
-    });
-  } catch (error) {
-    console.error(new Error(error));
-  } finally {
-    return Handlebars;
+      this.hbs.registerHelper('includeCssBundle', (options = {}) => {
+        const {contextPath = '/assets', bundleName} = options.hash;
+        return new this.hbs.SafeString(
+          `<link rel="stylesheet" href="${contextPath}/${bundleName}.css">`
+        );
+      });
+    } catch (error) {
+      console.error(new Error(error));
+    } finally {
+      return this.hbs;
+    }
   }
 }
 
-module.exports = {registerAppPartials, registerDefaultHelpers, registerDefaultLayouts};
+/**
+ * module.exports
+ */
+module.exports = {HandlebarsBuilder};
