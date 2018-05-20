@@ -12,11 +12,12 @@
   "author": "Elliott",
   "license": "ISC",
   "dependencies": {
-    "autoprefixer": "^8.4.1",
+    "autoprefixer": "^8.5.0",
     "babel-core": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "body-parser": "^1.18.2",
+    "babel-preset-env": "^1.7.0",
+    "body-parser": "^1.18.3",
     "bootstrap": "^4.1.1",
+    "consolidate": "^0.15.1",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
     "express-locale": "^1.0.5",
@@ -30,12 +31,12 @@
     "gulp-less": "^4.0.0",
     "gulp-load-plugins": "^1.5.0",
     "gulp-postcss": "^7.0.1",
-    "gulp-rename": "^1.2.2",
+    "gulp-rename": "^1.2.3",
     "gulp-sourcemaps": "^2.6.4",
     "gulp-uglify": "^3.0.0",
     "gulp-wrap": "^0.13.0",
     "handlebars": "^4.0.11",
-    "helmet": "^3.12.0",
+    "helmet": "^3.12.1",
     "https": "^1.0.0",
     "jquery": "^3.3.1",
     "minimist": "^1.2.0",
@@ -44,8 +45,9 @@
     "os": "^0.1.1",
     "path": "^0.12.7",
     "popper.js": "^1.14.3",
+    "promise": "^8.0.1",
     "tether": "^1.4.4",
-    "upath": "^1.0.5"
+    "upath": "^1.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.3",
@@ -67,7 +69,7 @@
   "eslintConfig": {
     "extends": "google",
     "parserOptions": {
-      "ecmaVersion": 6
+      "ecmaVersion": 2017
     },
     "env": {
       "es6": true,

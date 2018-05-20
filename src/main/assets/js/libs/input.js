@@ -15,7 +15,17 @@ App.libs.input = {
       const $el = $(this);
       if (!$el.val()) $el.removeClass('label-adjusted');
     });
+
+    $('input.validation-control').on('focusout focusin', function(e) {
+      const $el = $(this);
+      if (!$el[0].checkValidity()) {
+        $el.addClass('invalid');
+      } else {
+        $el.removeClass('invalid');
+      }
+    });
   },
+
   verifyPassword: function(el) {
     const $el = $(el);
     if (!$el.data('verifyFor')) throw new Error('This input doesn\'t verify any password input');
