@@ -9,12 +9,8 @@
     <!-- manifest -->
     <link rel="manifest" href="/manifest.json" type="application/manifest+json" charset="utf-8">
 
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="/resources/font-awesome/css/font-awesome.min.css">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="/resources/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/assets/styles.css">
+    {{> layouts/core-css}}
+    {{includeCssBundle bundleName="styles"}}
 
     <title>App</title>
   </head>
@@ -24,19 +20,9 @@
       {{> content}}
     </div>
     {{> layouts/footer}}
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script type="text/javascript" src="/resources/handlebars/dist/handlebars.min.js"></script>
-    <script type="text/javascript" src="/resources/tether/dist/js/tether.min.js"></script>
-    <script type="text/javascript" src="/resources/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="/resources/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/resources/moment/min/moment.min.js"></script>
-    <script type="text/javascript" src="/assets/templates.js"></script>
-    <script type="text/javascript">
-      // build the model
-      window.App = {{json App}};
-    </script>
-    <script type="text/javascript" src="/assets/app.js"></script>
+
+    {{> layouts/core-js}}
+    {{includeJsBundle bundleName="app"}}
     {{> more-scripts}}
   </body>
 </html>

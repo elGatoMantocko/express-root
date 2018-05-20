@@ -13,12 +13,19 @@ form .app-input-group {
   position: relative;
   overflow-x: hidden;
 
-  input.validation-control:invalid {
+  input.validation-control.invalid {
     border-color: red;
 
     ~ .icon,
     ~ label {
       color: red;
+    }
+
+    &:focus {
+      ~ .icon,
+      ~ label {
+        color: red;
+      }
     }
   }
 
@@ -32,6 +39,10 @@ form .app-input-group {
           padding-left: @inputPaddingX;
         }
       }
+    }
+
+    input:focus ~ .icon {
+      color: #80bdff;
     }
 
     .icon {
@@ -100,7 +111,7 @@ form .app-input-group {
     &.label-adjusted {
       padding-top: calc(@inputPaddingY + @inputPaddingY * (2 / 3));
       padding-bottom: calc(@inputPaddingY / 3);
-      padding-left: @inputPaddingX;
+      // padding-left: @inputPaddingX;
 
       &::placeholder {
         color: lighten(@inputTextColor, 50%);
@@ -108,16 +119,12 @@ form .app-input-group {
       }
 
       & ~ label {
-        padding-left: @inputPaddingX;
+        // padding-left: @inputPaddingX;
         padding-top: calc(@inputPaddingY / 3);
         padding-bottom: calc(@inputPaddingY / 3);
 
         // font should be smaller than input font
         font-size: calc(@baseFontSize * (3 / 4));
-      }
-
-      & ~ .icon {
-        left: -3rem;
       }
     }
   }
