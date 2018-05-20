@@ -58,7 +58,7 @@ app.use(cookieParser());
 // log incoming requests
 app.use(function(req, res, next) {
   const {originalUrl, method, ip, protocol} = req;
-  console.log(`INFO - ${(new Date()).toUTCString()} - ${method} - ${originalUrl} - ${ip} - ${protocol}}`);
+  console.log(`INFO - ${(new Date()).toUTCString()} - ${method} - ${originalUrl} - ${ip} - ${protocol}`);
   next();
 });
 
