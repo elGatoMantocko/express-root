@@ -43,7 +43,7 @@ class HandlebarsBuilder {
     try {
       layouts = await readdir(LAYOUTS_DIR);
     } catch (dir_err) {
-      console.error(new Error(dir_err));
+      console.error(`Could not read directory ${LAYOUTS_DIR}`, new Error(dir_err));
       layouts = [];
     }
 
@@ -55,8 +55,8 @@ class HandlebarsBuilder {
       try {
         data = await readFile(join(LAYOUTS_DIR, fileName));
       } catch (file_err) {
-        console.error(new Error(file_err));
-        return await hbs;
+        console.error(`Could not read file ${LAYOUTS_DIR}/${fileName}`, new Error(file_err));
+        return await hbsP;
       }
 
       // need to wait for the promise to be resolved
@@ -77,7 +77,7 @@ class HandlebarsBuilder {
     try {
       partials = await readdir(PARTIALS_DIR);
     } catch (dir_err) {
-      console.error(new Error(dir_err));
+      console.error(`Could not read dir ${PARTIALS_DIR}`, new Error(dir_err));
       partials = [];
     }
 
@@ -89,8 +89,8 @@ class HandlebarsBuilder {
       try {
         data = await readFile(join(PARTIALS_DIR, fileName));
       } catch (file_err) {
-        console.error(new Error(file_err));
-        return await hbs;
+        console.error(`Could not read file ${PARTIALS_DIR}/${fileName}`, new Error(file_err));
+        return await hbsP;
       }
 
       // need to wait for the promise to be resolved

@@ -17,6 +17,7 @@ const bundleDir = join('dist', 'bundle');
 
 // middleware to make life easier
 const {commonModelProvider} = require('./model/index.js');
+const session = require('express-session');
 const localeResolver = require('express-locale');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -50,6 +51,10 @@ hbsRuntimeBuilder.build() // resolves to hbs runtime
 app.use(localeResolver({
   priority: ['query', 'accept-language', 'cookie', 'default'],
   default: 'en_US',
+}));
+app.use(session({
+  secret: 'keyboard cat',
+  cookie: {maxAge: 60000},
 }));
 app.use(commonModelProvider());
 app.use(helmet());

@@ -1,13 +1,16 @@
 {
   "name": "app",
   "version": "0.0.0",
+  "egnines": {
+    "node": ">=10.0.0"
+  },
   "description": "A website for wedding plans",
   "main": "src/main/server/index.js",
   "scripts": {
     "build": "npx gulp build",
     "start": "node src/main/server/index.js --port 3000",
     "test": "npm test",
-    "watch": "npx nodemon -w src/main/server/**/*.js"
+    "watch": "npx nodemon -w src/main/server/index.js -w src/main/server/model/*.js -w src/main/server/handlebars/*.js"
   },
   "author": "Elliott",
   "license": "ISC",
@@ -21,6 +24,7 @@
     "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
     "express-locale": "^1.0.5",
+    "express-session": "^1.15.6",
     "font-awesome": "^4.7.0",
     "gulp": "^4.0.0",
     "gulp-babel": "^7.0.1",
