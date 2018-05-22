@@ -44,7 +44,6 @@ hbsRuntimeBuilder.build() // resolves to hbs runtime
     app.set('views', viewsDir);
     app.set('view engine', 'hbs');
   });
-
 // \TEMPLATING
 
 // MIDDLEWARE - TODO move to another file
