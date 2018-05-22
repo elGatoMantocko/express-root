@@ -52,8 +52,10 @@ app.use(localeResolver({
   default: 'en_US',
 }));
 app.use(session({
-  secret: 'keyboard cat',
   cookie: {maxAge: 60000},
+  resave: false,
+  saveUninitialized: false,
+  secret: 'keyboard cat',
 }));
 app.use(commonModelProvider());
 app.use(helmet());
