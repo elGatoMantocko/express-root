@@ -43,10 +43,12 @@ class HandlebarsBuilder {
     try {
       layouts = await readdir(LAYOUTS_DIR);
     } catch (dir_err) {
+      // if there is an error reading the directory, layouts will reduce to just this.hbs
       console.error(`Could not read directory ${LAYOUTS_DIR}`, new Error(dir_err));
       layouts = [];
     }
 
+    // resolve with a reduce on the Handlebars instance
     return await layouts.reduce(async function(hbsP, fileName = '') {
       // get the layout's name and start getting the file's contents right away
       const layoutName = `layouts/${fileName.replace(/\.hbs$/ig, '')}`;
@@ -56,13 +58,13 @@ class HandlebarsBuilder {
         data = await readFile(join(LAYOUTS_DIR, fileName));
       } catch (file_err) {
         console.error(`Could not read file ${LAYOUTS_DIR}/${fileName}`, new Error(file_err));
-        return await hbsP;
+        data = '';
+      } finally {
+        // need to wait for the promise to be resolved
+        const hbs = await hbsP;
+        hbs.registerPartial(layoutName, data.toString());
+        return hbs;
       }
-
-      // need to wait for the promise to be resolved
-      const hbs = await hbsP;
-      hbs.registerPartial(layoutName, data.toString());
-      return hbs;
     }, Promise.resolve(this.hbs));
   }
 
@@ -82,21 +84,21 @@ class HandlebarsBuilder {
     }
 
     return await partials.reduce(async function(hbsP, fileName = '') {
-      // get the layout's name and start getting the file's contents right away
-      const layoutName = `app/partials/${fileName.replace(/\.hbs$/ig, '')}`;
+      // get the partial's name and start getting the file's contents right away
+      const partialName = `app/partials/${fileName.replace(/\.hbs$/ig, '')}`;
       let data;
 
       try {
         data = await readFile(join(PARTIALS_DIR, fileName));
       } catch (file_err) {
         console.error(`Could not read file ${PARTIALS_DIR}/${fileName}`, new Error(file_err));
-        return await hbsP;
+        data = '';
+      } finally {
+        // need to wait for the promise to be resolved
+        const hbs = await hbsP;
+        hbs.registerPartial(partialName, data.toString());
+        return hbs;
       }
-
-      // need to wait for the promise to be resolved
-      const hbs = await hbsP;
-      hbs.registerPartial(layoutName, data.toString());
-      return hbs;
     }, Promise.resolve(this.hbs));
   }
 
