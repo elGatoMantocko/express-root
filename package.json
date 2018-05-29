@@ -15,7 +15,7 @@
   "author": "Elliott",
   "license": "ISC",
   "dependencies": {
-    "autoprefixer": "^8.5.0",
+    "autoprefixer": "^8.5.1",
     "babel-core": "^6.26.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
@@ -59,7 +59,7 @@
     "eslint": "^4.19.1",
     "eslint-config-google": "^0.9.1",
     "gulp-livereload": "^3.8.1",
-    "nodemon": "^1.17.4"
+    "nodemon": "^1.17.5"
   },
   "babel": {
     "presets": [
