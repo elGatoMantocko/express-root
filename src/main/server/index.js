@@ -16,7 +16,7 @@ const engines = require('consolidate');
 const bundleDir = join('dist', 'bundle');
 
 // middleware to make life easier
-const {commonModelProvider} = require('./model/index.js');
+const {commonModelProvider} = require('./middleware/model.js');
 const session = require('express-session');
 const localeResolver = require('express-locale');
 const bodyParser = require('body-parser');

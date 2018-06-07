@@ -26,4 +26,4 @@ function commonModelProvider() {
   };
 }
 
-module.exports = {commonModelProvider};
+exports = module.exports = {commonModelProvider};
