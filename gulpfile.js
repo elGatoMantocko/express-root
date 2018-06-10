@@ -1,14 +1,14 @@
 const gulp = require('gulp');
-const autoprefixer = require('autoprefixer');
+const postcssPresetEnv = require('postcss-preset-env');
 const {normalize} = require('upath');
 const plugins = require('gulp-load-plugins')();
-const {JS_FILES, LESS_FILES} = require('./buildtools/paths');
+const {JS_FILES, CSS_FILES} = require('./buildtools/paths');
 
 // src locations
 const ASSETS_DIR = 'src/main/assets/';
 const CLIENT_JS_SRC = ASSETS_DIR + 'js/';
 const CLIENT_HBS_SRC = ASSETS_DIR + 'views/';
-const CLIENT_LESS_SRC = ASSETS_DIR + 'less/';
+const CLIENT_CSS_SRC = ASSETS_DIR + 'css/';
 const CLIENT_STATIC_FILES = ASSETS_DIR + 'static/';
 
 // bundle directory
@@ -19,10 +19,19 @@ gulp.task('clean', function() {
     .pipe(plugins.clean());
 });
 
-gulp.task('lint', function() {
+gulp.task('lintJs', function() {
   return gulp.src(JS_FILES.map((file) => CLIENT_JS_SRC + file))
     .pipe(plugins.eslint())
     .pipe(plugins.eslint.format());
+});
+
+gulp.task('lintCss', function() {
+  return gulp.src(CSS_FILES.map((file) => CLIENT_CSS_SRC + file))
+    .pipe(plugins.stylelint({
+      reporters: [
+        {formatter: 'string', console: true},
+      ],
+    }));
 });
 
 gulp.task('bundleStatic', function() {
@@ -43,11 +52,13 @@ gulp.task('bundleJs', function() {
     .pipe(plugins.livereload());
 });
 
-gulp.task('bundleLess', function() {
-  return gulp.src(LESS_FILES.map((file) => CLIENT_LESS_SRC + file))
-    .pipe(plugins.less())
+gulp.task('bundleCss', function() {
+  return gulp.src(CSS_FILES.map((file) => CLIENT_CSS_SRC + file))
     .pipe(plugins.postcss([
-      autoprefixer({browsers: ['last 1 versions', 'ie 11']}),
+      postcssPresetEnv({
+        stage: 0,
+        browsers: ['last 2 versions', 'ie 11'],
+      }),
     ]))
     .pipe(plugins.concat('styles.css'))
     .pipe(gulp.dest(BUNDLE_DEST))
@@ -68,8 +79,8 @@ gulp.task('bundleHbs', function(done) {
 
 gulp.task('build',
   gulp.parallel(
-    gulp.series('lint', 'bundleJs'),
-    'bundleLess',
+    gulp.series('lintJs', 'bundleJs'),
+    gulp.series('lintCss', 'bundleCss'),
     'bundleHbs',
     'bundleStatic'
   )
@@ -80,9 +91,9 @@ gulp.task('watch', gulp.parallel('build', function() {
   const watchers = [];
 
   // watch js, less, hbs, and static
-  watchers.push(gulp.watch(CLIENT_JS_SRC + '**/*.js', gulp.series('lint', 'bundleJs')));
+  watchers.push(gulp.watch(CLIENT_JS_SRC + '**/*.js', gulp.series('lintJs', 'bundleJs')));
   watchers.push(gulp.watch(CLIENT_HBS_SRC + '**/*.hbs', gulp.parallel('bundleHbs')));
-  watchers.push(gulp.watch(CLIENT_LESS_SRC + '**/*.less', gulp.parallel('bundleLess')));
+  watchers.push(gulp.watch(CLIENT_CSS_SRC + '**/*.css', gulp.series('lintCss', 'bundleCss')));
   watchers.push(gulp.watch(CLIENT_STATIC_FILES + '**/*', gulp.parallel('bundleStatic')));
 
   watchers.forEach((watcher) => {

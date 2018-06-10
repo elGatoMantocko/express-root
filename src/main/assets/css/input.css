@@ -1,0 +1,122 @@
+.app-input-group {
+  /* necessary for label positioning in the *placeholders* spot */
+  position: relative;
+  overflow-x: hidden;
+
+  /* input and label padding should be identical */
+  & input,
+  & label,
+  & .icon {
+    padding: var(--inputPaddingY) var(--inputPaddingX);
+  }
+
+  &.app-input-icon {
+    & input,
+    & label {
+      padding-left: calc(var(--inputPaddingX) * 3);
+    }
+
+    & .icon {
+      /* these three are required */
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      /* these three are optional */
+      color: var(--inputTextColor);
+      display: block;
+
+      /* these two should mimic the behavior of the input */
+      border: 1px solid transparent;
+      border-radius: 0.25rem;
+
+      /* style transition */
+      transition: all 0.1s ease-in-out;
+
+      /* fix alignment issues. use sub because 'middle' sits too high */
+      &::before {
+        vertical-align: sub;
+      }
+    }
+
+    & input:focus ~ .icon {
+      color: #80bdff;
+    }
+  }
+
+  /**
+    * float label styles should be applied to inputs with the 'float-label' class
+    * labels sitting next to it will get standard styles
+    */
+  & input.float-label {
+    & ~ label {
+      /* these five are required */
+      position: absolute;
+      top: 0;
+      left: 0;
+      user-select: none;
+      white-space: nowrap;
+
+      /* these three are optional */
+      width: 100%;
+      color: var(--inputTextColor);
+      display: block;
+
+      /* only here because bootstrap adds margin bottom to labels */
+      margin-bottom: 0;
+
+      /* these two should mimic the behavior of the input */
+      border: 1px solid transparent;
+      border-radius: 0.25rem;
+
+      /* style transition */
+      transition: all 0.1s ease-in-out;
+    }
+
+    /* this selector is non-standard and has different naming per browser */
+    &::placeholder {
+      color: transparent; /* required (along with other placeholder selectors) */
+    }
+
+    /* javascript will apply this style on input in the field */
+    &.label-adjusted {
+      /* padding-left: var(--inputPaddingX)); */
+      padding-top: calc(var(--inputPaddingY) + var(--inputPaddingY) * (2 / 3));
+      padding-bottom: calc(var(--inputPaddingY) / 3);
+
+      &::placeholder {
+        color: lighten(var(--inputTextColor), 50%);
+        transition: all 0.1s ease-in-out;
+      }
+
+      & ~ label {
+        /* padding-left: var(--inputPaddingX); */
+        padding-top: calc(var(--inputPaddingY) / 3);
+        padding-bottom: calc(var(--inputPaddingY) / 3);
+
+        /* font should be smaller than input font */
+        font-size: calc(var(--baseFontSize) * (3 / 4));
+      }
+    }
+  }
+
+  & input.validation-control.invalid {
+    border-color: red;
+
+    & ~ .icon,
+    & ~ label {
+      color: red;
+    }
+
+    &:focus {
+      & ~ .icon,
+      & ~ label {
+        color: red;
+      }
+    }
+  }
+}
+
+form .app-input-group {
+  margin-bottom: 1rem;
+}
