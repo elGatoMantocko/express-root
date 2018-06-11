@@ -16,12 +16,16 @@
   "license": "ISC",
   "dependencies": {
     "babel-core": "^6.26.0",
+    "babel-eslint": "^8.2.3",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "body-parser": "^1.18.3",
     "bootstrap": "^4.1.1",
+    "browserslist-config-google": "^1.5.0",
     "consolidate": "^0.15.1",
     "cookie-parser": "^1.4.3",
+    "eslint": "^4.19.1",
+    "eslint-config-google": "^0.9.1",
     "express": "^4.16.3",
     "express-locale": "^1.0.5",
     "express-session": "^1.15.6",
@@ -38,6 +42,7 @@
     "gulp-sourcemaps": "^2.6.4",
     "gulp-stylelint": "^7.0.0",
     "gulp-uglify": "^3.0.0",
+    "gulp-uglifycss": "^1.0.9",
     "gulp-wrap": "^0.13.0",
     "handlebars": "^4.0.11",
     "helmet": "^3.12.1",
@@ -49,18 +54,18 @@
     "os": "^0.1.1",
     "path": "^0.12.7",
     "popper.js": "^1.14.3",
+    "postcss-discard-comments": "^2.0.4",
+    "postcss-discard-empty": "^2.1.0",
     "postcss-preset-env": "^5.1.0",
     "promise": "^8.0.1",
+    "stylelint": "^9.2.1",
+    "stylelint-config-standard": "^18.2.0",
     "tether": "^1.4.4",
     "upath": "^1.1.0"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.3",
-    "eslint": "^4.19.1",
-    "eslint-config-google": "^0.9.1",
     "gulp-livereload": "^3.8.1",
-    "nodemon": "^1.17.5",
-    "stylelint-config-standard": "^18.2.0"
+    "nodemon": "^1.17.5"
   },
   "babel": {
     "presets": [

@@ -1,7 +1,13 @@
+// gulp
 const gulp = require('gulp');
-const postcssPresetEnv = require('postcss-preset-env');
-const {normalize} = require('upath');
 const plugins = require('gulp-load-plugins')();
+
+// postcss
+const noEmpty = require('postcss-discard-empty');
+const noComments = require('postcss-discard-comments');
+const postcssPresetEnv = require('postcss-preset-env');
+
+const {normalize} = require('upath');
 const {JS_FILES, CSS_FILES} = require('./buildtools/paths');
 
 // src locations
@@ -55,12 +61,18 @@ gulp.task('bundleJs', function() {
 gulp.task('bundleCss', function() {
   return gulp.src(CSS_FILES.map((file) => CLIENT_CSS_SRC + file))
     .pipe(plugins.postcss([
+      noComments(),
+      noEmpty(),
       postcssPresetEnv({
-        stage: 0,
-        browsers: ['last 2 versions', 'ie 11'],
+        stage: 3,
+        features: {
+          'nesting-rules': true,
+        },
+        browsers: ['extends browserslist-config-google'],
       }),
     ]))
     .pipe(plugins.concat('styles.css'))
+    .pipe(plugins.uglifycss())
     .pipe(gulp.dest(BUNDLE_DEST))
     .pipe(plugins.livereload());
 });
@@ -73,6 +85,7 @@ gulp.task('bundleHbs', function(done) {
       imports: {processPartialName},
     }))
     .pipe(plugins.concat('templates.js'))
+    .pipe(plugins.uglify())
     .pipe(gulp.dest(BUNDLE_DEST))
     .pipe(plugins.livereload());
 });
