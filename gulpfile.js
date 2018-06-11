@@ -40,6 +40,8 @@ gulp.task('lintCss', function() {
     }));
 });
 
+gulp.task('lint', gulp.series('lintJs', 'lintCss'));
+
 gulp.task('bundleStatic', function() {
   return gulp.src(CLIENT_STATIC_FILES + '**/*')
     .pipe(plugins.rename({dirname: ''})) // How is this not a OOTB gulp feature??
@@ -92,8 +94,8 @@ gulp.task('bundleHbs', function(done) {
 
 gulp.task('build',
   gulp.parallel(
-    gulp.series('lintJs', 'bundleJs'),
-    gulp.series('lintCss', 'bundleCss'),
+    'bundleJs',
+    'bundleCss',
     'bundleHbs',
     'bundleStatic'
   )
@@ -104,9 +106,9 @@ gulp.task('watch', gulp.parallel('build', function() {
   const watchers = [];
 
   // watch js, less, hbs, and static
-  watchers.push(gulp.watch(CLIENT_JS_SRC + '**/*.js', gulp.series('lintJs', 'bundleJs')));
+  watchers.push(gulp.watch(CLIENT_JS_SRC + '**/*.js', gulp.parallel('bundleJs')));
   watchers.push(gulp.watch(CLIENT_HBS_SRC + '**/*.hbs', gulp.parallel('bundleHbs')));
-  watchers.push(gulp.watch(CLIENT_CSS_SRC + '**/*.css', gulp.series('lintCss', 'bundleCss')));
+  watchers.push(gulp.watch(CLIENT_CSS_SRC + '**/*.css', gulp.parallel('bundleCss')));
   watchers.push(gulp.watch(CLIENT_STATIC_FILES + '**/*', gulp.parallel('bundleStatic')));
 
   watchers.forEach((watcher) => {
