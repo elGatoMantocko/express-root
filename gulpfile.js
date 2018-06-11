@@ -5,7 +5,8 @@ const plugins = require('gulp-load-plugins')();
 // postcss
 const noEmpty = require('postcss-discard-empty');
 const noComments = require('postcss-discard-comments');
-const postcssPresetEnv = require('postcss-preset-env');
+const px2rem = require('postcss-pxtorem');
+const presetEnv = require('postcss-preset-env');
 
 const {normalize} = require('upath');
 const {JS_FILES, CSS_FILES} = require('./buildtools/paths');
@@ -62,10 +63,24 @@ gulp.task('bundleJs', function() {
 
 gulp.task('bundleCss', function() {
   return gulp.src(CSS_FILES.map((file) => CLIENT_CSS_SRC + file))
+    .pipe(plugins.sourcemaps.init())
     .pipe(plugins.postcss([
+      px2rem({
+        rootValue: 16,
+        unitPrecision: 2,
+        minPixelValue: 4,
+        propList: [
+          '--*',
+          '*padding*',
+          '*margin*',
+          'font',
+          'font-size',
+          'letter-spacing',
+        ],
+      }),
       noComments(),
       noEmpty(),
-      postcssPresetEnv({
+      presetEnv({
         stage: 3,
         features: {
           'nesting-rules': true,
@@ -75,6 +90,7 @@ gulp.task('bundleCss', function() {
     ]))
     .pipe(plugins.concat('styles.css'))
     .pipe(plugins.uglifycss())
+    .pipe(plugins.sourcemaps.write())
     .pipe(gulp.dest(BUNDLE_DEST))
     .pipe(plugins.livereload());
 });

@@ -1,6 +1,6 @@
 :root {
-  --baseFontSize: 1rem;
-  --inputPaddingX: 0.75rem;
-  --inputPaddingY: 0.75rem;
+  --baseFontSize: 16px;
+  --inputPaddingX: 12px;
+  --inputPaddingY: 12px;
   --inputTextColor: #495057;
 }

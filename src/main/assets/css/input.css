@@ -28,7 +28,7 @@
 
       /* these two should mimic the behavior of the input */
       border: 1px solid transparent;
-      border-radius: 0.25rem;
+      border-radius: 4px;
 
       /* style transition */
       transition: all 0.1s ease-in-out;
@@ -67,7 +67,7 @@
 
       /* these two should mimic the behavior of the input */
       border: 1px solid transparent;
-      border-radius: 0.25rem;
+      border-radius: 4px;
 
       /* style transition */
       transition: all 0.1s ease-in-out;
@@ -118,5 +118,5 @@
 }
 
 form .app-input-group {
-  margin-bottom: 1rem;
+  margin-bottom: var(--baseFontSize);
 }
