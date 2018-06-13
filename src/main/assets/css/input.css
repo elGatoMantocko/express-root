@@ -10,6 +10,11 @@
     padding: var(--inputPaddingY) var(--inputPaddingX);
   }
 
+  /* override bootstrap box shadow */
+  & input:focus {
+    box-shadow: none;
+  }
+
   &.app-input-icon {
     & input,
     & label {
@@ -40,7 +45,8 @@
     }
 
     & input:focus ~ .icon {
-      color: #80bdff;
+      /* bootstrap primary color */
+      color: var(--primary);
     }
   }
 
@@ -85,8 +91,10 @@
       padding-bottom: calc(var(--inputPaddingY) / 3);
 
       &::placeholder {
-        color: lighten(var(--inputTextColor), 50%);
+        /* bootstrap secondary color */
+        color: var(--secondary);
         transition: all 0.1s ease-in-out;
+        opacity: 0.5;
       }
 
       & ~ label {

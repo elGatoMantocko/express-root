@@ -4,7 +4,7 @@
   "egnines": {
     "node": ">=10.0.0"
   },
-  "description": "A website for wedding plans",
+  "description": "A basic website",
   "main": "src/main/server/index.js",
   "scripts": {
     "build": "npx gulp build",
@@ -15,6 +15,7 @@
   "author": "Elliott",
   "license": "ISC",
   "dependencies": {
+    "autoprefixer": "^8.6.2",
     "babel-core": "^6.26.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
@@ -49,9 +50,10 @@
     "os": "^0.1.1",
     "path": "^0.12.7",
     "popper.js": "^1.14.3",
+    "postcss-custom-properties": "^7.0.0",
     "postcss-discard-comments": "^2.0.4",
     "postcss-discard-empty": "^2.1.0",
-    "postcss-preset-env": "^5.1.0",
+    "postcss-nesting": "^6.0.0",
     "postcss-pxtorem": "^4.0.1",
     "promise": "^8.0.1",
     "tether": "^1.4.4",

@@ -2,11 +2,13 @@
 const gulp = require('gulp');
 const plugins = require('gulp-load-plugins')();
 
-// postcss
+// postcss plugins
 const noEmpty = require('postcss-discard-empty');
 const noComments = require('postcss-discard-comments');
 const px2rem = require('postcss-pxtorem');
-const presetEnv = require('postcss-preset-env');
+const nesting = require('postcss-nesting');
+const customProps = require('postcss-custom-properties');
+const autoprefixer = require('autoprefixer');
 
 const {normalize} = require('upath');
 const {JS_FILES, CSS_FILES} = require('./buildtools/paths');
@@ -64,31 +66,20 @@ gulp.task('bundleJs', function() {
 gulp.task('bundleCss', function() {
   return gulp.src(CSS_FILES.map((file) => CLIENT_CSS_SRC + file))
     .pipe(plugins.sourcemaps.init())
+    .pipe(plugins.concat('styles.css'))
     .pipe(plugins.postcss([
       px2rem({
         rootValue: 16,
         unitPrecision: 2,
         minPixelValue: 4,
-        propList: [
-          '--*',
-          '*padding*',
-          '*margin*',
-          'font',
-          'font-size',
-          'letter-spacing',
-        ],
+        propList: ['--*', 'padding*', 'margin*', 'border*', 'font', 'font-size', 'letter-spacing'],
       }),
       noComments(),
       noEmpty(),
-      presetEnv({
-        stage: 3,
-        features: {
-          'nesting-rules': true,
-        },
-        browsers: ['extends browserslist-config-google'],
-      }),
+      nesting(),
+      customProps({preserve: 'computed'}),
+      autoprefixer({browsers: ['extends browserslist-config-google']}),
     ]))
-    .pipe(plugins.concat('styles.css'))
     .pipe(plugins.uglifycss())
     .pipe(plugins.sourcemaps.write())
     .pipe(gulp.dest(BUNDLE_DEST))
@@ -121,7 +112,7 @@ gulp.task('watch', gulp.parallel('build', function() {
   plugins.livereload.listen();
   const watchers = [];
 
-  // watch js, less, hbs, and static
+  // watch js, css, hbs, and static
   watchers.push(gulp.watch(CLIENT_JS_SRC + '**/*.js', gulp.parallel('bundleJs')));
   watchers.push(gulp.watch(CLIENT_HBS_SRC + '**/*.hbs', gulp.parallel('bundleHbs')));
   watchers.push(gulp.watch(CLIENT_CSS_SRC + '**/*.css', gulp.parallel('bundleCss')));
