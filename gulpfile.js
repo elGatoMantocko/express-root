@@ -19,7 +19,7 @@ const JS_DEPS = [
   'node_modules/jquery/dist/jquery.slim.min.js',
   'node_modules/babel-polyfill/dist/polyfill.min.js',
   'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js',
-  'node_modules/moment/min/moment.min.js',
+  'node_modules/dayjs/dayjs.min.js',
 ];
 const CSS_DEPS = [
   'node_modules/font-awesome/css/font-awesome.min.css',

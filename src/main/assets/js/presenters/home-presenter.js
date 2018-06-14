@@ -2,13 +2,13 @@ App.Presenters.Home = function() {
   // initialize the input(s)
   App.libs.input.initFloats();
 
-  let now = moment();
+  let now = dayjs();
   /**
    * Updates time block and icon
    */
   function updateTime() {
-    now = moment();
-    if (now.isAfter(moment('04:00 pm', 'hh:mm a', true))) {
+    now = dayjs();
+    if (now.isAfter(dayjs().set('hour', 16))) {
       $('#confirm-beer')
         .removeClass('fa-times text-danger')
         .addClass('fa-check text-success');
@@ -17,7 +17,7 @@ App.Presenters.Home = function() {
         .addClass('fa-times text-danger')
         .removeClass('fa-check text-success');
     }
-    $('#time-container').empty().append(now.format('LTS'));
+    $('#time-container').empty().append(now.format('h:mm:ss'));
   }
 
   // render the time on the page
