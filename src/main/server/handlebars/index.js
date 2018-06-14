@@ -121,14 +121,14 @@ class HandlebarsBuilder {
       });
 
       this.hbs.registerHelper('includeJsBundle', (options = {}) => {
-        const {contextPath = '/assets', bundleName} = options.hash;
+        const {contextPath = '', bundleName} = options.hash;
         return new this.hbs.SafeString(
           `<script type="text/javascript" src="${contextPath}/${bundleName}.js"></script>`
         );
       });
 
       this.hbs.registerHelper('includeCssBundle', (options = {}) => {
-        const {contextPath = '/assets', bundleName} = options.hash;
+        const {contextPath = '', bundleName} = options.hash;
         return new this.hbs.SafeString(
           `<link rel="stylesheet" href="${contextPath}/${bundleName}.css">`
         );

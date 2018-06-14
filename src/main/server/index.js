@@ -13,7 +13,7 @@ const {HandlebarsBuilder} = require('./handlebars/index.js');
 const engines = require('consolidate');
 
 // app bundles
-const bundleDir = join('dist', 'bundle');
+const bundleDir = 'public';
 
 // middleware to make life easier
 const {commonModelProvider} = require('./middleware/model.js');
@@ -69,8 +69,7 @@ app.use(function(req, res, next) {
 });
 
 // static assets
-app.use('/resources', express.static('node_modules'));
-app.use('/assets', express.static(bundleDir));
+app.use(express.static(bundleDir));
 app.use('/favicon.ico', express.static(join(bundleDir, 'favicon.ico')));
 app.use('/manifest.json', express.static(join(bundleDir, 'manifest.json')));
 

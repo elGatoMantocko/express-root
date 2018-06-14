@@ -10,8 +10,23 @@ const nesting = require('postcss-nesting');
 const customProps = require('postcss-custom-properties');
 const autoprefixer = require('autoprefixer');
 
+const swPrecache = require('sw-precache');
 const {normalize} = require('upath');
-const {JS_FILES, CSS_FILES} = require('./buildtools/paths');
+
+const JS_DEPS = [
+  'node_modules/handlebars/dist/handlebars.runtime.min.js',
+  'node_modules/tether/dist/js/tether.min.js',
+  'node_modules/jquery/dist/jquery.slim.min.js',
+  'node_modules/babel-polyfill/dist/polyfill.min.js',
+  'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js',
+  'node_modules/moment/min/moment.min.js',
+];
+const CSS_DEPS = [
+  'node_modules/font-awesome/css/font-awesome.min.css',
+  'node_modules/bootstrap/dist/css/bootstrap.min.css',
+];
+const FONTS = 'node_modules/font-awesome/fonts/*';
+const {JS_FILES, CSS_FILES} = require('./buildtools/paths.js');
 
 // src locations
 const ASSETS_DIR = 'src/main/assets/';
@@ -21,10 +36,10 @@ const CLIENT_CSS_SRC = ASSETS_DIR + 'css/';
 const CLIENT_STATIC_FILES = ASSETS_DIR + 'static/';
 
 // bundle directory
-const BUNDLE_DEST = 'dist/bundle/';
+const BUNDLE_DEST = 'public/';
 
 gulp.task('clean', function() {
-  return gulp.src('dist', {read: false})
+  return gulp.src('public', {read: false})
     .pipe(plugins.clean());
 });
 
@@ -63,6 +78,13 @@ gulp.task('bundleJs', function() {
     .pipe(plugins.livereload());
 });
 
+gulp.task('bundleJsDeps', function() {
+  return gulp.src(JS_DEPS)
+    .pipe(plugins.stripComments())
+    .pipe(plugins.concat('deps.js'))
+    .pipe(gulp.dest(BUNDLE_DEST));
+});
+
 gulp.task('bundleCss', function() {
   return gulp.src(CSS_FILES.map((file) => CLIENT_CSS_SRC + file))
     .pipe(plugins.sourcemaps.init())
@@ -86,6 +108,16 @@ gulp.task('bundleCss', function() {
     .pipe(plugins.livereload());
 });
 
+gulp.task('bundleCssDeps', function() {
+  return gulp.src(CSS_DEPS)
+    .pipe(plugins.concat('deps.css'))
+    .pipe(gulp.dest(BUNDLE_DEST));
+});
+
+gulp.task('bundleFonts', function() {
+  return gulp.src(FONTS).pipe(gulp.dest(BUNDLE_DEST + '/fonts'));
+});
+
 gulp.task('bundleHbs', function(done) {
   const processPartialName = (file) => normalize(file.relative.replace(/\.\w+$/, ''));
   return gulp.src(CLIENT_HBS_SRC + '**/*.hbs')
@@ -99,12 +131,26 @@ gulp.task('bundleHbs', function(done) {
     .pipe(plugins.livereload());
 });
 
+gulp.task('bundleSw', function(done) {
+  swPrecache.write(`${BUNDLE_DEST}/sw.js`, {
+    staticFileGlobs: [BUNDLE_DEST + '/**/*.{js,html,css,png,jpg,gif,svg,eot,ttf,woff,ico}'],
+    stripPrefix: BUNDLE_DEST,
+  }, done);
+});
+
 gulp.task('build',
-  gulp.parallel(
-    'bundleJs',
-    'bundleCss',
-    'bundleHbs',
-    'bundleStatic'
+  gulp.series(
+    gulp.parallel(
+      'bundleJs',
+      'bundleCss',
+      'bundleHbs',
+      'bundleStatic',
+      // the following are dependencies from 'node_modules'
+      'bundleJsDeps',
+      'bundleCssDeps',
+      'bundleFonts'
+    ),
+    'bundleSw',
   )
 );
 

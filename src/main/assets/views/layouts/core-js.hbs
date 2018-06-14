@@ -1,10 +1,5 @@
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-{{includeJsBundle contextPath="/resources/handlebars/dist" bundleName="handlebars.min"}}
-{{includeJsBundle contextPath="/resources/tether/dist/js" bundleName="tether.min"}}
-{{includeJsBundle contextPath="/resources/jquery/dist" bundleName="jquery.min"}}
-{{includeJsBundle contextPath="/resources/babel-polyfill/dist" bundleName="polyfill.min"}}
-{{includeJsBundle contextPath="/resources/bootstrap/dist/js" bundleName="bootstrap.min"}}
-{{includeJsBundle contextPath="/resources/moment/min" bundleName="moment.min"}}
+{{includeJsBundle bundleName="deps"}}
 {{includeJsBundle bundleName="templates"}}
 <script type="text/javascript">
   // build the model
