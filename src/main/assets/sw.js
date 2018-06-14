@@ -8,6 +8,7 @@ if (workbox) {
   workbox.routing.registerRoute( /\/input/, workbox.strategies.staleWhileRevalidate());
   workbox.routing.registerRoute( /\/home/, workbox.strategies.staleWhileRevalidate());
   workbox.routing.registerRoute(/\/fonts\/fontawesome-webfont/, workbox.strategies.staleWhileRevalidate());
+  workbox.routing.registerRoute(/\/favicon\.ico/, workbox.strategies.staleWhileRevalidate());
 } else {
   console.log(`Boo! Workbox didn't load 😬`);
 }
