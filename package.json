@@ -59,9 +59,9 @@
     "postcss-nesting": "^6.0.0",
     "postcss-pxtorem": "^4.0.1",
     "promise": "^8.0.1",
-    "sw-precache": "^5.2.1",
     "tether": "^1.4.4",
-    "upath": "^1.1.0"
+    "upath": "^1.1.0",
+    "workbox-build": "^3.2.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.3",

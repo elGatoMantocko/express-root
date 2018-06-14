@@ -10,8 +10,16 @@ const nesting = require('postcss-nesting');
 const customProps = require('postcss-custom-properties');
 const autoprefixer = require('autoprefixer');
 
-const swPrecache = require('sw-precache');
+const workboxBuild = require('workbox-build');
 const {normalize} = require('upath');
+const serviceWorkerConfig = {
+  globDirectory: 'public/',
+  globPatterns: [
+    '**/*.{js,css,ico,eot,svg,ttf,woff,woff2,otf,json,txt}',
+  ],
+  swDest: 'public/sw.js',
+  swSrc: 'src/main/assets/sw.js',
+};
 
 const JS_DEPS = [
   'node_modules/handlebars/dist/handlebars.runtime.min.js',
@@ -85,6 +93,14 @@ gulp.task('bundleJsDeps', function() {
     .pipe(gulp.dest(BUNDLE_DEST + 'js/'));
 });
 
+gulp.task('bundleSw', function(done) {
+  return workboxBuild.injectManifest(serviceWorkerConfig).then(({count, size, warnings}) => {
+    warnings.forEach(console.warn);
+    console.log(`${count} files will be precached, totaling ${size} bytes.`);
+    done();
+  });
+});
+
 gulp.task('bundleCss', function() {
   return gulp.src(CSS_FILES.map((file) => CLIENT_CSS_SRC + file))
     .pipe(plugins.sourcemaps.init())
@@ -132,13 +148,6 @@ gulp.task('bundleHbs', function(done) {
     .pipe(plugins.livereload());
 });
 
-gulp.task('bundleSw', function(done) {
-  swPrecache.write(`${BUNDLE_DEST}/sw.js`, {
-    staticFileGlobs: [BUNDLE_DEST + '/**/*.{js,html,css,png,jpg,gif,svg,eot,ttf,woff,ico}'],
-    stripPrefix: BUNDLE_DEST,
-  }, done);
-});
-
 gulp.task('build',
   gulp.series(
     gulp.parallel(
@@ -164,6 +173,7 @@ gulp.task('watch', gulp.parallel('build', function() {
   watchers.push(gulp.watch(CLIENT_HBS_SRC + '**/*.hbs', gulp.parallel('bundleHbs')));
   watchers.push(gulp.watch(CLIENT_CSS_SRC + '**/*.css', gulp.parallel('bundleCss')));
   watchers.push(gulp.watch(CLIENT_STATIC_FILES + '**/*', gulp.parallel('bundleStatic')));
+  watchers.push(gulp.watch(serviceWorkerConfig.swSrc, gulp.parallel('bundleSw')));
 
   watchers.forEach((watcher) => {
     watcher.on('change', function(path, stats) {
