@@ -111,6 +111,7 @@ gulp.task('bundleCss', function() {
 gulp.task('bundleCssDeps', function() {
   return gulp.src(CSS_DEPS)
     .pipe(plugins.concat('deps.css'))
+    .pipe(plugins.stripCssComments())
     .pipe(gulp.dest(BUNDLE_DEST));
 });
 
