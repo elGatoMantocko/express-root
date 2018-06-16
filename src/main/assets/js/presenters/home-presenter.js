@@ -8,7 +8,7 @@ App.Presenters.Home = function() {
    */
   function updateTime() {
     now = dayjs();
-    if (now.isAfter(dayjs().set('hour', 16))) {
+    if (now.isAfter(dayjs().set('hour', 15))) {
       $('#confirm-beer')
         .removeClass('fa-times text-danger')
         .addClass('fa-check text-success');
@@ -17,7 +17,7 @@ App.Presenters.Home = function() {
         .addClass('fa-times text-danger')
         .removeClass('fa-check text-success');
     }
-    $('#time-container').empty().append(now.format('h:mm:ss'));
+    $('#time-container').empty().append(now.format('h:mm:ss A'));
   }
 
   // render the time on the page
