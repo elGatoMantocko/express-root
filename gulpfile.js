@@ -33,6 +33,7 @@ const CSS_DEPS = [
   'node_modules/font-awesome/css/font-awesome.min.css',
   'node_modules/bootstrap/dist/css/bootstrap.min.css',
 ];
+const WORKBOX_SW = 'node_modules/workbox-sw/build/workbox-sw.js';
 const FONTS = 'node_modules/font-awesome/fonts/*';
 const {JS_FILES, CSS_FILES} = require('./buildtools/paths.js');
 
@@ -94,6 +95,7 @@ gulp.task('bundleJsDeps', function() {
 });
 
 gulp.task('bundleSw', function(done) {
+  gulp.src(WORKBOX_SW).pipe(gulp.dest(BUNDLE_DEST + 'js/'));
   return workboxBuild.injectManifest(serviceWorkerConfig).then(({count, size, warnings}) => {
     warnings.forEach(console.warn);
     console.log(`${count} files will be precached, totaling ${size} bytes.`);
