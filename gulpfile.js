@@ -95,7 +95,9 @@ gulp.task('bundleJsDeps', function() {
 });
 
 gulp.task('bundleSw', function(done) {
-  gulp.src(WORKBOX_SW).pipe(gulp.dest(BUNDLE_DEST + 'js/'));
+  gulp.src(WORKBOX_SW)
+    .pipe(plugins.stripComments())
+    .pipe(gulp.dest(BUNDLE_DEST + 'js/'));
   return workboxBuild.injectManifest(serviceWorkerConfig).then(({count, size, warnings}) => {
     warnings.forEach(console.warn);
     console.log(`${count} files will be precached, totaling ${size} bytes.`);
