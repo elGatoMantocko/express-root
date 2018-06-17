@@ -94,17 +94,6 @@ gulp.task('bundleJsDeps', function() {
     .pipe(gulp.dest(BUNDLE_DEST + 'js/'));
 });
 
-gulp.task('bundleSw', function(done) {
-  gulp.src(WORKBOX_SW)
-    .pipe(plugins.stripComments())
-    .pipe(gulp.dest(BUNDLE_DEST + 'js/'));
-  return workboxBuild.injectManifest(serviceWorkerConfig).then(({count, size, warnings}) => {
-    warnings.forEach(console.warn);
-    console.log(`${count} files will be precached, totaling ${size} bytes.`);
-    done();
-  });
-});
-
 gulp.task('bundleCss', function() {
   return gulp.src(CSS_FILES.map((file) => CLIENT_CSS_SRC + file))
     .pipe(plugins.sourcemaps.init())
@@ -150,6 +139,17 @@ gulp.task('bundleHbs', function(done) {
     .pipe(plugins.uglify())
     .pipe(gulp.dest(BUNDLE_DEST + 'js/'))
     .pipe(plugins.livereload());
+});
+
+gulp.task('bundleSw', function(done) {
+  gulp.src(WORKBOX_SW)
+    .pipe(plugins.stripComments())
+    .pipe(gulp.dest(BUNDLE_DEST + 'js/'));
+  return workboxBuild.injectManifest(serviceWorkerConfig).then(({count, size, warnings}) => {
+    warnings.forEach(console.warn);
+    console.log(`${count} files will be precached, totaling ${size} bytes.`);
+    done();
+  });
 });
 
 gulp.task('build',
