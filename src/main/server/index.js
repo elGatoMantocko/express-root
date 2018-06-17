@@ -70,8 +70,9 @@ app.use(function(req, res, next) {
 
 // static assets
 app.use(express.static(bundleDir));
-app.use('/favicon.ico', express.static(join(bundleDir, 'favicon.ico')));
-app.use('/manifest.json', express.static(join(bundleDir, 'manifest.json')));
+app.use('/favicon.ico', express.static(join(bundleDir, 'static', 'favicon.ico')));
+app.use('/manifest.json', express.static(join(bundleDir, 'static', 'manifest.json')));
+app.use('/robots.txt', express.static(join(bundleDir, 'static', 'robots.txt')));
 
 // error handling
 app.use(async function(err, req, res, next) {

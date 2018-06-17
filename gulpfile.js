@@ -63,7 +63,7 @@ gulp.task('lint', gulp.series('lintJs', 'lintCss'));
 gulp.task('bundleStatic', function() {
   return gulp.src(CLIENT_STATIC_FILES + '**/*')
     .pipe(plugins.rename({dirname: ''})) // How is this not a OOTB gulp feature??
-    .pipe(gulp.dest(BUNDLE_DEST))
+    .pipe(gulp.dest(BUNDLE_DEST + 'static/'))
     .pipe(plugins.livereload());
 });
 
@@ -74,7 +74,7 @@ gulp.task('bundleJs', function() {
     .pipe(plugins.concat('app.js'))
     .pipe(plugins.uglify())
     .pipe(plugins.sourcemaps.write())
-    .pipe(gulp.dest(BUNDLE_DEST))
+    .pipe(gulp.dest(BUNDLE_DEST + 'js/'))
     .pipe(plugins.livereload());
 });
 
@@ -82,7 +82,7 @@ gulp.task('bundleJsDeps', function() {
   return gulp.src(JS_DEPS)
     .pipe(plugins.stripComments())
     .pipe(plugins.concat('deps.js'))
-    .pipe(gulp.dest(BUNDLE_DEST));
+    .pipe(gulp.dest(BUNDLE_DEST + 'js/'));
 });
 
 gulp.task('bundleCss', function() {
@@ -104,7 +104,7 @@ gulp.task('bundleCss', function() {
     ]))
     .pipe(plugins.uglifycss())
     .pipe(plugins.sourcemaps.write())
-    .pipe(gulp.dest(BUNDLE_DEST))
+    .pipe(gulp.dest(BUNDLE_DEST + 'css/'))
     .pipe(plugins.livereload());
 });
 
@@ -112,7 +112,7 @@ gulp.task('bundleCssDeps', function() {
   return gulp.src(CSS_DEPS)
     .pipe(plugins.concat('deps.css'))
     .pipe(plugins.stripCssComments())
-    .pipe(gulp.dest(BUNDLE_DEST));
+    .pipe(gulp.dest(BUNDLE_DEST + 'css/'));
 });
 
 gulp.task('bundleFonts', function() {
@@ -128,7 +128,7 @@ gulp.task('bundleHbs', function(done) {
     }))
     .pipe(plugins.concat('templates.js'))
     .pipe(plugins.uglify())
-    .pipe(gulp.dest(BUNDLE_DEST))
+    .pipe(gulp.dest(BUNDLE_DEST + 'js/'))
     .pipe(plugins.livereload());
 });
 
