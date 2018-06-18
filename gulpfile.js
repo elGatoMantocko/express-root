@@ -1,6 +1,7 @@
 // gulp
 const gulp = require('gulp');
 const plugins = require('gulp-load-plugins')();
+const del = require('del');
 
 // postcss plugins
 const noEmpty = require('postcss-discard-empty');
@@ -48,8 +49,7 @@ const CLIENT_STATIC_FILES = ASSETS_DIR + 'static/';
 const BUNDLE_DEST = 'public/';
 
 gulp.task('clean', function() {
-  return gulp.src('public', {read: false})
-    .pipe(plugins.clean());
+  return del(['public']);
 });
 
 gulp.task('lintJs', function() {
