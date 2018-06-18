@@ -80,9 +80,10 @@ gulp.task('bundleJs', function() {
   return gulp.src(JS_FILES.map((file) => CLIENT_JS_SRC + file))
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins.babel({presets: ['env']}))
+    .pipe(plugins.wrap(';(function(){"use strict"; <%= contents %> })();'))
     .pipe(plugins.concat('app.js'))
     .pipe(plugins.uglify())
-    .pipe(plugins.sourcemaps.write())
+    .pipe(process.env.DEVEL ? plugins.sourcemaps.write() : plugins.noop())
     .pipe(gulp.dest(BUNDLE_DEST + 'js/'))
     .pipe(plugins.livereload());
 });
@@ -112,7 +113,7 @@ gulp.task('bundleCss', function() {
       autoprefixer({browsers: ['extends browserslist-config-google']}),
     ]))
     .pipe(plugins.uglifycss())
-    .pipe(plugins.sourcemaps.write())
+    .pipe(process.env.DEVEL ? plugins.sourcemaps.write() : plugins.noop())
     .pipe(gulp.dest(BUNDLE_DEST + 'css/'))
     .pipe(plugins.livereload());
 });
