@@ -7,5 +7,17 @@
   "scope": "/",
   "short_name": "App",
   "start_url": "/home",
-  "theme_color": "#f8f9fa"
+  "theme_color": "#f8f9fa",
+  "icons": [
+    {
+      "src": "/static/app_icon_192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/static/app_icon_512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
 }
