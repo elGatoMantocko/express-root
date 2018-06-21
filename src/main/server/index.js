@@ -17,6 +17,7 @@ const bundleDir = 'public';
 
 // middleware to make life easier
 const {commonModelProvider} = require('./middleware/model.js');
+const {appErrorHandler} = require('./middleware/errors.js');
 const session = require('express-session');
 const localeResolver = require('express-locale');
 const bodyParser = require('body-parser');
@@ -73,13 +74,6 @@ app.use(express.static(bundleDir));
 app.use('/favicon.ico', express.static(join(bundleDir, 'static', 'favicon.ico')));
 app.use('/manifest.json', express.static(join(bundleDir, 'static', 'manifest.json')));
 app.use('/robots.txt', express.static(join(bundleDir, 'static', 'robots.txt')));
-
-// error handling
-app.use(async function(err, req, res, next) {
-  // await log to external logging
-  console.error(err);
-  next();
-});
 // \MIDDLEWARE
 
 // CONTROLLERS - TODO move to another file
@@ -122,6 +116,9 @@ app.post('/register', bodyParser.urlencoded({extended: true}), function(req, res
   res.send(req.body);
 });
 // \CONTROLLERS
+
+// Request error handling
+app.use(appErrorHandler());
 
 // APP START
 if (argv.key && argv.cert) {

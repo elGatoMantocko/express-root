@@ -1,0 +1,17 @@
+{{#> layouts/default}}
+    {{#*inline "content"}}
+      <div class="container">
+        <h1>Error!</h1>
+        <p>There was an error.</p>
+      </div>
+    {{/inline}}
+    {{#*inline "more-scripts"}}
+      {{#with err}}
+        <script type="text/javascript">
+          console.group('Server Logs');
+          console.error("{{{message}}}");
+          console.groupEnd();
+        </script>
+      {{/with}}
+    {{/inline}}
+{{/layouts/default}}
