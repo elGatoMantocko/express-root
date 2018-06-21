@@ -7,5 +7,6 @@ module.exports = {
     'variables.css',
     'input.css',
     'carousel.css',
+    '**/*.css',
   ],
 };
