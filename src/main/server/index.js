@@ -63,7 +63,7 @@ app.use(helmet());
 app.use(cookieParser());
 
 // log incoming requests
-app.use(function(req, res, next) {
+app.use(async function(req, res, next) {
   const {originalUrl, method, ip, protocol} = req;
   console.log(`INFO - ${(new Date()).toUTCString()} - ${method} - ${originalUrl} - ${ip} - ${protocol}`);
   next();
@@ -106,7 +106,7 @@ app.post('/logger/:loggerPath', bodyParser.json(), function(req, res) {
 
 // controller
 app.get(/\w*$/, function(req, res) {
-  if (req.path === '/') res.status(302).redirect('/home');
+  if (req.path === '/') res.redirect('/home');
   else res.render(`app/templates${req.path}`, res.locals.model);
 });
 

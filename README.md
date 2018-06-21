@@ -16,7 +16,7 @@ Watch for changes in the assets with `npx gulp watch`.
 
 All javascript is transpiled using the `babel-preset-env` babel preset. So you get the latest ES features. JS should go in the `src/main/assets/js`.
 
-All less should be kept in `src/main/assets/less`.
+All css should be kept in `src/main/assets/css`.
 
 All hbs should placed appropriately in `src/main/assets/views`.
 
