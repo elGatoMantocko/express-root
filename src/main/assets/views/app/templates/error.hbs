@@ -1,12 +1,15 @@
 {{#> layouts/default}}
     {{#*inline "content"}}
       <div class="container">
-        <h1>Error!</h1>
-        <p>There was an error.</p>
+        {{#with error}}
+          <h1 class="display-1 text-secondary">{{{status}}}</h1>
+          <h2 class="display-4">{{{displayValue}}}</h2>
+          <p class="lead text-muted">{{{verboseDisplayValue}}}</p>
+        {{/with}}
       </div>
     {{/inline}}
     {{#*inline "more-scripts"}}
-      {{#with err}}
+      {{#with error}}
         <script type="text/javascript">
           console.group('Server Logs');
           console.error("{{{message}}}");

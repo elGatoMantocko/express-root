@@ -21,6 +21,18 @@ function appErrorHandler(opts = {errorPath: 'app/templates/error.hbs'}) {
   }
 
   /**
+   * Checks if an express request object should return a 404
+   * @param {Object} req
+   * @return {Boolean} - 404 status
+   */
+  function is404(req) {
+    return !readdirSync('src/main/assets/views/app/templates')
+      .some(function(file) {
+        return req.path.indexOf(file.replace(/\.hbs$/, '')) > -1;
+      });
+  }
+
+  /**
    * Identifies the error and renders a response
    * @param {Error} err - Error passed by express
    * @param {Object} req - Request object passed by express
@@ -28,26 +40,31 @@ function appErrorHandler(opts = {errorPath: 'app/templates/error.hbs'}) {
    * @param {Function} next - Next function to signal done here
    * @return {Null} - Return if error is null/undefined
    */
-  return function(err, req, res, next) {
-    if (!err) return next();
+  return function({message, stack, status}, req, res, next) {
+    if (!stack) return next();
 
     // in case anything goes wrong in this function make sure to log right away
-    console.error(err.stack);
+    console.error(stack);
 
     // error conditions
-    const is404 = readdirSync('src/main/assets/views/app/templates')
-      .some((file) => req.path.indexOf(file.replace(/\.hbs$/, '')));
+    if (is404(req)) {
+      status = 404;
+    } else {
+      status = 500;
+    }
 
-    // apply error conditions
-    err.status = 500;
-    if (is404) err.status = 404;
+    // get display values for the error codes reported
+    const {http_errors} = require('../messages/messages.json');
+    const {displayValue, verboseDisplayValue} = http_errors[status];
 
     // this should get logged to the browsers console
     //  which means we need to add extra escaping
-    err.message = err.message
+    message = message
       .replace(/\\/g, '\\\\')
       .replace(/\"/g, '\\\"');
-    res.status(err.status).render('app/templates/error', Object.assign({err}, res.locals.model));
+    const error = {status, message, displayValue, verboseDisplayValue};
+
+    res.status(status).render('app/templates/error', Object.assign({error}, res.locals.model));
   };
 }
 

@@ -1,0 +1,16 @@
+{
+  "http_errors": {
+    "404": {
+      "status": 404,
+      "displayValue": "We couldn't find that page.",
+      "verboseDisplayValue": "We appologize, but weren't able to find what you were looking for. You can click <a href=\"/home\">here</a> to go back home.",
+      "icon": "optional/icon/path.png"
+    },
+    "500": {
+      "status": 500,
+      "displayValue": "We messed up.",
+      "verboseDisplayValue": "Something wen't wrong on our end. If you don't mind, could you report a bug <a href=\"https://github.com/elGatoMantocko/express-root/issues\">here</a>?",
+      "icon": "optional/icon/path.png"
+    }
+  }
+}
