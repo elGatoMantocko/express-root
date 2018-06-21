@@ -16,7 +16,15 @@ const {normalize} = require('upath');
 const serviceWorkerConfig = {
   globDirectory: 'public/',
   globPatterns: [
-    '**/*.{js,css,ico,eot,svg,ttf,woff,woff2,otf,json,txt}',
+    'css/*.css',
+    'fonts/*.{eot,svg,ttf,woff,woff2,otf}',
+    'js/*.js',
+    'static/*.{json,txt,ico}',
+  ],
+  globIgnores: [
+    '**/node_modules',
+    '**/sw.js',
+    'js/workbox-sw.js',
   ],
   swDest: 'public/sw.js',
   swSrc: 'src/main/assets/sw.js',
@@ -48,17 +56,17 @@ const CLIENT_STATIC_FILES = ASSETS_DIR + 'static/';
 // bundle directory
 const BUNDLE_DEST = 'public/';
 
-gulp.task('clean', function() {
-  return del(['public']);
+gulp.task(function clean(done) {
+  return del(['public'], done);
 });
 
-gulp.task('lintJs', function() {
+gulp.task(function lintJs() {
   return gulp.src(JS_FILES.map((file) => CLIENT_JS_SRC + file))
     .pipe(plugins.eslint())
     .pipe(plugins.eslint.format());
 });
 
-gulp.task('lintCss', function() {
+gulp.task(function lintCss() {
   return gulp.src(CSS_FILES.map((file) => CLIENT_CSS_SRC + file))
     .pipe(plugins.stylelint({
       reporters: [
@@ -69,14 +77,14 @@ gulp.task('lintCss', function() {
 
 gulp.task('lint', gulp.series('lintJs', 'lintCss'));
 
-gulp.task('bundleStatic', function() {
+gulp.task(function bundleStatic() {
   return gulp.src(CLIENT_STATIC_FILES + '**/*')
     .pipe(plugins.rename({dirname: ''})) // How is this not a OOTB gulp feature??
     .pipe(gulp.dest(BUNDLE_DEST + 'static/'))
     .pipe(plugins.livereload());
 });
 
-gulp.task('bundleJs', function() {
+gulp.task(function bundleJs() {
   return gulp.src(JS_FILES.map((file) => CLIENT_JS_SRC + file))
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins.babel({presets: ['env']}))
@@ -88,14 +96,14 @@ gulp.task('bundleJs', function() {
     .pipe(plugins.livereload());
 });
 
-gulp.task('bundleJsDeps', function() {
+gulp.task(function bundleJsDeps() {
   return gulp.src(JS_DEPS)
     .pipe(plugins.stripComments())
     .pipe(plugins.concat('deps.js'))
     .pipe(gulp.dest(BUNDLE_DEST + 'js/'));
 });
 
-gulp.task('bundleCss', function() {
+gulp.task(function bundleCss() {
   return gulp.src(CSS_FILES.map((file) => CLIENT_CSS_SRC + file))
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins.concat('styles.css'))
@@ -118,18 +126,18 @@ gulp.task('bundleCss', function() {
     .pipe(plugins.livereload());
 });
 
-gulp.task('bundleCssDeps', function() {
+gulp.task(function bundleCssDeps() {
   return gulp.src(CSS_DEPS)
     .pipe(plugins.concat('deps.css'))
     .pipe(plugins.stripCssComments())
     .pipe(gulp.dest(BUNDLE_DEST + 'css/'));
 });
 
-gulp.task('bundleFonts', function() {
+gulp.task(function bundleFonts() {
   return gulp.src(FONTS).pipe(gulp.dest(BUNDLE_DEST + '/fonts'));
 });
 
-gulp.task('bundleHbs', function(done) {
+gulp.task(function bundleHbs() {
   const processPartialName = (file) => normalize(file.relative.replace(/\.\w+$/, ''));
   return gulp.src(CLIENT_HBS_SRC + '**/*.hbs')
     .pipe(plugins.handlebars({handlebars: require('handlebars')}))
@@ -142,16 +150,21 @@ gulp.task('bundleHbs', function(done) {
     .pipe(plugins.livereload());
 });
 
-gulp.task('bundleSw', function(done) {
-  gulp.src(WORKBOX_SW)
-    .pipe(plugins.stripComments())
-    .pipe(gulp.dest(BUNDLE_DEST + 'js/'));
-  return workboxBuild.injectManifest(serviceWorkerConfig).then(({count, size, warnings}) => {
-    warnings.forEach(console.warn);
-    console.log(`${count} files will be precached, totaling ${size} bytes.`);
-    done();
-  });
-});
+gulp.task('bundleSw', gulp.series(
+  function bundleWorkbox() {
+    return gulp.src(WORKBOX_SW)
+      .pipe(plugins.stripComments())
+      .pipe(gulp.dest(BUNDLE_DEST + 'js/'));
+  },
+
+  function buildSwPrecache() {
+    return workboxBuild.injectManifest(serviceWorkerConfig)
+      .then(({count, size, warnings}) => {
+        warnings.forEach(console.warn);
+        console.log(`${count} files will be precached, totaling ${size} bytes.`);
+      });
+  },
+));
 
 gulp.task('build',
   gulp.series(
