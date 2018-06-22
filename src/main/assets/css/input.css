@@ -1,7 +1,6 @@
 .app-input-group {
   /* necessary for label positioning in the *placeholders* spot */
   position: relative;
-  overflow-x: hidden;
 
   /* input and label padding should be identical */
   & input,
