@@ -1,4 +1,6 @@
-const {existsSync, readdirSync} = require('fs');
+const {existsSync} = require('fs');
+const {http_errors} = require('../messages/messages.json');
+
 /**
  * @param {Object} opts - Options passed to the middleware
  * @param {String} opts.errorPath - Path defined for the error template
@@ -20,52 +22,28 @@ function appErrorHandler(opts = {errorPath: 'app/templates/error.hbs'}) {
     };
   }
 
-  /**
-   * Checks if an express request object should return a 404
-   * @param {Object} req
-   * @return {Boolean} - 404 status
-   */
-  function is404(req) {
-    return !readdirSync('src/main/assets/views/app/templates')
-      .some(function(file) {
-        return req.path.indexOf(file.replace(/\.hbs$/, '')) > -1;
-      });
-  }
+  return [
+    // 400 handler
+    function(req, res, next) {
+      const {status = 404} = res.locals;
+      const {displayValue, verboseDisplayValue} = http_errors[status];
+      res.status(status).render('app/templates/error', Object.assign({
+        error: {status, displayValue, verboseDisplayValue},
+      }, res.locals.model));
+    },
+    // 500 handler
+    function({message, stack}, req, res, next) {
+      if (!stack) return next();
 
-  /**
-   * Identifies the error and renders a response
-   * @param {Error} err - Error passed by express
-   * @param {Object} req - Request object passed by express
-   * @param {Object} res - Response object passed by express
-   * @param {Function} next - Next function to signal done here
-   * @return {Null} - Return if error is null/undefined
-   */
-  return function({message, stack, status}, req, res, next) {
-    if (!stack) return next();
+      // in case anything goes wrong in this function make sure to log right away
+      console.error(stack);
 
-    // in case anything goes wrong in this function make sure to log right away
-    console.error(stack);
-
-    // error conditions
-    if (is404(req)) {
-      status = 404;
-    } else {
-      status = 500;
-    }
-
-    // get display values for the error codes reported
-    const {http_errors} = require('../messages/messages.json');
-    const {displayValue, verboseDisplayValue} = http_errors[status];
-
-    // this should get logged to the browsers console
-    //  which means we need to add extra escaping
-    message = message
-      .replace(/\\/g, '\\\\')
-      .replace(/\"/g, '\\\"');
-    const error = {status, message, displayValue, verboseDisplayValue};
-
-    res.status(status).render('app/templates/error', Object.assign({error}, res.locals.model));
-  };
+      const {displayValue, verboseDisplayValue} = http_errors[500];
+      res.status(500).render('app/templates/error', Object.assign({
+        error: {status: 500, displayValue, verboseDisplayValue},
+      }, res.locals.model));
+    },
+  ];
 }
 
 module.exports = exports = {appErrorHandler};
