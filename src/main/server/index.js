@@ -5,12 +5,15 @@ const argv = require('minimist')(process.argv.slice(2));
 const https = require('https');
 
 // node based requirements
-const {readFileSync, readdirSync} = require('fs');
+const {readFileSync} = require('fs');
 const {join} = require('path');
 
 // view engine
 const {HandlebarsBuilder} = require('./handlebars/index.js');
 const engines = require('consolidate');
+
+// utils
+const {readdirRecursiveSync} = require('./utils/fs-utils.js');
 
 // app bundles
 const bundleDir = 'public';
@@ -105,9 +108,10 @@ app.post('/logger/:loggerPath', bodyParser.json(), function(req, res) {
 });
 
 // controller
-const viewsPattern = readdirSync(join(viewsDir, 'app', 'templates'))
-  .map((file) => '/' + file.replace(/\.hbs$/g, ''));
-app.get(viewsPattern, function(req, res) {
+const views = readdirRecursiveSync(join(viewsDir, 'app', 'templates'))
+  .map((file) => '/' + file.replace(/\.hbs$/g, '')) // routes start with /
+  .concat('/'); // add '/' base route for redirecting purposes
+app.get(views, function(req, res) {
   if (req.path === '/') res.redirect('/home');
   else res.render(`app/templates${req.path}`, res.locals.model);
 });
