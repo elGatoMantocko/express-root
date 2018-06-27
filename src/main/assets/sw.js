@@ -3,6 +3,7 @@ importScripts('/js/workbox-sw.js');
 if (workbox) {
   console.log(`Yay! Workbox is loaded 🎉`);
 
+  workbox.googleAnalytics.initialize();
   workbox.precaching.precacheAndRoute([]);
 
   workbox.routing.registerRoute( /\/input/, workbox.strategies.networkFirst());
