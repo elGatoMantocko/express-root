@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
+
+:root {
+  --inputPaddingX: 12px;
+  --inputPaddingY: 12px;
+  --inputTextColor: #495057;
+
+  /* all things font related */
+  --baseFontSize: 16px;
+  --fontFamilySansSerif: 'Roboto', Arial, sans-serif;
+}
+
+body {
+  font-family: var(--fontFamilySansSerif);
+}

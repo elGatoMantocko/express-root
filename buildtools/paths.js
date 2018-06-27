@@ -4,7 +4,7 @@ module.exports = {
     '**/*.js',
   ],
   CSS_FILES: [
-    'variables.css',
+    'app-core.css',
     'input.css',
     'carousel.css',
     '**/*.css',
