@@ -13,6 +13,7 @@ if (workbox) {
     })],
   }), 'POST');
 
+  workbox.routing.registerRoute(/https:\/\/fonts\.googleapis\.com\/css\?family=Roboto:300,400,500/, workbox.strategies.cacheFirst());
   workbox.routing.registerRoute(/\/fonts\/fontawesome-webfont/, workbox.strategies.cacheFirst());
   workbox.routing.registerRoute(/\/favicon\.ico/, workbox.strategies.cacheFirst());
 } else {
