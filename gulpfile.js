@@ -49,7 +49,7 @@ const {JS_FILES, CSS_FILES} = require('./buildtools/paths.js');
 // src locations
 const ASSETS_DIR = 'src/main/assets/';
 const CLIENT_JS_SRC = ASSETS_DIR + 'js/';
-const CLIENT_HBS_SRC = ASSETS_DIR + 'views/';
+const CLIENT_HBS_SRC = ASSETS_DIR + 'views/**/partials/';
 const CLIENT_CSS_SRC = ASSETS_DIR + 'css/';
 const CLIENT_STATIC_FILES = ASSETS_DIR + 'static/';
 
