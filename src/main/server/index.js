@@ -37,17 +37,19 @@ const machine_name = hostname();
 const viewsDir = join('src', 'main', 'assets', 'views');
 
 // get the handlebars runtime and assign it to consolidate
-const hbsRuntimeBuilder = new HandlebarsBuilder();
-hbsRuntimeBuilder.build() // resolves to hbs runtime
-  .then((hbs) => engines.requires.handlebars = hbs)
-  .catch((err) => engines.requires.handlebars = require('handlebars'))
-  .finally(() => {
-    // tell the app about the views and view engine
-    app.locals.cache = true;
-    app.engine('hbs', engines.handlebars);
-    app.set('views', viewsDir);
-    app.set('view engine', 'hbs');
-  });
+// IIFE that builds the handlebars instance and app render engine
+(async function() {
+  try {
+    engines.requires.handlebars = await new HandlebarsBuilder().build();
+  } catch (e) {
+    engines.requires.handlebars = require('handlebars');
+  }
+  // tell the app about the views and view engine
+  app.locals.cache = true;
+  app.engine('hbs', engines.handlebars);
+  app.set('views', viewsDir);
+  app.set('view engine', 'hbs');
+})();
 // \TEMPLATING
 
 // MIDDLEWARE - TODO move to another file
