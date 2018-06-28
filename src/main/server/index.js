@@ -6,7 +6,7 @@ const https = require('https');
 
 // node based requirements
 const {readFileSync} = require('fs');
-const {join} = require('path');
+const {join, sep} = require('path');
 
 // view engine
 const {HandlebarsBuilder} = require('./handlebars/index.js');
@@ -109,8 +109,11 @@ app.post('/logger/:loggerPath', bodyParser.json(), function(req, res) {
 
 // controller
 const views = readdirRecursiveSync(join(viewsDir, 'app', 'templates'))
-  .map((file) => '/' + file.replace(/\.hbs$/g, '')) // routes start with /
-  .concat('/'); // add '/' base route for redirecting purposes
+  // .split.join is a hacky way to avoid escaping regex control
+  .map((file) => '/' + file.split(sep).join('/').replace(/\.hbs$/g, ''))
+  // add '/' base route for redirecting purposes
+  .concat('/');
+
 app.get(views, function(req, res) {
   if (req.path === '/') res.redirect('/home');
   else res.render(`app/templates${req.path}`, res.locals.model);
