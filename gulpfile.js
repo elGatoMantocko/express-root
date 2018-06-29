@@ -2,6 +2,10 @@
 const gulp = require('gulp');
 const plugins = require('gulp-load-plugins')();
 const del = require('del');
+const {join} = require('path'); // only need this for non gulp things
+
+// karma
+const {Server} = require('karma');
 
 // postcss plugins
 const noEmpty = require('postcss-discard-empty');
@@ -181,6 +185,14 @@ gulp.task('build',
     'bundleSw',
   )
 );
+
+gulp.task(function test(done) {
+  new Server({
+    configFile: join(__dirname, 'karma.conf.js'),
+    browsers: ['ChromeHeadless'],
+    singleRun: true,
+  }, done).start();
+});
 
 gulp.task('watch', gulp.parallel('build', function() {
   plugins.livereload.listen();

@@ -7,7 +7,7 @@
   "description": "A basic website",
   "main": "src/main/server/index.js",
   "scripts": {
-    "build": "npx gulp build",
+    "build": "npx gulp build && npx gulp test",
     "start": "node src/main/server/index.js --port 3000",
     "test": "npx karma start --single-run --browsers ChromeHeadless karma.conf.js",
     "watch": "npx nodemon -w src/main/server/index.js -w src/main/server/middleware/*.js -w src/main/server/handlebars/*.js"
