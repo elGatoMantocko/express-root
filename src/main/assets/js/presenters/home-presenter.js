@@ -1,6 +1,7 @@
 App.Presenters.Home = function() {
   // initialize the input(s)
   App.libs.input.initFloats();
+  App.libs.input.initValidation();
 
   let now = dayjs();
   /**

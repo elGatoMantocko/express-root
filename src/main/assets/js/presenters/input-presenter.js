@@ -1,6 +1,7 @@
 App.Presenters.Input = function() {
   // initialize the input(s)
   App.libs.input.initFloats();
+  App.libs.input.initValidation();
 
   // need to validate that the input is filled in on form submit
   // but also have to clean up the input's state on first input

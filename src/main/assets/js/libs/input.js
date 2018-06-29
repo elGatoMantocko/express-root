@@ -13,7 +13,9 @@ App.libs.input = {
       const $el = $(this);
       if (!$el.val()) $el.removeClass('label-adjusted');
     });
+  },
 
+  initValidation: function() {
     // validation control for inputs with 'validation-control' class
     $('input.validation-control')
       .on('focusout focusin', function() {
