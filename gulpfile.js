@@ -194,7 +194,7 @@ gulp.task(function test(done) {
   }, done).start();
 });
 
-gulp.task('watch', gulp.parallel('build', function() {
+gulp.task('watch', gulp.parallel('build', function listen() {
   plugins.livereload.listen();
   const watchers = [];
 

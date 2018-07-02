@@ -7,7 +7,7 @@
   "description": "A basic website",
   "main": "src/main/server/index.js",
   "scripts": {
-    "build": "npx gulp build && npx gulp test",
+    "build": "npx gulp clean && npx gulp build && npx gulp test",
     "start": "node src/main/server/index.js --port 3000",
     "test": "npx karma start --single-run --browsers ChromeHeadless karma.conf.js",
     "watch": "npx nodemon -w src/main/server/index.js -w src/main/server/middleware/*.js -w src/main/server/handlebars/*.js"
@@ -24,7 +24,7 @@
     "browserslist-config-google": "^1.5.0",
     "consolidate": "^0.15.1",
     "cookie-parser": "^1.4.3",
-    "dayjs": "^1.6.10",
+    "dayjs": "^1.7.0",
     "del": "^3.0.0",
     "express": "^4.16.3",
     "express-locale": "^1.0.5",
