@@ -9,7 +9,7 @@ const {readFileSync} = require('fs');
 const {join, sep} = require('path');
 
 // view engine
-const {HandlebarsBuilder} = require('./handlebars/index.js');
+const {HandlebarsBuilder} = require('./handlebars/runtime.js');
 const engines = require('consolidate');
 
 // utils
