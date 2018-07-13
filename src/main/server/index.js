@@ -9,7 +9,7 @@ const {readFileSync} = require('fs');
 const {join, sep} = require('path');
 
 // view engine
-const {HandlebarsBuilder} = require('./handlebars/runtime.js');
+const {HandlebarsRuntimeBuilder} = require('./handlebars/handlebars-runtime-builder.js');
 const engines = require('consolidate');
 
 // utils
@@ -37,8 +37,8 @@ const machine_name = hostname();
 const viewsDir = join('src', 'main', 'assets', 'views');
 
 // get the handlebars runtime and assign it to consolidate
-const hbsRuntimeBuilder = new HandlebarsBuilder();
-hbsRuntimeBuilder.build() // resolves to hbs runtime
+const builder = new HandlebarsRuntimeBuilder();
+builder.build() // resolves to hbs runtime
   .then((hbs) => engines.requires.handlebars = hbs)
   .catch((err) => engines.requires.handlebars = require('handlebars'))
   .finally(() => {

@@ -6,10 +6,10 @@ const helpers = require('./helpers.js');
  * Class that builds a handlebars instance
  * @class
  */
-class HandlebarsBuilder {
+class HandlebarsRuntimeBuilder {
   /**
    * Constructor initializes the Handlebars instance and returns self
-   * @return {HandlebarsBuilder} - self
+   * @return {HandlebarsRuntimeBuilder} - self
    */
   constructor() {
     // paths for layouts
@@ -129,4 +129,4 @@ class HandlebarsBuilder {
 /**
  * module.exports
  */
-module.exports = {HandlebarsBuilder};
+module.exports = {HandlebarsRuntimeBuilder};
