@@ -1,10 +1,6 @@
 const {readdir, readFile} = require('fs').promises;
 const {join} = require('path');
-
-// paths for layouts
-const VIEWS_DIR = join('src', 'main', 'assets', 'views');
-const LAYOUTS_DIR = join(VIEWS_DIR, 'layouts');
-const PARTIALS_DIR = join(VIEWS_DIR, 'app', 'partials');
+const helpers = require('./helpers.js');
 
 /**
  * Class that builds a handlebars instance
@@ -16,19 +12,31 @@ class HandlebarsBuilder {
    * @return {HandlebarsBuilder} - self
    */
   constructor() {
+    // paths for layouts
+    this.VIEWS_DIR = join('src', 'main', 'assets', 'views');
+    this.LAYOUTS_DIR = join(this.VIEWS_DIR, 'layouts');
+    this.PARTIALS_DIR = join(this.VIEWS_DIR, 'app', 'partials');
+
     this.hbs = require('handlebars');
     return this;
   }
 
   /**
    * Build the default set of hbs options for our apps
-   * @param {Object} options - Params to allow disabling of settings
+   * @param {Object} [options] - Params to allow disabling of settings
+   * @param {Boolean} [options.includeLayouts=true] - Keep layouts on or off the shelves
+   * @param {Boolean} [options.includeHelpers=true] - Keep helpers on or off the shelves
+   * @param {Boolean} [options.includePartials=true] - Keep partials on or off the shelves
    * @return {Promise} - Promise that resolves to the hbs runtime instance
    */
-  async build(options = {}) {
-    if (!options.layouts) await this.registerDefaultLayouts();
-    if (!options.helpers) await this.registerDefaultHelpers();
-    if (!options.partials) await this.registerAppPartials();
+  async build(options = {
+    includeLayouts: true,
+    includeHelpers: true,
+    includePartials: true,
+  }) {
+    if (!options.includelayouts) await this.registerDefaultLayouts();
+    if (!options.includehelpers) await this.registerDefaultHelpers();
+    if (!options.includepartials) await this.registerAppPartials();
     return this.hbs;
   }
 
@@ -41,23 +49,23 @@ class HandlebarsBuilder {
 
     // get layouts from the layouts directory
     try {
-      layouts = await readdir(LAYOUTS_DIR);
+      layouts = await readdir(this.LAYOUTS_DIR);
     } catch (dir_err) {
       // if there is an error reading the directory, layouts will reduce to just this.hbs
-      console.error(`Could not read directory ${LAYOUTS_DIR}`, new Error(dir_err));
+      console.error(`Could not read directory ${this.LAYOUTS_DIR}`, new Error(dir_err));
       layouts = [];
     }
 
     // resolve with a reduce on the Handlebars instance
-    return await layouts.reduce(async function(hbsP, fileName = '') {
+    return await layouts.reduce(async (hbsP, fileName = '') => {
       // get the layout's name and start getting the file's contents right away
       const layoutName = `layouts/${fileName.replace(/\.hbs$/ig, '')}`;
       let data;
 
       try {
-        data = await readFile(join(LAYOUTS_DIR, fileName));
+        data = await readFile(join(this.LAYOUTS_DIR, fileName));
       } catch (file_err) {
-        console.error(`Could not read file ${LAYOUTS_DIR}/${fileName}`, new Error(file_err));
+        console.error(`Could not read file ${this.LAYOUTS_DIR}/${fileName}`, new Error(file_err));
         data = '';
       } finally {
         // need to wait for the promise to be resolved
@@ -77,21 +85,21 @@ class HandlebarsBuilder {
 
     // get partials from the partials directory
     try {
-      partials = await readdir(PARTIALS_DIR);
+      partials = await readdir(this.PARTIALS_DIR);
     } catch (dir_err) {
-      console.error(`Could not read dir ${PARTIALS_DIR}`, new Error(dir_err));
+      console.error(`Could not read dir ${this.PARTIALS_DIR}`, new Error(dir_err));
       partials = [];
     }
 
-    return await partials.reduce(async function(hbsP, fileName = '') {
+    return await partials.reduce(async (hbsP, fileName = '') => {
       // get the partial's name and start getting the file's contents right away
       const partialName = `app/partials/${fileName.replace(/\.hbs$/ig, '')}`;
       let data;
 
       try {
-        data = await readFile(join(PARTIALS_DIR, fileName));
+        data = await readFile(join(this.PARTIALS_DIR, fileName));
       } catch (file_err) {
-        console.error(`Could not read file ${PARTIALS_DIR}/${fileName}`, new Error(file_err));
+        console.error(`Could not read file ${this.PARTIALS_DIR}/${fileName}`, new Error(file_err));
         data = '';
       } finally {
         // need to wait for the promise to be resolved
@@ -108,31 +116,8 @@ class HandlebarsBuilder {
    */
   async registerDefaultHelpers() {
     try {
-      // #range block helper takes a number n as an arg and renders the block n times
-      this.hbs.registerHelper('range', (length, options) => {
-        return new this.hbs.SafeString(Array.from({length}, (value, index) => {
-          return options.fn({length, value}, {data: {index}});
-        }).join(''));
-      });
-
-      // json helper to stringify json in the view
-      this.hbs.registerHelper('json', (object) => {
-        return new this.hbs.SafeString(JSON.stringify(object));
-      });
-
-      this.hbs.registerHelper('includeJsBundle', (options = {}) => {
-        const {contextPath = '/js', bundleName} = options.hash;
-        return new this.hbs.SafeString(
-          `<script type="text/javascript" src="${contextPath}/${bundleName}.js"></script>`
-        );
-      });
-
-      this.hbs.registerHelper('includeCssBundle', (options = {}) => {
-        const {contextPath = '/css', bundleName} = options.hash;
-        return new this.hbs.SafeString(
-          `<link rel="stylesheet" href="${contextPath}/${bundleName}.css">`
-        );
-      });
+      Object.entries(helpers)
+        .forEach(([name, func]) => this.hbs.registerHelper(name, func));
     } catch (error) {
       console.error(new Error(error));
     } finally {
