@@ -9,13 +9,21 @@ const helpers = require('@mantocko/handlebars-helpers');
 class HandlebarsRuntimeBuilder {
   /**
    * Constructor initializes the Handlebars instance and returns self
+   * @param {Object} [opts] - options passed to the runtime builder
+   * @param {String} [opts.viewsDir] - path for views
+   * @param {String} [opts.layoutsContext] - context path for layouts
+   * @param {String} [opts.partialsContext] - context path for partials
    * @return {HandlebarsRuntimeBuilder} - self
    */
-  constructor() {
+  constructor(opts = {}) {
+    const viewsDir = opts.viewsDir || join('src', 'main', 'assets', 'views');
+    const layoutsContext = opts.layoutsContext || 'layouts';
+    const partialsContext = opts.partialsContext || join('app', 'partials');
+
     // paths for layouts
-    this.VIEWS_DIR = join('src', 'main', 'assets', 'views');
-    this.LAYOUTS_DIR = join(this.VIEWS_DIR, 'layouts');
-    this.PARTIALS_DIR = join(this.VIEWS_DIR, 'app', 'partials');
+    this.viewsDir = viewsDir;
+    this.layoutsDir = join(this.viewsDir, layoutsContext);
+    this.partialsDir = join(this.viewsDir, partialsContext);
 
     this.hbs = require('handlebars');
     return this;
@@ -49,10 +57,10 @@ class HandlebarsRuntimeBuilder {
 
     // get layouts from the layouts directory
     try {
-      layouts = await readdir(this.LAYOUTS_DIR);
+      layouts = await readdir(this.layoutsDir);
     } catch (dir_err) {
       // if there is an error reading the directory, layouts will reduce to just this.hbs
-      console.error(`Could not read directory ${this.LAYOUTS_DIR}`, new Error(dir_err));
+      console.error(`Could not read directory ${this.layoutsDir}`, new Error(dir_err));
       layouts = [];
     }
 
@@ -63,9 +71,9 @@ class HandlebarsRuntimeBuilder {
       let data;
 
       try {
-        data = await readFile(join(this.LAYOUTS_DIR, fileName));
+        data = await readFile(join(this.layoutsDir, fileName));
       } catch (file_err) {
-        console.error(`Could not read file ${this.LAYOUTS_DIR}/${fileName}`, new Error(file_err));
+        console.error(`Could not read file ${this.layoutsDir}/${fileName}`, new Error(file_err));
         data = '';
       } finally {
         // need to wait for the promise to be resolved
@@ -85,9 +93,9 @@ class HandlebarsRuntimeBuilder {
 
     // get partials from the partials directory
     try {
-      partials = await readdir(this.PARTIALS_DIR);
+      partials = await readdir(this.partialsDir);
     } catch (dir_err) {
-      console.error(`Could not read dir ${this.PARTIALS_DIR}`, new Error(dir_err));
+      console.error(`Could not read dir ${this.partialsDir}`, new Error(dir_err));
       partials = [];
     }
 
@@ -97,9 +105,9 @@ class HandlebarsRuntimeBuilder {
       let data;
 
       try {
-        data = await readFile(join(this.PARTIALS_DIR, fileName));
+        data = await readFile(join(this.partialsDir, fileName));
       } catch (file_err) {
-        console.error(`Could not read file ${this.PARTIALS_DIR}/${fileName}`, new Error(file_err));
+        console.error(`Could not read file ${this.partialsDir}/${fileName}`, new Error(file_err));
         data = '';
       } finally {
         // need to wait for the promise to be resolved
