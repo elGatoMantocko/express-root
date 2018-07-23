@@ -15,24 +15,11 @@ const nesting = require('postcss-nesting');
 const customProps = require('postcss-custom-properties');
 const autoprefixer = require('autoprefixer');
 
+// app defined config
+const config = require('./config.js');
+
 const workboxBuild = require('workbox-build');
 const {normalize} = require('upath');
-const serviceWorkerConfig = {
-  globDirectory: 'public/',
-  globPatterns: [
-    'css/*.css',
-    'fonts/*.{eot,svg,ttf,woff,woff2,otf}',
-    'js/*.js',
-    'static/*.{json,txt,ico}',
-  ],
-  globIgnores: [
-    '**/node_modules',
-    '**/sw.js',
-    'js/workbox-sw.js',
-  ],
-  swDest: 'public/sw.js',
-  swSrc: 'src/main/assets/sw.js',
-};
 
 const JS_DEPS = [
   'node_modules/handlebars/dist/handlebars.runtime.min.js',
@@ -48,14 +35,6 @@ const CSS_DEPS = [
 ];
 const WORKBOX_SW = 'node_modules/workbox-sw/build/workbox-sw.js';
 const FONTS = 'node_modules/font-awesome/fonts/*';
-const {JS_FILES, CSS_FILES} = require('./buildtools/paths.js');
-
-// src locations
-const ASSETS_DIR = 'src/main/assets/';
-const CLIENT_JS_SRC = ASSETS_DIR + 'js/';
-const CLIENT_HBS_SRC = ASSETS_DIR + 'views/**/partials/';
-const CLIENT_CSS_SRC = ASSETS_DIR + 'css/';
-const CLIENT_STATIC_FILES = ASSETS_DIR + 'static/';
 
 // bundle directory
 const BUNDLE_DEST = 'public/';
@@ -64,41 +43,54 @@ gulp.task(function clean(done) {
   return del(['public'], done);
 });
 
-gulp.task(function lintJs() {
-  return gulp.src(JS_FILES.map((file) => CLIENT_JS_SRC + file))
-    .pipe(plugins.eslint())
-    .pipe(plugins.eslint.format());
-});
+gulp.task('lintJs', gulp.parallel(...config.jsBundles.map(function(bundle) {
+  const {name, src} = bundle;
+  return Object.defineProperty(function() {
+    return gulp.src(src)
+      .pipe(plugins.eslint())
+      .pipe(plugins.eslint.format());
+  }, 'name', {value: name + '_js_lint'});
+})));
 
-gulp.task(function lintCss() {
-  return gulp.src(CSS_FILES.map((file) => CLIENT_CSS_SRC + file))
-    .pipe(plugins.stylelint({
-      reporters: [
-        {formatter: 'string', console: true},
-      ],
-    }));
-});
+gulp.task('lintCss', gulp.parallel(...config.cssBundles.map(function(bundle) {
+  const {name, src} = bundle;
+  return Object.defineProperty(function() {
+    return gulp.src(src)
+      .pipe(plugins.stylelint({
+        reporters: [
+          {formatter: 'string', console: true},
+        ],
+      }));
+  }, 'name', {value: name + '_css_lint'});
+})));
 
 gulp.task('lint', gulp.series('lintJs', 'lintCss'));
 
-gulp.task(function bundleStatic() {
-  return gulp.src(CLIENT_STATIC_FILES + '**/*')
-    .pipe(plugins.rename({dirname: ''})) // How is this not a OOTB gulp feature??
-    .pipe(gulp.dest(BUNDLE_DEST + 'static/'))
-    .pipe(plugins.livereload());
-});
+gulp.task('bundleStatic', gulp.parallel(...config.staticFiles.map(function(bundle) {
+  const {context = 'static', src} = bundle;
+  return Object.defineProperty(function() {
+    return gulp.src(src)
+      .pipe(plugins.rename({dirname: ''})) // How is this not a OOTB gulp feature??
+      .pipe(gulp.dest(BUNDLE_DEST + `${context}/`))
+      .pipe(plugins.livereload());
+  }, 'name', {value: context + '_static_bundle'});
+})));
 
-gulp.task(function bundleJs() {
-  return gulp.src(JS_FILES.map((file) => CLIENT_JS_SRC + file))
-    .pipe(plugins.sourcemaps.init())
-    .pipe(plugins.babel({presets: ['env']}))
-    .pipe(plugins.wrap(';(function(){"use strict"; <%= contents %> })();'))
-    .pipe(plugins.concat('app.js'))
-    .pipe(plugins.uglify())
-    .pipe(process.env.DEVEL ? plugins.sourcemaps.write() : plugins.noop())
-    .pipe(gulp.dest(BUNDLE_DEST + 'js/'))
-    .pipe(plugins.livereload());
-});
+gulp.task('bundleJs', gulp.parallel(...config.jsBundles.map(function(bundle = {}) {
+  const {name, context = 'js', src, babel = true, sourcemaps = true, uglify = true} = bundle;
+  // we only do this so the console can be more verbose about the task
+  return Object.defineProperty(function() {
+    return gulp.src(src)
+      .pipe(sourcemaps ? plugins.sourcemaps.init() : plugins.noop())
+      .pipe(babel ? plugins.babel({presets: ['env']}) : plugins.noop())
+      .pipe(plugins.wrap(';(function(){"use strict"; <%= contents %> })();'))
+      .pipe(plugins.concat(`${name}.js`))
+      .pipe(uglify ? plugins.uglify() : plugins.noop())
+      .pipe(process.env.DEVEL && sourcemaps ? plugins.sourcemaps.write() : plugins.noop())
+      .pipe(gulp.dest(BUNDLE_DEST + `${context}/`))
+      .pipe(plugins.livereload());
+  }, 'name', {value: name + '_js_bundle'});
+})));
 
 gulp.task(function bundleJsDeps() {
   return gulp.src(JS_DEPS)
@@ -107,10 +99,13 @@ gulp.task(function bundleJsDeps() {
     .pipe(gulp.dest(BUNDLE_DEST + 'js/'));
 });
 
-gulp.task(function bundleCss() {
-  return gulp.src(CSS_FILES.map((file) => CLIENT_CSS_SRC + file))
-    .pipe(plugins.sourcemaps.init())
-    .pipe(plugins.concat('styles.css'))
+gulp.task('bundleCss', gulp.parallel(...config.cssBundles.map(function(bundle = {}) {
+  const {name, context = 'css', src, sourcemaps = true} = bundle;
+  // we only do this so the console can be more verbose about the task
+  return Object.defineProperty(function() {
+    return gulp.src(src)
+    .pipe(sourcemaps ? plugins.sourcemaps.init() : plugins.noop())
+    .pipe(plugins.concat(`${name}.css`))
     .pipe(plugins.postcss([
       px2rem({
         rootValue: 16,
@@ -125,10 +120,11 @@ gulp.task(function bundleCss() {
       autoprefixer({browsers: ['extends browserslist-config-google']}),
     ]))
     .pipe(plugins.uglifycss())
-    .pipe(process.env.DEVEL ? plugins.sourcemaps.write() : plugins.noop())
-    .pipe(gulp.dest(BUNDLE_DEST + 'css/'))
+    .pipe(process.env.DEVEL && sourcemaps ? plugins.sourcemaps.write() : plugins.noop())
+    .pipe(gulp.dest(BUNDLE_DEST + `${context}/`))
     .pipe(plugins.livereload());
-});
+  }, 'name', {value: name + '_css_bundle'});
+})));
 
 gulp.task(function bundleCssDeps() {
   return gulp.src(CSS_DEPS)
@@ -143,7 +139,9 @@ gulp.task(function bundleFonts() {
 
 gulp.task(function bundleHbs() {
   const processPartialName = (file) => normalize(file.relative.replace(/\.\w+$/, ''));
-  return gulp.src(CLIENT_HBS_SRC + '**/*.hbs')
+  const {viewsDir, partialsContext} = config.handlebars;
+  const partials = join(viewsDir, partialsContext);
+  return gulp.src(partials + '**/*.hbs')
     .pipe(plugins.handlebars({handlebars: require('handlebars')}))
     .pipe(plugins.wrap('Handlebars.registerPartial(\'<%= processPartialName(file) %>\', Handlebars.template(<%= contents %>));', {}, {
       imports: {processPartialName},
@@ -155,18 +153,24 @@ gulp.task(function bundleHbs() {
 });
 
 gulp.task('bundleSw', gulp.series(
-  function bundleWorkbox() {
-    return gulp.src(WORKBOX_SW)
-      .pipe(plugins.stripComments())
-      .pipe(gulp.dest(BUNDLE_DEST + 'js/'));
+  function bundleWorkbox(done) {
+    const {serviceWorker = {}} = config;
+    if (serviceWorker.swSrc) {
+      return gulp.src(WORKBOX_SW)
+        .pipe(plugins.stripComments())
+        .pipe(gulp.dest(BUNDLE_DEST + 'js/'));
+    } else done();
   },
 
-  function buildSwPrecache() {
-    return workboxBuild.injectManifest(serviceWorkerConfig)
-      .then(({count, size, warnings}) => {
-        warnings.forEach(console.warn);
-        console.log(`${count} files will be precached, totaling ${size} bytes.`);
-      });
+  function buildSwPrecache(done) {
+    const {serviceWorker = {}} = config;
+    if (serviceWorker.swSrc) {
+      return workboxBuild.injectManifest(serviceWorker)
+        .then(({count, size, warnings}) => {
+          warnings.forEach(console.warn);
+          console.log(`${count} files will be precached, totaling ${size} bytes.`);
+        });
+    } else done();
   },
 ));
 
@@ -196,18 +200,23 @@ gulp.task(function test(done) {
 
 gulp.task('watch', gulp.parallel('build', function listen() {
   plugins.livereload.listen();
-  const watchers = [];
 
   // watch js, css, hbs, and static
-  watchers.push(gulp.watch(CLIENT_JS_SRC + '**/*.js', gulp.parallel('bundleJs')));
-  watchers.push(gulp.watch(CLIENT_HBS_SRC + '**/*.hbs', gulp.parallel('bundleHbs')));
-  watchers.push(gulp.watch(CLIENT_CSS_SRC + '**/*.css', gulp.parallel('bundleCss')));
-  watchers.push(gulp.watch(CLIENT_STATIC_FILES + '**/*', gulp.parallel('bundleStatic')));
-  watchers.push(gulp.watch(serviceWorkerConfig.swSrc, gulp.parallel('bundleSw')));
-
-  watchers.forEach((watcher) => {
-    watcher.on('change', function(path, stats) {
-      console.log(`File ${path} was changed`);
-    });
+  const {jsBundles = [], cssBundles = [], serviceWorker = {}, handlebars = {}} = config;
+  jsBundles.forEach(function(bundle = {}) {
+    gulp.watch(bundle.src, gulp.parallel('bundleJs'));
   });
+
+  cssBundles.forEach(function(bundle) {
+    gulp.watch(bundle.src, gulp.parallel('bundleCss'));
+  });
+
+  staticFiles.forEach(function(bundle) {
+    gulp.watch(bundle.src, gulp.parallel('bundleStatic'));
+  });
+
+  const {viewsDir, partialsContext} = handlebars;
+  const partials = join(viewsDir, partialsContext);
+  gulp.watch(partials + '**/*.hbs', gulp.parallel('bundleHbs'));
+  gulp.watch(serviceWorker.swSrc, gulp.parallel('bundleSw'));
 }));
