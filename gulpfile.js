@@ -39,20 +39,34 @@ const FONTS = 'node_modules/font-awesome/fonts/*';
 // bundle directory
 const BUNDLE_DEST = 'public/';
 
+/**
+ * @param {String|String[]} src - globs of files to lint
+ * @return {Object} - gulp pipe stream
+ */
+function lintJs(src) {
+  return gulp.src(src)
+    .pipe(plugins.eslint())
+    .pipe(plugins.eslint.format());
+}
+
 gulp.task(function clean(done) {
   return del(['public'], done);
 });
 
-gulp.task('lintJs', gulp.parallel(...config.jsBundles.map(function(bundle) {
+gulp.task(function lintServerJs(done) {
+  const {serverJs} = config;
+  if (!serverJs) return done();
+  return lintJs(serverJs);
+});
+
+gulp.task('lintAssetJs', gulp.parallel(...config.jsBundles.map(function(bundle) {
   const {name, src} = bundle;
   return Object.defineProperty(function() {
-    return gulp.src(src)
-      .pipe(plugins.eslint())
-      .pipe(plugins.eslint.format());
+    return lintJs(src);
   }, 'name', {value: name + '_js_lint'});
 })));
 
-gulp.task('lintCss', gulp.parallel(...config.cssBundles.map(function(bundle) {
+gulp.task('lintAssetCss', gulp.parallel(...config.cssBundles.map(function(bundle) {
   const {name, src} = bundle;
   return Object.defineProperty(function() {
     return gulp.src(src)
@@ -64,7 +78,7 @@ gulp.task('lintCss', gulp.parallel(...config.cssBundles.map(function(bundle) {
   }, 'name', {value: name + '_css_lint'});
 })));
 
-gulp.task('lint', gulp.series('lintJs', 'lintCss'));
+gulp.task('lint', gulp.series('lintAssetJs', 'lintAssetCss', 'lintServerJs'));
 
 gulp.task('bundleStatic', gulp.parallel(...config.staticFiles.map(function(bundle) {
   const {context = 'static', src} = bundle;

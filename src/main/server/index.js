@@ -9,7 +9,6 @@ const {readFileSync} = require('fs');
 const {join, sep} = require('path');
 
 // view engine
-const {HandlebarsRuntimeBuilder} = require('./handlebars/handlebars-runtime-builder.js');
 const engines = require('consolidate');
 
 // utils
@@ -37,17 +36,10 @@ const machine_name = hostname();
 const viewsDir = join('src', 'main', 'assets', 'views');
 
 // get the handlebars runtime and assign it to consolidate
-const builder = new HandlebarsRuntimeBuilder();
-builder.build() // resolves to hbs runtime
-  .then((hbs) => engines.requires.handlebars = hbs)
-  .catch((err) => engines.requires.handlebars = require('handlebars'))
-  .finally(() => {
-    // tell the app about the views and view engine
-    app.locals.cache = true;
-    app.engine('hbs', engines.handlebars);
-    app.set('views', viewsDir);
-    app.set('view engine', 'hbs');
-  });
+engines.requires.handlebars = require('./handlebars/runtime-generator.js');
+app.engine('hbs', engines.handlebars);
+app.set('views', viewsDir);
+app.set('view engine', 'hbs');
 // \TEMPLATING
 
 // MIDDLEWARE - TODO move to another file
