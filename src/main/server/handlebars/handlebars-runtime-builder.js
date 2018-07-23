@@ -1,6 +1,6 @@
 const {readdir, readFile} = require('fs').promises;
 const {join} = require('path');
-const helpers = require('./helpers.js');
+const helpers = require('@mantocko/handlebars-helpers');
 
 /**
  * Class that builds a handlebars instance
