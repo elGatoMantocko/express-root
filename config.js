@@ -1,5 +1,12 @@
 const {join} = require('path');
 
+// application name and context path
+const appName = 'app';
+const appSlug = '';
+
+// globs of server code
+const serverJs = ['src/main/server/**/*.js'];
+
 // array of js bundles. files in src are transpiled and concated to <name>.js
 const jsBundles = [{
   name: 'app',
@@ -54,6 +61,9 @@ const handlebars = {
 
 // export object of configs for gulp and the server to read
 module.exports = {
+  appName,
+  appSlug,
+  serverJs,
   jsBundles,
   cssBundles,
   staticFiles,
