@@ -11,6 +11,12 @@ async function getModel() {
       Models: {},
       Presenters: {},
       libs: {},
+      bootstrapped: {
+        malicious: [
+          '<script>alert("test");</script>',
+          '<script>console.log("hello world!");</script>',
+        ],
+      },
     },
   };
 };
