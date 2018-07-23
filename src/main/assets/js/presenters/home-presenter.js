@@ -24,4 +24,8 @@ App.Presenters.Home = function() {
   // render the time on the page
   updateTime();
   setInterval(updateTime, 1000);
+
+  App.bootstrapped.malicious.forEach(function(str) {
+    $('.malicious-container').append('<p><code>' + str + '</code></p>');
+  });
 };
