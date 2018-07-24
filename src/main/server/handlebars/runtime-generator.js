@@ -1,9 +1,9 @@
 const Handlebars = require('handlebars');
-const helpers = require('@mantocko/handlebars-helpers');
+const requiredHelpers = require('@mantocko/handlebars-helpers');
 const {readdirSync, readFileSync} = require('fs');
 const {join} = require('path');
 
-const {appName, handlebars: {viewsDir, layoutsContext, partialsContext}} = require(join(process.cwd() + '/config.js'));
+const {appName, handlebars: {viewsDir, layoutsContext, partialsContext, helpers = {}}} = require(join(process.cwd() + '/config.js'));
 
 const layoutsDir = join(viewsDir, layoutsContext);
 const partialsDir = join(viewsDir, partialsContext);
@@ -40,13 +40,14 @@ try {
 } finally {
   partials.forEach(function(fileName) {
     const data = readFileSync(join(partialsDir, fileName));
-    const layoutName = `${appName}/partials/${fileName.replace(/\.hbs$/ig, '')}`;
+    const partialName = `${appName}/partials/${fileName.replace(/\.hbs$/ig, '')}`;
     if (!data) return;
-    Handlebars.registerPartial(layoutName, data.toString());
+    Handlebars.registerPartial(partialName, data.toString());
   });
 }
 
-// register all helpers defined in @mantocko/handlebars-helpers
+// register all helpers defined in @mantocko/handlebars-helpers. you can add extentions to the required helpers, but can't override them.
+Object.assign(helpers, requiredHelpers);
 Object.entries(helpers).forEach(function([name, func]) {
   Handlebars.registerHelper(name, func);
 });
