@@ -14,9 +14,6 @@ const engines = require('consolidate');
 // utils
 const {readdirRecursiveSync} = require('./utils/fs-utils.js');
 
-// app bundles
-const bundleDir = 'public';
-
 // middleware to make life easier
 const commonModelProvider = require('./middleware/model.js');
 const appErrorHandler = require('./middleware/errors.js');
@@ -32,8 +29,11 @@ const {name: application_name, version: build_version} = require(join(process.cw
 const build_date = (new Date()).toISOString();
 const machine_name = hostname();
 
+// app config
+let {bundleDir, handlebars: {viewsDir, templatesContext}} = require(join(process.cwd(), 'config.js'));
+if (!viewsDir || !templatesContext) throw new Error('Please define the viewsDir and templatesContext properties in your app config.js!');
+
 // TEMPLATING
-const viewsDir = join('src', 'main', 'assets', 'views');
 
 // get the handlebars runtime and assign it to consolidate
 engines.requires.handlebars = require('./handlebars/runtime-generator.js');
@@ -100,7 +100,7 @@ app.post('/logger/:loggerPath', bodyParser.json(), function(req, res) {
 });
 
 // controller
-const views = readdirRecursiveSync(join(viewsDir, 'app', 'templates'))
+const views = readdirRecursiveSync(join(viewsDir, templatesContext))
   // .split.join is a hacky way to avoid escaping regex control
   .map((file) => '/' + file.split(sep).join('/').replace(/\.hbs$/g, ''))
   // add '/' base route for redirecting purposes
@@ -108,7 +108,7 @@ const views = readdirRecursiveSync(join(viewsDir, 'app', 'templates'))
 
 app.get(views, function(req, res) {
   if (req.path === '/') res.redirect('/home');
-  else res.render(`app/templates${req.path}`, res.locals.model);
+  else res.render(`${templatesContext.split(sep).join('/')}${req.path}`, res.locals.model);
 });
 
 // basic registration endpoint

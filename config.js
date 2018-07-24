@@ -2,10 +2,12 @@ const {join} = require('path');
 
 // application name and context path
 const appName = 'app';
-const appSlug = '';
 
 // globs of server code
 const serverJs = ['src/main/server/**/*.js'];
+
+// bundle parent directory
+const bundleDir = 'public';
 
 // array of js bundles. files in src are transpiled and concated to <name>.js
 const jsBundles = [{
@@ -56,14 +58,15 @@ const serviceWorker = {
 const handlebars = {
   viewsDir: join('src', 'main', 'assets', 'views'),
   layoutsContext: 'layouts',
-  partialsContext: join('app', 'partials'),
+  partialsContext: join(appName, 'partials'),
+  templatesContext: join(appName, 'templates'),
 };
 
 // export object of configs for gulp and the server to read
 module.exports = {
   appName,
-  appSlug,
   serverJs,
+  bundleDir,
   jsBundles,
   cssBundles,
   staticFiles,
