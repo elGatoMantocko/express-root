@@ -32,4 +32,4 @@ function commonModelProvider() {
   };
 }
 
-exports = module.exports = {commonModelProvider};
+exports = module.exports = commonModelProvider;

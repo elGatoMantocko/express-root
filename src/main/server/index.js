@@ -19,8 +19,8 @@ const {readdirRecursiveSync} = require('./utils/fs-utils.js');
 const bundleDir = 'public';
 
 // middleware to make life easier
-const {commonModelProvider} = require('./middleware/model.js');
-const {appErrorHandler} = require('./middleware/errors.js');
+const commonModelProvider = require('./middleware/model.js');
+const appErrorHandler = require('./middleware/errors.js');
 const session = require('express-session');
 const localeResolver = require('express-locale');
 const bodyParser = require('body-parser');

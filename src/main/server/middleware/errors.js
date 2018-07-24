@@ -46,4 +46,4 @@ function appErrorHandler(opts = {errorPath: 'app/templates/error.hbs'}) {
   ];
 }
 
-module.exports = exports = {appErrorHandler};
+module.exports = exports = appErrorHandler;
