@@ -24,10 +24,10 @@ module.exports = exports = function(config) {
     browsers: ['PhantomJS', 'ChromeHeadless'],
     frameworks: ['mocha', 'chai'],
 
-    reporters: ['mocha', 'coverage'],
+    reporters: ['progress', 'coverage'],
     coverageReporter: {
       reporters: [
-        {type: 'text-summary'},
+        {type: 'text'},
       ],
     },
     preprocessors: {
