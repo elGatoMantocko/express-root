@@ -25,7 +25,9 @@ App.Presenters.Home = function() {
   updateTime();
   setInterval(updateTime, 1000);
 
-  App.bootstrapped.malicious.forEach(function(str) {
-    $('.malicious-container').append('<p><code>' + str + '</code></p>');
-  });
+  const maliciousBlocks = App.bootstrapped.malicious.map(function(str) {
+    return '<p><code>' + str + '</code></p>';
+  }).join('');
+
+  $('.malicious-container').append(maliciousBlocks);
 };
