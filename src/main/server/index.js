@@ -29,7 +29,7 @@ const helmet = require('helmet');
 
 // details for logging
 const {hostname} = require('os');
-const {name: application_name, version: build_version} = require(join(__dirname, '..', '..', '..', 'package.json'));
+const {name: application_name, version: build_version} = require(join(process.cwd(), 'package.json'));
 const build_date = (new Date()).toISOString();
 const machine_name = hostname();
 
