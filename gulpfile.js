@@ -15,9 +15,6 @@ const nesting = require('postcss-nesting');
 const customProps = require('postcss-custom-properties');
 const autoprefixer = require('autoprefixer');
 
-// app defined config
-const config = require(join(process.cwd(), 'config.js'));
-
 const workboxBuild = require('workbox-build');
 const {normalize} = require('upath');
 
@@ -36,8 +33,16 @@ const CSS_DEPS = [
 const WORKBOX_SW = 'node_modules/workbox-sw/build/workbox-sw.js';
 const FONTS = 'node_modules/font-awesome/fonts/*';
 
-// bundle directory
-const {bundleDir = 'public'} = config;
+// app defined config
+const {
+  serverJs,
+  jsBundles = [],
+  cssBundles = [],
+  staticFiles = [],
+  bundleDir = 'public',
+  handlebars = {},
+  serviceWorker = {},
+} = require(join(process.cwd(), 'config.js'));
 
 /**
  * @param {String|String[]} src - globs of files to lint
@@ -54,19 +59,18 @@ gulp.task(function clean(done) {
 });
 
 gulp.task(function lintServerJs(done) {
-  const {serverJs} = config;
   if (!serverJs) return done();
   return lintJs(serverJs);
 });
 
-gulp.task('lintAssetJs', gulp.parallel(...config.jsBundles.map(function(bundle) {
+gulp.task('lintAssetJs', gulp.parallel(...jsBundles.map(function(bundle) {
   const {name, src} = bundle;
   return Object.defineProperty(function() {
     return lintJs(src);
   }, 'name', {value: name + '_js_lint'});
 })));
 
-gulp.task('lintAssetCss', gulp.parallel(...config.cssBundles.map(function(bundle) {
+gulp.task('lintAssetCss', gulp.parallel(...cssBundles.map(function(bundle) {
   const {name, src} = bundle;
   return Object.defineProperty(function() {
     return gulp.src(src)
@@ -80,7 +84,7 @@ gulp.task('lintAssetCss', gulp.parallel(...config.cssBundles.map(function(bundle
 
 gulp.task('lint', gulp.series('lintAssetJs', 'lintAssetCss', 'lintServerJs'));
 
-gulp.task('bundleStatic', gulp.parallel(...config.staticFiles.map(function(bundle) {
+gulp.task('bundleStatic', gulp.parallel(...staticFiles.map(function(bundle) {
   const {context = 'static', src} = bundle;
   return Object.defineProperty(function() {
     return gulp.src(src)
@@ -90,7 +94,7 @@ gulp.task('bundleStatic', gulp.parallel(...config.staticFiles.map(function(bundl
   }, 'name', {value: context + '_static_bundle'});
 })));
 
-gulp.task('bundleJs', gulp.parallel(...config.jsBundles.map(function(bundle = {}) {
+gulp.task('bundleJs', gulp.parallel(...jsBundles.map(function(bundle = {}) {
   const {name, context = 'js', src, babel = true, sourcemaps = true, uglify = true} = bundle;
   // we only do this so the console can be more verbose about the task
   return Object.defineProperty(function() {
@@ -113,7 +117,7 @@ gulp.task(function bundleJsDeps() {
     .pipe(gulp.dest(`${bundleDir}/js/`));
 });
 
-gulp.task('bundleCss', gulp.parallel(...config.cssBundles.map(function(bundle = {}) {
+gulp.task('bundleCss', gulp.parallel(...cssBundles.map(function(bundle = {}) {
   const {name, context = 'css', src, sourcemaps = true} = bundle;
   // we only do this so the console can be more verbose about the task
   return Object.defineProperty(function() {
@@ -153,7 +157,7 @@ gulp.task(function bundleFonts() {
 
 gulp.task(function bundleHbs() {
   const processPartialName = (file) => normalize(file.relative.replace(/\.\w+$/, ''));
-  const {viewsDir, partialsContext} = config.handlebars;
+  const {viewsDir, partialsContext} = handlebars;
   const partials = join(viewsDir, partialsContext);
   return gulp.src(partials + '**/*.hbs')
     .pipe(plugins.handlebars({handlebars: require('handlebars')}))
@@ -168,23 +172,18 @@ gulp.task(function bundleHbs() {
 
 gulp.task('bundleSw', gulp.series(
   function bundleWorkbox(done) {
-    const {serviceWorker = {}} = config;
-    if (serviceWorker.swSrc) {
-      return gulp.src(WORKBOX_SW)
-        .pipe(plugins.stripComments())
-        .pipe(gulp.dest(`${bundleDir}/js/`));
-    } else done();
+    if (!serviceWorker.swSrc) return done();
+    return gulp.src(WORKBOX_SW)
+      .pipe(plugins.stripComments())
+      .pipe(gulp.dest(`${bundleDir}/js/`));
   },
-
   function buildSwPrecache(done) {
-    const {serviceWorker = {}} = config;
-    if (serviceWorker.swSrc) {
-      return workboxBuild.injectManifest(serviceWorker)
-        .then(({count, size, warnings}) => {
-          warnings.forEach(console.warn);
-          console.log(`${count} files will be precached, totaling ${size} bytes.`);
-        });
-    } else done();
+    if (!serviceWorker.swSrc) return done();
+    return workboxBuild.injectManifest(serviceWorker)
+      .then(({count, size, warnings}) => {
+        warnings.forEach(console.warn);
+        console.log(`${count} files will be precached, totaling ${size} bytes.`);
+      });
   },
 ));
 
@@ -216,7 +215,6 @@ gulp.task('watch', gulp.parallel('build', function listen() {
   plugins.livereload.listen();
 
   // watch js, css, hbs, and static
-  const {jsBundles = [], cssBundles = [], serviceWorker = {}, handlebars = {}} = config;
   jsBundles.forEach(function(bundle = {}) {
     gulp.watch(bundle.src, gulp.parallel('bundleJs'));
   });
