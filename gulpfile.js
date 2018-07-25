@@ -16,7 +16,7 @@ const customProps = require('postcss-custom-properties');
 const autoprefixer = require('autoprefixer');
 
 // app defined config
-const config = require('./config.js');
+const config = require(join(process.cwd(), 'config.js'));
 
 const workboxBuild = require('workbox-build');
 const {normalize} = require('upath');
@@ -37,7 +37,7 @@ const WORKBOX_SW = 'node_modules/workbox-sw/build/workbox-sw.js';
 const FONTS = 'node_modules/font-awesome/fonts/*';
 
 // bundle directory
-const BUNDLE_DEST = 'public/';
+const {bundleDir = 'public'} = config;
 
 /**
  * @param {String|String[]} src - globs of files to lint
@@ -85,7 +85,7 @@ gulp.task('bundleStatic', gulp.parallel(...config.staticFiles.map(function(bundl
   return Object.defineProperty(function() {
     return gulp.src(src)
       .pipe(plugins.rename({dirname: ''})) // How is this not a OOTB gulp feature??
-      .pipe(gulp.dest(BUNDLE_DEST + `${context}/`))
+      .pipe(gulp.dest(`${bundleDir}/${context}/`))
       .pipe(plugins.livereload());
   }, 'name', {value: context + '_static_bundle'});
 })));
@@ -101,7 +101,7 @@ gulp.task('bundleJs', gulp.parallel(...config.jsBundles.map(function(bundle = {}
       .pipe(plugins.concat(`${name}.js`))
       .pipe(uglify ? plugins.uglify() : plugins.noop())
       .pipe(process.env.DEVEL && sourcemaps ? plugins.sourcemaps.write() : plugins.noop())
-      .pipe(gulp.dest(BUNDLE_DEST + `${context}/`))
+      .pipe(gulp.dest(`${bundleDir}/${context}/`))
       .pipe(plugins.livereload());
   }, 'name', {value: name + '_js_bundle'});
 })));
@@ -110,7 +110,7 @@ gulp.task(function bundleJsDeps() {
   return gulp.src(JS_DEPS)
     .pipe(plugins.stripComments())
     .pipe(plugins.concat('deps.js'))
-    .pipe(gulp.dest(BUNDLE_DEST + 'js/'));
+    .pipe(gulp.dest(`${bundleDir}/js/`));
 });
 
 gulp.task('bundleCss', gulp.parallel(...config.cssBundles.map(function(bundle = {}) {
@@ -135,7 +135,7 @@ gulp.task('bundleCss', gulp.parallel(...config.cssBundles.map(function(bundle = 
     ]))
     .pipe(plugins.uglifycss())
     .pipe(process.env.DEVEL && sourcemaps ? plugins.sourcemaps.write() : plugins.noop())
-    .pipe(gulp.dest(BUNDLE_DEST + `${context}/`))
+    .pipe(gulp.dest(`${bundleDir}/${context}/`))
     .pipe(plugins.livereload());
   }, 'name', {value: name + '_css_bundle'});
 })));
@@ -144,11 +144,11 @@ gulp.task(function bundleCssDeps() {
   return gulp.src(CSS_DEPS)
     .pipe(plugins.concat('deps.css'))
     .pipe(plugins.stripCssComments())
-    .pipe(gulp.dest(BUNDLE_DEST + 'css/'));
+    .pipe(gulp.dest(`${bundleDir}/css/`));
 });
 
 gulp.task(function bundleFonts() {
-  return gulp.src(FONTS).pipe(gulp.dest(BUNDLE_DEST + '/fonts'));
+  return gulp.src(FONTS).pipe(gulp.dest(`${bundleDir}/fonts`));
 });
 
 gulp.task(function bundleHbs() {
@@ -162,7 +162,7 @@ gulp.task(function bundleHbs() {
     }))
     .pipe(plugins.concat('templates.js'))
     .pipe(plugins.uglify())
-    .pipe(gulp.dest(BUNDLE_DEST + 'js/'))
+    .pipe(gulp.dest(`${bundleDir}/js/`))
     .pipe(plugins.livereload());
 });
 
@@ -172,7 +172,7 @@ gulp.task('bundleSw', gulp.series(
     if (serviceWorker.swSrc) {
       return gulp.src(WORKBOX_SW)
         .pipe(plugins.stripComments())
-        .pipe(gulp.dest(BUNDLE_DEST + 'js/'));
+        .pipe(gulp.dest(`${bundleDir}/js/`));
     } else done();
   },
 
