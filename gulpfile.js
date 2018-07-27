@@ -129,7 +129,7 @@ gulp.task('bundleCss', gulp.parallel(...cssBundles.map(function(bundle = {}) {
         rootValue: 16,
         unitPrecision: 2,
         minPixelValue: 4,
-        propList: ['--*', 'padding*', 'margin*', 'border*', 'font', 'font-size', 'letter-spacing'],
+        propList: ['--*', 'padding*', 'margin*', 'border*', 'font', 'font-size', 'letter-spacing', 'width', 'height'],
       }),
       noComments(),
       noEmpty(),

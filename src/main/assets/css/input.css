@@ -6,6 +6,7 @@
   & input,
   & label,
   & .icon {
+    height: 48px;
     padding: var(--inputPaddingY) var(--inputPaddingX);
   }
 
@@ -30,8 +31,7 @@
       color: var(--inputTextColor);
       display: block;
 
-      /* these two should mimic the behavior of the input */
-      border: 1px solid transparent;
+      /* this should mimic the behavior of the input */
       border-radius: 4px;
 
       /* style transition */
