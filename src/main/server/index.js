@@ -4,13 +4,6 @@ const app = express();
 const argv = require('minimist')(process.argv.slice(2));
 const https = require('https');
 
-const {join} = require('path');
-const {bundleDir} = require(join(process.cwd(), 'config.js'));
-
-app.use('/favicon.ico', express.static(join(bundleDir, 'static', 'favicon.ico')));
-app.use('/manifest.json', express.static(join(bundleDir, 'static', 'manifest.json')));
-app.use('/robots.txt', express.static(join(bundleDir, 'static', 'robots.txt')));
-
 // Need to extend model here
 
 // basic registration endpoint
