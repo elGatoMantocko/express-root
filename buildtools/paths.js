@@ -1,3 +1,4 @@
+// TODO: REMOVE ME
 module.exports = {
   JS_FILES: [
     'libs/*.js',
