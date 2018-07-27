@@ -157,9 +157,10 @@ gulp.task(function bundleFonts() {
 
 gulp.task(function bundleHbs() {
   const processPartialName = (file) => normalize(file.relative.replace(/\.\w+$/, ''));
-  const {viewsDir, partialsContext} = handlebars;
-  const partials = join(viewsDir, partialsContext);
-  return gulp.src(partials + '**/*.hbs')
+  const {viewsDir, partialsContext = ''} = handlebars;
+  const appPartials = join(viewsDir, partialsContext);
+  const libPartials = `node_modules/@mantocko/express/src/main/assets/views/mantocko/partials`;
+  return gulp.src([appPartials + '**/*.hbs', libPartials + '**/*.hbs'])
     .pipe(plugins.handlebars({handlebars: require('handlebars')}))
     .pipe(plugins.wrap('Handlebars.registerPartial(\'<%= processPartialName(file) %>\', Handlebars.template(<%= contents %>));', {}, {
       imports: {processPartialName},

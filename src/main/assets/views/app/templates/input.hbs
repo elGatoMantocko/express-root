@@ -1,4 +1,4 @@
-{{#> layouts/default}}
+{{#> app/layouts/default}}
   {{#*inline "content"}}
     <div class="container pt-sm-5">
       <div class="row justify-content-center">
@@ -10,7 +10,7 @@
       <form id="my-registration-form" action="/register" method="post" autocomplete="off">
         <div class="row justify-content-center">
           <div class="col-sm col-md-8">
-            {{#> app/partials/input-group for="my-email-input" icon="at" label="Email Address" }}
+            {{#> mantocko/partials/input-group for="my-email-input" icon="at" label="Email Address" }}
               <input id="my-email-input"
                      class="validation-control form-control label-adjusted float-label"
                      name="email"
@@ -18,12 +18,12 @@
                      placeholder="sholmes@domain.com"
                      autofocus=true
                      spellcheck=false>
-            {{/app/partials/input-group}}
+            {{/mantocko/partials/input-group}}
           </div>
         </div>
         <div class="row justify-content-center">
           <div class="col-sm col-md-4">
-            {{#> app/partials/input-group for="my-first-name-input" icon="user" label="First Name" }}
+            {{#> mantocko/partials/input-group for="my-first-name-input" icon="user" label="First Name" }}
               <input id="my-first-name-input"
                      class="validation-control form-control float-label"
                      name="first_name"
@@ -32,10 +32,10 @@
                      type="text"
                      placeholder="Sherlock"
                      spellcheck=false>
-            {{/app/partials/input-group}}
+            {{/mantocko/partials/input-group}}
           </div>
           <div class="col-sm col-md-4">
-            {{#> app/partials/input-group for="my-last-name-input" icon="user" label="Last Name" }}
+            {{#> mantocko/partials/input-group for="my-last-name-input" icon="user" label="Last Name" }}
               <input id="my-last-name-input"
                      class="validation-control form-control float-label"
                      name="last_name"
@@ -44,58 +44,58 @@
                      type="text"
                      placeholder="Holmes"
                      spellcheck=false>
-            {{/app/partials/input-group}}
+            {{/mantocko/partials/input-group}}
           </div>
         </div>
         <div class="row justify-content-center">
           <div class="col-sm col-md-8">
-            {{#> app/partials/input-group for="my-address-line-1-input" label="Address Line One"}}
+            {{#> mantocko/partials/input-group for="my-address-line-1-input" label="Address Line One"}}
               <input id="my-address-line-1-input"
                      class="validation-control form-control float-label"
                      name="address_line_1"
                      type="text"
                      placeholder="221 Baker Street"
                      spellcheck=false>
-            {{/app/partials/input-group}}
+            {{/mantocko/partials/input-group}}
           </div>
         </div>
         <div class="row justify-content-center">
           <div class="col-sm col-md-8">
-            {{#> app/partials/input-group for="my-address-line-2-input" label="Address Line Two"}}
+            {{#> mantocko/partials/input-group for="my-address-line-2-input" label="Address Line Two"}}
               <input id="my-address-line-2-input"
                      class="validation-control form-control float-label"
                      name="address_line_2"
                      type="text"
                      placeholder="Flat B"
                      spellcheck=false>
-            {{/app/partials/input-group}}
+            {{/mantocko/partials/input-group}}
           </div>
         </div>
         <div class="row justify-content-center">
           <div class="col-sm col-md-4">
-            {{#> app/partials/input-group for="my-city-input" label="City / Town"}}
+            {{#> mantocko/partials/input-group for="my-city-input" label="City / Town"}}
               <input id="my-city-input"
                      class="validation-control form-control float-label"
                      name="city"
                      type="text"
                      placeholder="London"
                      spellcheck=false>
-            {{/app/partials/input-group}}
+            {{/mantocko/partials/input-group}}
           </div>
           <div class="col-sm col-md-4">
-            {{#> app/partials/input-group for="my-state-input" label="State / Province / Region"}}
+            {{#> mantocko/partials/input-group for="my-state-input" label="State / Province / Region"}}
               <input id="my-state-input"
                      class="validation-control form-control float-label"
                      name="state"
                      type="text"
                      placeholder="Marylebone"
                      spellcheck=false>
-            {{/app/partials/input-group}}
+            {{/mantocko/partials/input-group}}
           </div>
         </div>
         <div class="row justify-content-center">
           <div class="col-sm col-md-4">
-            {{#> app/partials/input-group for="my-password-input" icon="lock" label="Password" }}
+            {{#> mantocko/partials/input-group for="my-password-input" icon="lock" label="Password" }}
               <input id="my-password-input"
                      class="validation-control form-control float-label"
                      name="password"
@@ -103,10 +103,10 @@
                      minlength="6"
                      placeholder="***********"
                      autocomplete="new-password">
-            {{/app/partials/input-group}}
+            {{/mantocko/partials/input-group}}
           </div>
           <div class="col-sm col-md-4">
-            {{#> app/partials/input-group for="my-password-verify-input" icon="lock" label="Verify Password" }}
+            {{#> mantocko/partials/input-group for="my-password-verify-input" icon="lock" label="Verify Password" }}
               <input id="my-password-verify-input"
                      class="validation-control form-control float-label"
                      type="password"
@@ -115,7 +115,7 @@
                      placeholder="***********"
                      data-verify-for="#my-password-input"
                      oninput="App.libs.input.verifyPassword(this)">
-            {{/app/partials/input-group}}
+            {{/mantocko/partials/input-group}}
           </div>
         </div>
         <div class="row justify-content-center mb-4">
@@ -129,4 +129,4 @@
   {{#*inline "more-scripts"}}
     <script type="text/javascript">App.Presenters.Input();</script>
   {{/inline}}
-{{/layouts/default}}
+{{/app/layouts/default}}

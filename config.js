@@ -32,7 +32,6 @@ const cssBundles = [{
 
 // list of static file bundles. files in src globs are placed in the directory <name>
 const staticFiles = [{
-  context: 'static',
   src: ['src/main/assets/static/**/*'],
 }];
 
@@ -43,7 +42,7 @@ const serviceWorker = {
     'css/*.css',
     'fonts/*.{eot,svg,ttf,woff,woff2,otf}',
     'js/*.js',
-    'static/*.{json,txt,ico}',
+    'static/*',
   ],
   globIgnores: [
     '**/node_modules',
@@ -56,9 +55,12 @@ const serviceWorker = {
 
 // all handlebars related context info (these paths should be os readable)
 const handlebars = {
+  // base dir for all hbs views
   viewsDir: join('src', 'main', 'assets', 'views'),
-  layoutsContext: 'layouts',
-  partialsContext: join(appName, 'partials'),
+
+  // partials would be included here
+
+  // templates are for "pages" and routes
   templatesContext: join(appName, 'templates'),
 };
 

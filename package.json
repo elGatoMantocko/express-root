@@ -19,7 +19,7 @@
   "author": "Elliott",
   "license": "ISC",
   "dependencies": {
-    "@mantocko/express": "0.0.1",
+    "@mantocko/express": "^0.3.0",
     "autoprefixer": "^9.0.1",
     "babel-core": "^6.26.0",
     "babel-polyfill": "^6.26.0",

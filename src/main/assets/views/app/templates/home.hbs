@@ -1,7 +1,7 @@
-{{#> layouts/default}}
+{{#> app/layouts/default}}
   {{#*inline "content"}}
-    {{#> app/partials/carousel id="my-carousel" slideCount=3 indicators=true control=true}}
-      {{#> app/partials/carousel-item id="slide-1" classes="app-carousel-bg active"}}
+    {{#> mantocko/partials/carousel id="my-carousel" slideCount=3 indicators=true control=true}}
+      {{#> mantocko/partials/carousel-item id="slide-1" classes="app-carousel-bg active"}}
         <div class="container">
           <div class="row justify-content-center">
             <div class="col-sm col-sm-8">
@@ -9,8 +9,8 @@
             </div>
           </div>
         </div>
-      {{/app/partials/carousel-item}}
-      {{#> app/partials/carousel-item id="slide-2" classes="app-carousel-bg"}}
+      {{/mantocko/partials/carousel-item}}
+      {{#> mantocko/partials/carousel-item id="slide-2" classes="app-carousel-bg"}}
         <div class="container">
           <div class="row justify-content-center">
             <div class="col-sm col-sm-8">
@@ -18,8 +18,8 @@
             </div>
           </div>
         </div>
-      {{/app/partials/carousel-item}}
-      {{#> app/partials/carousel-item id="slide-3" classes="app-carousel-bg"}}
+      {{/mantocko/partials/carousel-item}}
+      {{#> mantocko/partials/carousel-item id="slide-3" classes="app-carousel-bg"}}
         <div class="container">
           <div class="row justify-content-center">
             <div class="col-sm col-sm-8">
@@ -27,8 +27,8 @@
             </div>
           </div>
         </div>
-      {{/app/partials/carousel-item}}
-    {{/app/partials/carousel}}
+      {{/mantocko/partials/carousel-item}}
+    {{/mantocko/partials/carousel}}
     <div class="container pt-sm-5">
       <div class="row justify-content-center">
         <div class="col-sm col-sm-8">
@@ -70,4 +70,4 @@
   {{#*inline "more-scripts"}}
     <script type="text/javascript">App.Presenters.Home();</script>
   {{/inline}}
-{{/layouts/default}}
+{{/app/layouts/default}}
