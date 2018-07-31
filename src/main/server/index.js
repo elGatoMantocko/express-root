@@ -1,10 +1,8 @@
 const express = require('@mantocko/express');
-const app = express();
+const app = express({middleware: require('./middleware')});
 
 const argv = require('minimist')(process.argv.slice(2));
 const https = require('https');
-
-// Need to extend model here
 
 // basic registration endpoint
 app.post('/register', express.bodyParser.urlencoded({extended: true}), function(req, res) {
