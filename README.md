@@ -14,12 +14,12 @@ Watch for changes in the assets with `npx gulp watch`.
 
 #### Structure
 
-All javascript is transpiled using the `babel-preset-env` babel preset. So you get the latest ES features. JS should go in the `src/main/assets/js`.
+All javascript is transpiled using the `babel-preset-env` babel preset. So you get the latest ES features. JS should go in the `src/assets/js`.
 
-All css should be kept in `src/main/assets/css`.
+All css should be kept in `src/assets/css`.
 
-All hbs should placed appropriately in `src/main/assets/views`.
+All hbs should placed appropriately in `src/assets/views`.
 
 #### Server
 
-Any server related config and code is located in `src/main/server`.
+Any server related config and code is located in `src/server`.

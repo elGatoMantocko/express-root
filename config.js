@@ -4,7 +4,7 @@ const {join} = require('path');
 const appName = 'app';
 
 // globs of server code
-const serverJs = ['src/main/server/**/*.js'];
+const serverJs = ['src/server/**/*.js'];
 
 // bundle parent directory
 const bundleDir = 'public';
@@ -13,9 +13,9 @@ const bundleDir = 'public';
 const jsBundles = [{
   name: 'app',
   src: [
-    'src/main/assets/js/libs/*.js',
-    'src/main/assets/js/presenters/*.js',
-    'src/main/assets/js/vendors/*.js',
+    'src/assets/js/libs/*.js',
+    'src/assets/js/presenters/*.js',
+    'src/assets/js/vendors/*.js',
   ],
 }];
 
@@ -23,16 +23,16 @@ const jsBundles = [{
 const cssBundles = [{
   name: 'styles',
   src: [
-    'src/main/assets/css/app-core.css',
-    'src/main/assets/css/input.css',
-    'src/main/assets/css/carousel.css',
-    'src/main/assets/css/*.css',
+    'src/assets/css/app-core.css',
+    'src/assets/css/input.css',
+    'src/assets/css/carousel.css',
+    'src/assets/css/*.css',
   ],
 }];
 
 // list of static file bundles. files in src globs are placed in the directory <name>
 const staticFiles = [{
-  src: ['src/main/assets/static/**/*'],
+  src: ['src/assets/static/**/*'],
 }];
 
 // service worker config. omit if not required
@@ -50,13 +50,13 @@ const serviceWorker = {
     'js/workbox-sw.js',
   ],
   swDest: 'public/sw.js',
-  swSrc: 'src/main/assets/sw.js',
+  swSrc: 'src/assets/sw.js',
 };
 
 // all handlebars related context info (these paths should be os readable)
 const handlebars = {
   // base dir for all hbs views
-  viewsDir: join('src', 'main', 'assets', 'views'),
+  viewsDir: join('src', 'assets', 'views'),
 
   // partials would be included here
 

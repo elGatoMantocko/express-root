@@ -1,6 +1,5 @@
 process.env.CHROME_BIN = require('puppeteer').executablePath();
-const {JS_FILES} = require('./buildtools/paths.js');
-const {join} = require('path');
+const {jsBundles = []} = require('./config.js');
 
 module.exports = exports = function(config) {
   config.set({
@@ -10,15 +9,17 @@ module.exports = exports = function(config) {
       'public/css/styles.css',
 
       // setup testing environment
-      'src/main/assets/js/unit-tests/helpers/**/*.js',
+      'src/assets/js/unit-tests/helpers/**/*.js',
 
       // setup defined on page
       'public/js/deps.js',
       'public/js/templates.js',
-      ...JS_FILES.map((path) => join('src', 'main', 'assets', 'js', path)),
+      ...jsBundles.reduce(function(files, bundle) {
+        return files.concat(bundle.src);
+      }, []),
 
       // unit tests
-      'src/main/assets/js/unit-tests/spec/**/*.js',
+      'src/assets/js/unit-tests/spec/**/*.js',
     ],
 
     browsers: ['PhantomJS', 'ChromeHeadless'],
