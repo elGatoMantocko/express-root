@@ -207,8 +207,6 @@ gulp.task('build',
 gulp.task(function test(done) {
   new Server({
     configFile: join(__dirname, 'karma.conf.js'),
-    browsers: ['ChromeHeadless'],
-    singleRun: true,
   }, done).start();
 });
 
