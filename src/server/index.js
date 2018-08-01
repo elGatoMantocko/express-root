@@ -1,5 +1,5 @@
 const express = require('@mantocko/express');
-const app = express({middleware: require('./middleware')});
+const app = express(require('./middleware'));
 
 const argv = require('minimist')(process.argv.slice(2));
 const https = require('https');

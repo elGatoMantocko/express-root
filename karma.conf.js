@@ -22,7 +22,7 @@ module.exports = exports = function(config) {
       'src/assets/js/unit-tests/spec/**/*.js',
     ],
 
-    browsers: ['PhantomJS', 'ChromeHeadless'],
+    browsers: ['PhantomJS'],
     frameworks: ['mocha', 'chai'],
 
     reporters: ['progress', 'coverage'],
