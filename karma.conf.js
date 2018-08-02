@@ -6,7 +6,7 @@ module.exports = exports = function(config) {
       'public/css/deps.css', 'public/css/styles.css',
 
       // setup testing environment
-      'src/assets/js/unit-tests/helpers/**/*.js',
+      'test/assets/helpers/**/*.js',
 
       // setup defined on page
       'public/js/deps.js', 'public/js/templates.js',
@@ -15,7 +15,7 @@ module.exports = exports = function(config) {
       ...jsBundles.reduce((files, bundle) => files.concat(bundle.src), []),
 
       // unit tests
-      'src/assets/js/unit-tests/spec/**/*.js',
+      'test/assets/spec/**/*.js',
     ],
 
     browsers: ['PhantomJS'],
