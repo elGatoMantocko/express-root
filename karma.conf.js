@@ -6,17 +6,14 @@ module.exports = exports = function(config) {
       'public/css/deps.css',
       ...cssBundles.reduce((files, bundle) => files.concat(bundle.src), []),
 
-      // setup testing environment
-      'test/assets/helpers/**/*.js',
-
       // setup defined on page
       'public/js/deps.js', 'public/js/templates.js',
 
-      // include defined js bundle src
-      ...jsBundles.reduce((files, bundle) => files.concat(bundle.src), []),
-
-      // unit tests
-      'test/assets/spec/**/*.js',
+      // include defined js bundle src and helpers
+      ...jsBundles.reduce(function(files, bundle) {
+        const {src = [], test = [], testHelpers = []} = bundle;
+        return files.concat(testHelpers).concat(src).concat(test);
+      }, []),
     ],
 
     browsers: ['PhantomJS'],
@@ -31,12 +28,11 @@ module.exports = exports = function(config) {
     // test src preprocessors
     preprocessors: jsBundles.reduce(function(preprocessors, bundle) {
       const {src = [], babel = true} = bundle;
-      src.forEach(function(path) {
+      return src.reduce(function(memo, path) {
         let parserOpts = ['sourcemap', 'coverage'];
         if (babel) parserOpts = ['babel', ...parserOpts];
-        Object.assign(preprocessors, {[path]: parserOpts});
-      });
-      return preprocessors;
+        return Object.assign(memo, {[path]: parserOpts});
+      }, preprocessors);
     }, {}),
     babelPreprocessor: {
       options: {sourceMap: 'inline'},
