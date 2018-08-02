@@ -13,7 +13,7 @@
   "scripts": {
     "build": "npx gulp clean && npx gulp lint && npx gulp build && npx gulp test",
     "start": "node src/server/index.js --port 3000",
-    "test": "npx mocha test/server/**/*.js && npx karma start karma.conf.js",
+    "test": "npx mocha --reporter progress test/server/**/*.js && npx karma start karma.conf.js",
     "watch": "npx nodemon -w src/server/index.js -w src/server/middleware/*.js -w src/server/handlebars/*.js"
   },
   "author": "Elliott",
