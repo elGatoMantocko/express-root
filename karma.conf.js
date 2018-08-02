@@ -1,9 +1,10 @@
-const {jsBundles = []} = require('./config.js');
+const {jsBundles = [], cssBundles = []} = require('./config.js');
 module.exports = exports = function(config) {
   config.set({
     files: [
       // setup css
-      'public/css/deps.css', 'public/css/styles.css',
+      'public/css/deps.css',
+      ...cssBundles.reduce((files, bundle) => files.concat(bundle.src), []),
 
       // setup testing environment
       'test/assets/helpers/**/*.js',
@@ -28,10 +29,15 @@ module.exports = exports = function(config) {
     },
 
     // test src preprocessors
-    preprocessors: {
-      '**/js/libs/**/*.js': ['babel', 'sourcemap', 'coverage'],
-      '**/js/presenters/**/*.js': ['babel', 'sourcemap', 'coverage'],
-    },
+    preprocessors: jsBundles.reduce(function(preprocessors, bundle) {
+      const {src = [], babel = true} = bundle;
+      src.forEach(function(path) {
+        let parserOpts = ['sourcemap', 'coverage'];
+        if (babel) parserOpts = ['babel', ...parserOpts];
+        Object.assign(preprocessors, {[path]: parserOpts});
+      });
+      return preprocessors;
+    }, {}),
     babelPreprocessor: {
       options: {sourceMap: 'inline'},
       sourceFileName: (file) => file.originalPath,

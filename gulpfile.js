@@ -35,7 +35,7 @@ const FONTS = 'node_modules/font-awesome/fonts/*';
 
 // app defined config
 const {
-  serverJs,
+  serverJs = {},
   jsBundles = [],
   cssBundles = [],
   staticFiles = [],
@@ -59,8 +59,8 @@ gulp.task(function clean(done) {
 });
 
 gulp.task(function lintServerJs(done) {
-  if (!serverJs) return done();
-  return lintJs(serverJs);
+  if (!serverJs.src) return done();
+  return lintJs(serverJs.src);
 });
 
 gulp.task('lintAssetJs', gulp.parallel(...jsBundles.map(function(bundle) {
@@ -204,11 +204,17 @@ gulp.task('build',
   )
 );
 
-gulp.task(function test(done) {
-  new Server({
-    configFile: join(__dirname, 'karma.conf.js'),
-  }, done).start();
-});
+gulp.task('test', gulp.series(
+  function testAssets(done) {
+    new Server({
+      configFile: join(__dirname, 'karma.conf.js'),
+    }, done).start();
+  },
+  function testServer() {
+    return gulp.src(serverJs.test)
+      .pipe(plugins.mocha({reporter: 'progress'}));
+  },
+));
 
 gulp.task('watch', gulp.parallel('build', function listen() {
   plugins.livereload.listen();
