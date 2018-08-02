@@ -82,7 +82,7 @@
     "karma-sourcemap-loader": "^0.3.7",
     "mocha": "^5.2.0",
     "nodemon": "^1.18.3",
-    "puppeteer": "^1.6.1",
+    "puppeteer": "^1.6.2",
     "stylelint": "^9.4.0",
     "stylelint-config-standard": "^18.2.0"
   },
