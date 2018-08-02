@@ -70,6 +70,7 @@
     "eslint-config-google": "^0.9.1",
     "gulp-eslint": "^5.0.0",
     "gulp-livereload": "^3.8.1",
+    "gulp-mocha": "^6.0.0",
     "gulp-stylelint": "^7.0.0",
     "karma": "^2.0.5",
     "karma-babel-preprocessor": "^7.0.0",

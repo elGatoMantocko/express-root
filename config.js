@@ -4,7 +4,10 @@ const {join} = require('path');
 const appName = 'app';
 
 // globs of server code
-const serverJs = ['src/server/**/*.js'];
+const serverJs = {
+  src: ['src/server/**/*.js'],
+  test: ['test/server/**/*.js'],
+};
 
 // bundle parent directory
 const bundleDir = 'public';
@@ -17,6 +20,8 @@ const jsBundles = [{
     'src/assets/js/presenters/*.js',
     'src/assets/js/vendors/*.js',
   ],
+  test: ['test/assets/spec/**/*.js'],
+  testHelpers: ['test/assets/helpers/**/*.js'],
 }];
 
 // array of css bundles. files in src are transpiled and concated to <name>.css
@@ -26,7 +31,6 @@ const cssBundles = [{
     'src/assets/css/app-core.css',
     'src/assets/css/input.css',
     'src/assets/css/carousel.css',
-    'src/assets/css/*.css',
   ],
 }];
 
