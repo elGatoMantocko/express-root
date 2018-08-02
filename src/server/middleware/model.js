@@ -4,16 +4,19 @@
  */
 function extendModel() {
   return function(req, res, next) {
-    Object.assign(res.locals.model.App, {
-      Models: {},
-      Presenters: {},
-      bootstrapped: {
-        malicious: [
-          '<script>alert("test");</script>',
-          '<script>console.log("hello world!");</script>',
-        ],
-      },
-    });
+    if (res.locals && res.locals.model && res.locals.model.App) {
+      Object.assign(res.locals.model.App, {
+        Models: {},
+        Presenters: {},
+        bootstrapped: {
+          malicious: [
+            '<script>alert("test");</script>',
+            '<script>console.log("hello world!");</script>',
+          ],
+        },
+      });
+    }
+
     next();
   };
 }
