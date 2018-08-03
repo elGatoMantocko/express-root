@@ -1,8 +1,19 @@
-# Base Express App
+# An example Express app [![Build Status](https://travis-ci.org/elGatoMantocko/express-root.svg?branch=master)](https://travis-ci.org/elGatoMantocko/express-root)
 
-[![Build Status](https://travis-ci.org/elGatoMantocko/express-root.svg?branch=master)](https://travis-ci.org/elGatoMantocko/express-root)
+This is a pretty basic webapp that uses [@mantocko/express](https://www.npmjs.com/package/@mantocko/express) to generate an [express](https://www.npmjs.com/package/express) runtime.
 
-This branch provides an architecture that is a base express app with a straightforward mvp pattern. All pages are rendered server side with handlebars and each page has it's own template in the `views/app/templates` directory. Template names are the then the name of the page path.
+It is not required, but this app has a `config.js` file to indicate where js and css bundles, static assets, [mocha](https://www.npmjs.com/package/mocha) tests, server code, and [handlebars](https://www.npmjs.com/package/handlebars) templates are. Also included is a service worker config. The gulp pipeline optionally takes a [workbox service worker](https://developers.google.com/web/tools/workbox/modules/workbox-sw) and bundles it into the distribution directory.
+
+## Bundles
+
+Bundles as a whole are considered interfaces and should implement a few basic things to be functional.
+
+### JS Bundles
+
+Bundle Property | Type | Description | Example Value
+--- | --- | ---
+*name* | `String` | Name of the bundle. This gets transformed into a `<name>.js` file in the context directory. | `'app'`
+*src* | `String|String[]` | The globs/paths for source files in the bundle. | `'src/assets/js/file.js'` or `['assets/**/libs/*.js', 'assets/**/presenters/*.js']`
 
 ## Development
 
