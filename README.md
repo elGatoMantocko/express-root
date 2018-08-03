@@ -8,12 +8,15 @@ It is not required, but this app has a `config.js` file to indicate where js and
 
 Bundles as a whole are considered interfaces and should implement a few basic things to be functional.
 
-### JS Bundles
+Bundle Property | Type | Description | Default value | Example Value
+--- | --- | --- | --- | ---
+*name* | `String` | Name of the bundle. This gets transformed into a `<name>.js` file in the context directory. | `undefined` | `'app'`
+*src* | `String\|String[]` | The globs/paths for source files in the bundle. | `[]` | `'src/assets/js/file.js'` or `['assets/**/libs/*.js', 'assets/**/presenters/*.js']`
+*context* | `String` | Context directory to put the bundle in within the distribution directory. | `js` for `jsBundles`, `css` for `cssBundles`, `static` for `staticFiles` | `myjs` or `js/special`
+*babel* | `Boolean` | JS bundle property to allow babel transpilation on assets. | `true` | `false`
+*sourcemaps* | `Boolean` | JS and CSS bundle property to allow sourcemaps in bundle write. Additionally, sourcemaps will only be written if environment variable `DEVEL` is present. | `true` | `false`
+*minify* | `Boolean` | JS and CSS bundle property to allow minify of assets. | `true` | `false`
 
-Bundle Property | Type | Description | Example Value
---- | --- | ---
-*name* | `String` | Name of the bundle. This gets transformed into a `<name>.js` file in the context directory. | `'app'`
-*src* | `String|String[]` | The globs/paths for source files in the bundle. | `'src/assets/js/file.js'` or `['assets/**/libs/*.js', 'assets/**/presenters/*.js']`
 
 ## Development
 
