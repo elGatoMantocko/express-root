@@ -95,7 +95,7 @@ gulp.task('bundleStatic', gulp.parallel(...staticFiles.map(function(bundle) {
 })));
 
 gulp.task('bundleJs', gulp.parallel(...jsBundles.map(function(bundle = {}) {
-  const {name, context = 'js', src, babel = true, sourcemaps = true, uglify = true} = bundle;
+  const {name, context = 'js', src, babel = true, sourcemaps = true, minify = true} = bundle;
   // we only do this so the console can be more verbose about the task
   return Object.defineProperty(function() {
     return gulp.src(src)
@@ -103,7 +103,7 @@ gulp.task('bundleJs', gulp.parallel(...jsBundles.map(function(bundle = {}) {
       .pipe(babel ? plugins.babel({presets: ['env']}) : plugins.noop())
       .pipe(plugins.wrap(';(function(){"use strict"; <%= contents %> })();'))
       .pipe(plugins.concat(`${name}.js`))
-      .pipe(uglify ? plugins.uglify() : plugins.noop())
+      .pipe(minify ? plugins.uglify() : plugins.noop())
       .pipe(process.env.DEVEL && sourcemaps ? plugins.sourcemaps.write() : plugins.noop())
       .pipe(gulp.dest(`${bundleDir}/${context}/`))
       .pipe(plugins.livereload());
@@ -118,7 +118,7 @@ gulp.task(function bundleJsDeps() {
 });
 
 gulp.task('bundleCss', gulp.parallel(...cssBundles.map(function(bundle = {}) {
-  const {name, context = 'css', src, sourcemaps = true} = bundle;
+  const {name, context = 'css', src, sourcemaps = true, minify = true} = bundle;
   // we only do this so the console can be more verbose about the task
   return Object.defineProperty(function() {
     return gulp.src(src)
@@ -137,7 +137,7 @@ gulp.task('bundleCss', gulp.parallel(...cssBundles.map(function(bundle = {}) {
       customProps({preserve: 'computed'}),
       autoprefixer({browsers: ['extends browserslist-config-google']}),
     ]))
-    .pipe(plugins.uglifycss())
+    .pipe(minify ? plugins.uglifycss() : plugins.noop())
     .pipe(process.env.DEVEL && sourcemaps ? plugins.sourcemaps.write() : plugins.noop())
     .pipe(gulp.dest(`${bundleDir}/${context}/`))
     .pipe(plugins.livereload());
