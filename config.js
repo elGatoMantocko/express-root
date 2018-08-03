@@ -70,12 +70,18 @@ const handlebars = {
 
 // export object of configs for gulp and the server to read
 module.exports = {
-  appName,
+  // paths for server code and views
   serverJs,
+  handlebars,
+
+  // path for bundles to go
   bundleDir,
+
+  // bundles
   jsBundles,
   cssBundles,
   staticFiles,
+
+  // service worker config
   serviceWorker,
-  handlebars,
 };

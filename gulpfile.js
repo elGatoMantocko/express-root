@@ -65,39 +65,50 @@ gulp.task(function lintServerJs(done) {
 
 gulp.task('lintAssetJs', gulp.parallel(...jsBundles.map(function(bundle) {
   const {name, src} = bundle;
-  return Object.defineProperty(function() {
+  return Object.assign(function() {
     return lintJs(src);
-  }, 'name', {value: name + '_js_lint'});
+  }, {
+    displayName: name + '_js_lint',
+    description: `Lints the ${name} js bundle.`,
+  });
 })));
 
 gulp.task('lintAssetCss', gulp.parallel(...cssBundles.map(function(bundle) {
   const {name, src} = bundle;
-  return Object.defineProperty(function() {
+  return Object.assign(function() {
     return gulp.src(src)
       .pipe(plugins.stylelint({
         reporters: [
           {formatter: 'string', console: true},
         ],
       }));
-  }, 'name', {value: name + '_css_lint'});
+  }, {
+    displayName: name + '_css_lint',
+    description: `Lints the ${name} css bundle.`,
+  });
 })));
 
 gulp.task('lint', gulp.series('lintAssetJs', 'lintAssetCss', 'lintServerJs'));
 
 gulp.task('bundleStatic', gulp.parallel(...staticFiles.map(function(bundle) {
   const {context = 'static', src} = bundle;
-  return Object.defineProperty(function() {
+  const bundlePath = `${bundleDir}/${context}/`;
+  return Object.assign(function() {
     return gulp.src(src)
       .pipe(plugins.rename({dirname: ''})) // How is this not a OOTB gulp feature??
-      .pipe(gulp.dest(`${bundleDir}/${context}/`))
+      .pipe(gulp.dest(bundlePath))
       .pipe(plugins.livereload());
-  }, 'name', {value: context + '_static_bundle'});
+  }, {
+    displayName: context + '_static_bundle',
+    description: `Move files in staticFiles.src to ${bundlePath}`,
+  });
 })));
 
 gulp.task('bundleJs', gulp.parallel(...jsBundles.map(function(bundle = {}) {
   const {name, context = 'js', src, babel = true, sourcemaps = true, minify = true} = bundle;
   // we only do this so the console can be more verbose about the task
-  return Object.defineProperty(function() {
+  const bundlePath = `${bundleDir}/${context}/`;
+  return Object.assign(function() {
     return gulp.src(src)
       .pipe(sourcemaps ? plugins.sourcemaps.init() : plugins.noop())
       .pipe(babel ? plugins.babel({presets: ['env']}) : plugins.noop())
@@ -105,9 +116,12 @@ gulp.task('bundleJs', gulp.parallel(...jsBundles.map(function(bundle = {}) {
       .pipe(plugins.concat(`${name}.js`))
       .pipe(minify ? plugins.uglify() : plugins.noop())
       .pipe(process.env.DEVEL && sourcemaps ? plugins.sourcemaps.write() : plugins.noop())
-      .pipe(gulp.dest(`${bundleDir}/${context}/`))
+      .pipe(gulp.dest(bundlePath))
       .pipe(plugins.livereload());
-  }, 'name', {value: name + '_js_bundle'});
+  }, {
+    displayName: name + '_js_bundle',
+    description: `Create ${name} js bundle and move it to ${bundlePath}`,
+  });
 })));
 
 gulp.task(function bundleJsDeps() {
@@ -119,8 +133,9 @@ gulp.task(function bundleJsDeps() {
 
 gulp.task('bundleCss', gulp.parallel(...cssBundles.map(function(bundle = {}) {
   const {name, context = 'css', src, sourcemaps = true, minify = true} = bundle;
+  const bundlePath = `${bundleDir}/${context}/`;
   // we only do this so the console can be more verbose about the task
-  return Object.defineProperty(function() {
+  return Object.assign(function() {
     return gulp.src(src)
     .pipe(sourcemaps ? plugins.sourcemaps.init() : plugins.noop())
     .pipe(plugins.concat(`${name}.css`))
@@ -139,9 +154,12 @@ gulp.task('bundleCss', gulp.parallel(...cssBundles.map(function(bundle = {}) {
     ]))
     .pipe(minify ? plugins.uglifycss() : plugins.noop())
     .pipe(process.env.DEVEL && sourcemaps ? plugins.sourcemaps.write() : plugins.noop())
-    .pipe(gulp.dest(`${bundleDir}/${context}/`))
+    .pipe(gulp.dest(bundlePath))
     .pipe(plugins.livereload());
-  }, 'name', {value: name + '_css_bundle'});
+  }, {
+    displayName: name + '_css_bundle',
+    description: `Create ${name} css bundle and move it to ${bundlePath}`,
+  });
 })));
 
 gulp.task(function bundleCssDeps() {
