@@ -1,0 +1,19 @@
+.notification {
+  &.active { top: 0; }
+
+  /* color properties */
+  &.error { background: orangered; }
+  &.info { background: cornflowerblue; }
+  &.warn { background: darkorange; }
+
+  & .close {
+    text-shadow: none;
+  }
+
+  color: white;
+  position: absolute;
+  top: -5rem;
+  padding: 1rem;
+  width: 100%;
+  transition: 0.2s;
+}
