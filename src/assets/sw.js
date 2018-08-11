@@ -1,7 +1,7 @@
 importScripts('/js/workbox-sw.js');
 
 if (workbox) {
-  console.log(`Yay! Workbox is loaded 🎉`);
+  console.log('Yay! Workbox is loaded 🎉');
 
   workbox.googleAnalytics.initialize();
   workbox.precaching.precacheAndRoute([]);
@@ -18,5 +18,5 @@ if (workbox) {
   workbox.routing.registerRoute(/\/fonts\/fontawesome-webfont/, workbox.strategies.cacheFirst());
   workbox.routing.registerRoute(/\/favicon\.ico/, workbox.strategies.cacheFirst());
 } else {
-  console.log(`Boo! Workbox didn't load 😬`);
+  console.log('Boo! Workbox didn\'t load 😬');
 }

@@ -29,8 +29,7 @@ const cssBundles = [{
   name: 'styles',
   src: [
     'src/assets/css/app-core.css',
-    'src/assets/css/input.css',
-    'src/assets/css/carousel.css',
+    'src/assets/css/*.css',
   ],
 }];
 
