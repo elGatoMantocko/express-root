@@ -190,8 +190,7 @@ gulp.task(function bundleHbs() {
 });
 
 gulp.task('bundleSw', gulp.series(
-  function bundleWorkbox(done) {
-    if (!serviceWorker.swSrc) return done();
+  function bundleWorkbox() {
     return gulp.src(WORKBOX_SW)
       .pipe(plugins.stripComments())
       .pipe(gulp.dest(`${bundleDir}/js/`));
@@ -239,19 +238,20 @@ gulp.task('watch', gulp.parallel('build', function listen() {
 
   // watch js, css, hbs, and static
   jsBundles.forEach(function(bundle = {}) {
-    gulp.watch(bundle.src, gulp.parallel('bundleJs'));
+    gulp.watch(bundle.src, gulp.series('bundleJs', 'bundleSw'));
   });
 
   cssBundles.forEach(function(bundle) {
-    gulp.watch(bundle.src, gulp.parallel('bundleCss'));
+    gulp.watch(bundle.src, gulp.series('bundleCss', 'bundleSw'));
   });
 
   staticFiles.forEach(function(bundle) {
-    gulp.watch(bundle.src, gulp.parallel('bundleStatic'));
+    gulp.watch(bundle.src, gulp.series('bundleStatic', 'bundleSw'));
   });
 
   const {viewsDir, partialsContext} = handlebars;
-  const partials = join(viewsDir, partialsContext);
-  gulp.watch(partials + '**/*.hbs', gulp.parallel('bundleHbs'));
-  gulp.watch(serviceWorker.swSrc, gulp.parallel('bundleSw'));
+  if (partialsContext) gulp.watch(join(viewsDir, partialsContext, '**/*.hbs'), gulp.series('bundleHbs', 'bundleSw'));
+
+  const {swSrc, swDest} = serviceWorker;
+  if (swSrc && swDest) gulp.watch(swSrc, gulp.parallel('bundleSw'));
 }));
