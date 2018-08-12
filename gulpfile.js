@@ -174,11 +174,22 @@ gulp.task(function bundleFonts() {
 });
 
 gulp.task(function bundleHbs() {
+  // function to help name the partial
   const processPartialName = (file) => normalize(file.relative.replace(/\.\w+$/, ''));
+
+  // list of sources to get partials from
+  let sources = [
+    `node_modules/@mantocko/express/src/main/assets/views/**/*.hbs`,
+    `!node_modules/@mantocko/express/src/main/assets/views/{layouts,mantocko/templates}/**/*.hbs`,
+  ];
+
+  // if the app has partials, register them
   const {viewsDir, partialsContext = ''} = handlebars;
-  const appPartials = join(viewsDir, partialsContext);
-  const libPartials = `node_modules/@mantocko/express/src/main/assets/views/mantocko/partials`;
-  return gulp.src([appPartials + '**/*.hbs', libPartials + '**/*.hbs'])
+  if (partialsContext) {
+    sources.push(join(viewsDir, partialsContext));
+  }
+
+  return gulp.src(sources)
     .pipe(plugins.handlebars({handlebars: require('handlebars')}))
     .pipe(plugins.wrap('Handlebars.registerPartial(\'<%= processPartialName(file) %>\', Handlebars.template(<%= contents %>));', {}, {
       imports: {processPartialName},

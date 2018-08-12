@@ -15,20 +15,10 @@ class Notification {
     if (!message) throw new Error('Missing required param \'message\'');
 
     // create the notification element
-    const el = document.createElement('div');
-    el.className = `notification ${color}`;
-    el.innerHTML = `
-      <div class="float-left">
-        ${title ? `<h3 class="title display-4">${title}</h3>` : ''}
-        <div class="message">${message}</div>
-      </div>
-      <button type="button" class="close" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    `;
+    const $el = $(Handlebars.partials['mantocko/partials/notification']({message, title, color}));
 
     // apply options and objects to this notification instance
-    Object.assign(this, {message, title, color, el, $el: $(el)});
+    Object.assign(this, {message, title, color, $el, el: $el[0]});
     return this.initialize();
   }
 
