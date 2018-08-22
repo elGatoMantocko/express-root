@@ -115,7 +115,7 @@ gulp.task('bundleJs', gulp.parallel(...jsBundles.map(function(bundle = {}) {
       .pipe(plugins.wrap(';(function(){"use strict"; <%= contents %> })();'))
       .pipe(plugins.concat(`${name}.js`))
       .pipe(minify ? plugins.uglify() : plugins.noop())
-      .pipe(process.env.DEVEL && sourcemaps ? plugins.sourcemaps.write() : plugins.noop())
+      .pipe(sourcemaps ? plugins.sourcemaps.write() : plugins.noop())
       .pipe(gulp.dest(bundlePath))
       .pipe(plugins.livereload());
   }, {
@@ -153,7 +153,7 @@ gulp.task('bundleCss', gulp.parallel(...cssBundles.map(function(bundle = {}) {
       autoprefixer({browsers: ['extends browserslist-config-google']}),
     ]))
     .pipe(minify ? plugins.uglifycss() : plugins.noop())
-    .pipe(process.env.DEVEL && sourcemaps ? plugins.sourcemaps.write() : plugins.noop())
+    .pipe(sourcemaps ? plugins.sourcemaps.write() : plugins.noop())
     .pipe(gulp.dest(bundlePath))
     .pipe(plugins.livereload());
   }, {

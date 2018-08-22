@@ -20,6 +20,7 @@ const jsBundles = [{
     'src/assets/js/presenters/*.js',
     'src/assets/js/vendors/*.js',
   ],
+  sourcemaps: process.env.DEVEL || false,
   test: ['test/assets/spec/**/*.js'],
   testHelpers: ['test/assets/helpers/**/*.js'],
 }];
@@ -31,6 +32,7 @@ const cssBundles = [{
     'src/assets/css/app-core.css',
     'src/assets/css/*.css',
   ],
+  sourcemaps: process.env.DEVEL || false,
 }];
 
 // list of static file bundles. files in src globs are placed in the directory <name>
